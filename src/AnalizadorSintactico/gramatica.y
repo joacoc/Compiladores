@@ -31,7 +31,7 @@ import AnalizadorLexico.Error;
 import AnalizadorSintactico.*;
 %}
 
-programa_principal  : PROGRAMA declaraciones '{' bloque_de_sentencia '}' 
+programa_principal  : PROGRAMA declaraciones '{' bloque_de_sentencia '}' {System.out.println("abs");}
                     | PROGRAMA declaraciones '{' bloque_de_sentencia  { analizadorS.addError (new Error ( analizadorS.errorLlaveA,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
                     | PROGRAMA declaraciones bloque_de_sentencia '}'  { analizadorS.addError (new Error ( analizadorS.errorLlaveA,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
                     | error declaraciones '{' bloque_de_sentencia '}' { analizadorS.addError (new Error ( analizadorS.errorProgram,"ERROR SINTACTICO", controladorArchivo.getLinea() )); } 
