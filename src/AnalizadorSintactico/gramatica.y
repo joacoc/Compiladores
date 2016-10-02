@@ -189,6 +189,7 @@ AnalizadorLexico analizadorL;
 AnalizadorSintactico analizadorS;
 TablaSimbolos tablaSimbolo;
 ControladorArchivo controladorArchivo;
+Token tokenActual; 
 
 public void setLexico(AnalizadorLexico al) {
        analizadorL = al;
@@ -208,7 +209,8 @@ public void setControladorArchivo ( ControladorArchivo ca){
 
 int yylex()
 {
-   	int val = analizadorL.yylex().getUso();
+    tokenActual = analizadorL.yylex();
+	int val = tokenActual.yylex().getUso();	
     return val;
 }
 
