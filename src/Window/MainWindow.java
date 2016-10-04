@@ -189,7 +189,7 @@ public class MainWindow extends javax.swing.JFrame {
                 //mostrar estructura
                 //set_text_output(analizadorSintactico.getEstructuras());             
                 
-                //set_text_output (analizadorLexico.mostrarTokens());
+                set_text_output (analizadorLexico.mostrarTokens());
             }
         });
 

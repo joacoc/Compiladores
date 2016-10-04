@@ -35,7 +35,7 @@ public class AnalizadorLexico {
 	static final int ENDIF = 271;
 	static final int PRINT = 272;
 	static final int FOR = 273;
-	static final int PROGRAMA = 274;
+	//static final int PROGRAMA = 274;
 	static final int MATRIX = 275;
 	static final int ALLOW = 276;
 	static final int TO = 277;
@@ -170,8 +170,6 @@ public class AnalizadorLexico {
     	sigToken();
     	
 	    if (archivo.finArchivo()){
-	    	System.out.print("cant lineas: ");
-	    	System.out.println(archivo.getLinea());
 	    	Token token = new Token ("Fin de archivo", 0);
 	    	return token;
 	    }
@@ -190,7 +188,6 @@ public class AnalizadorLexico {
 	    	tokens.add(token);
 	    	celdaActual.ejecutar_celda(token);
 	    	archivo.avanzar();
-	    	
     		return yylex(); //token.calcularToken();
 	    }
 	}
@@ -203,7 +200,6 @@ public class AnalizadorLexico {
 			case "endif": return ENDIF;
 			case "print": return PRINT;
 			case "for": return FOR;
-			case "programa": return PROGRAMA;
 			case "matrix": return MATRIX;
 			case "allow": return ALLOW;
 			case "to": return TO;
@@ -253,35 +249,37 @@ public class AnalizadorLexico {
 	
 	public String mostrarTokens(){
 
-		String cadena = "";
+		String cadena = "Tokens: \n";
 		for ( Token t: tokens)
-			cadena =cadena + t.imprimirToken() + "<br>";
-		
+			cadena =cadena + t.imprimirToken() + "\n";
+		cadena = cadena + "\n";
 		return cadena;
 	}
 	
 	public String mostrarWarning(){
-		String errores="";
-   	for (Error e: erroresWarning)
-    		errores=errores + e.Imprimir() + "<br>";
-    	return errores;
+		String errores="Warning: \n";
+	   	for (Error e: erroresWarning)
+	    		errores=errores + e.Imprimir() + "\n";
+		errores=errores + "\n";
+	   	return errores;
 	}
 	
 	public String mostrarErrorComp(){
-		String errores="";
-   	for (Error e: erroresComp)
-    		errores=errores + e.Imprimir() + "<br>";
-    	return errores;
+		String errores="Errores Compilacion: \n";
+	   	for (Error e: erroresComp)
+	    		errores=errores + e.Imprimir() + "\n";
+		errores=errores + "\n";
+	   	return errores;
 	}
 	
 
 	public String mostrarTs(){
 
 		ArrayList<Token> tokens = matTrans.getTablaSimbolos().getTokens();
-		String cadena ="";
+		String cadena ="Tabla de Simbolos: \n";
 		for ( Token t: tokens)
-			cadena =cadena + t.imprimirToken() + "<br>";
-		
+			cadena =cadena + t.imprimirToken() + "\n";
+		cadena = cadena + "\n";
 		return cadena;
 	}
 }

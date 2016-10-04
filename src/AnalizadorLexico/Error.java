@@ -28,9 +28,8 @@ public class Error {
 	}
 	
 	public String Imprimir(){
-		String l ="<b>";
+		String l= "";
 		l= l + "Linea "+ String.valueOf(linea)+": ";
-		l = l + "</b>";
 		return l + descripcion ;
 	}
 	

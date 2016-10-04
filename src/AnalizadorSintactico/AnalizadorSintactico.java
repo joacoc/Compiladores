@@ -13,6 +13,11 @@ public class AnalizadorSintactico {
 	static final String estructuraPrint = "Sentencia para imprimir por pantalla ";
 	static final String estructuraIF = "Sentencia de seleccion IF ";
 	static final String estructuraFOR = "Sentencia de iteracion FOR ";
+	static final String estructuraASIG = "Sentencia de ASIGNACIÓN ";
+	static final String estructuraCONDICION = "Sentencia de CONDICION ";
+	static final String estructuraPRINCIPAL = "Estructura del programa principal ";
+
+	
 	
 	//descripciones errores sintacticos
 	static final String errorPrint1 = "Existe un error en la sentencia print ";
@@ -44,7 +49,6 @@ public class AnalizadorSintactico {
 	}
 	
 	public void addError( Error error ){
-		System.out.println("entra");
 		erroresSint.add(error);
 	}
 	
@@ -53,22 +57,22 @@ public class AnalizadorSintactico {
 	}
 	
 	public String getErroresSint(){
-		String aux = "";
+		String aux = "Errores Sintacticos: \n";
 		for (Error e:erroresSint){
-			aux = aux + e.Imprimir() + "<br>";
+			aux = aux + e.Imprimir() + "\n";
 		}
-		if (aux == "")
-			return "<b>No hay errores sintacticos.</b>";
+		if (erroresSint.size() == 0)
+			return "No hay errores sintacticos.";
 		else
 			return aux;
 	}
 	
 	public String getEstructuras(){
-		String aux = "";
+		String aux = "Estructuras encontradas: \n";
 		for (Error e:estructuras){
-			aux = aux + e.Imprimir() + "<br>";
+			aux = aux + e.Imprimir() + "\n";
 		}
-		if (aux == "")
+		if (estructuras.size() == 0)
 			return "No se encontraron estructuras sintacticas";
 		else
 			return aux;
