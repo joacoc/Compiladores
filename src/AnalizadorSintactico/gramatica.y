@@ -77,7 +77,7 @@ bloque_de_sentencia : bloque_de_sentencia sentencia
 
 sentencia : print
 		  | sentencia_seleccion
-		  | asignacion 
+		  | asignacion
 		  | sentencia_for 
 		  ;
 
@@ -89,6 +89,8 @@ operador_menos_menos : ID S_RESTA_RESTA
 			;
 
 asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion
+                            | operador_menos_menos
+                            ;
 
 asignacion :  asignacion_sin_punto_coma ';'  { analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
     	   | lado_izquierdo S_ASIGNACION ';' { analizadorS.addError (new Error ( analizadorS.errorAsignacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
@@ -114,9 +116,6 @@ factor : CTEI
         ;
 
 print : PRINT '(' MULTI_LINEA ')' ';' {analizadorS.addEstructura (new Error ( analizadorS.estructuraPrint,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
-	  | PRINT '(' error ')' ';' { analizadorS.addError (new Error ( analizadorS.errorPrint1,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }	 
-	  | PRINT '(' MULTI_LINEA ')' error{ analizadorS.addError (new Error ( analizadorS.errorPrint1,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
-	  | error '(' MULTI_LINEA ')' ';' { analizadorS.addError (new Error ( analizadorS.errorPrint2,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
       ;
 
 sentencia_for : FOR '(' asignacion condicion ';' asignacion_sin_punto_coma ')' sentencia {analizadorS.addEstructura (new Error ( analizadorS.estructuraFOR,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ) ); }
