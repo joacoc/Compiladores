@@ -60,7 +60,9 @@ matriz : MATRIX ID '[' CTEI ']' '[' CTEI ']' inicializacion anotacion/*creo que 
           | MATRIX ID '[' CTEI ']' '[' CTEI ']' ';'
           ;
 
-
+anotacion : ANOTACIONC
+            | ANOTACIONF
+            ;
 inicializacion : '{' filas '}' ;
 
 filas : filas ';' fila
