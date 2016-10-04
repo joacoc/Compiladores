@@ -166,7 +166,7 @@ public class AnalizadorLexico {
 	
 	
 	public Token yylex(){
-		
+		System.out.println("joaco");
     	sigToken();
     	
 	    if (archivo.finArchivo()){
