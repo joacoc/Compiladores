@@ -168,6 +168,7 @@ public class AnalizadorLexico {
 	public Token yylex(){
 		
     	sigToken();
+    	System.out.println( "laucha");
     	
 	    if (archivo.finArchivo()){
 	    	Token token = new Token ("Fin de archivo", 0);
