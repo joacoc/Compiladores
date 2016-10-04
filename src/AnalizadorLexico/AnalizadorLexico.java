@@ -166,6 +166,7 @@ public class AnalizadorLexico {
 	
 	
 	public Token yylex(){
+		
     	sigToken();
     	
 	    if (archivo.finArchivo()){

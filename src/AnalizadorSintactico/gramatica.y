@@ -46,7 +46,8 @@ declaraciones : declaraciones declaracion
 			  ;
               
 declaracion : tipo lista_variables ';'
-            | tipo matriz ';'
+            | tipo matriz
+            | ALLOW tipo TO tipo ';'
             ;
 
 lista_variables : lista_variables ',' ID
@@ -55,8 +56,8 @@ lista_variables : lista_variables ',' ID
 
 matriz : MATRIX ID '[' CTEI ']' '[' CTEI ']' inicializacion anotacion/*creo que esta mal esto. no tendria que poder incializar aca*/
           | MATRIX ID '[' CTEI ']' '[' CTEI ']' anotacion
-          | MATRIX ID '[' CTEI ']' '[' CTEI ']' inicializacion
-          | MATRIX ID '[' CTEI ']' '[' CTEI ']'
+          | MATRIX ID '[' CTEI ']' '[' CTEI ']' inicializacion ';'
+          | MATRIX ID '[' CTEI ']' '[' CTEI ']' ';'
           ;
 
 
