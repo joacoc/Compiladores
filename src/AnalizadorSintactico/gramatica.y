@@ -46,17 +46,19 @@ declaraciones : declaraciones declaracion
 			  ;
               
 declaracion : tipo lista_variables ';'
-            | tipo lista_variables error
+            | matriz ';'
             ;
 
-lista_variables : lista_variables ',' variable
-                | variable
+lista_variables : lista_variables ',' ID
+                | ID
                 ;
-                
-variable : ID
-          | MATRIX ID '[' CTEI ']' '[' CTEI ']' inicializacion /*creo que esta mal esto. no tendria que poder incializar aca*/
+
+matriz : MATRIX ID '[' CTEI ']' '[' CTEI ']' inicializacion anotacion/*creo que esta mal esto. no tendria que poder incializar aca*/
+          | MATRIX ID '[' CTEI ']' '[' CTEI ']' anotacion
+          | MATRIX ID '[' CTEI ']' '[' CTEI ']' inicializacion
           | MATRIX ID '[' CTEI ']' '[' CTEI ']'
           ;
+          
 
 inicializacion : '{' filas '}' ;
 
