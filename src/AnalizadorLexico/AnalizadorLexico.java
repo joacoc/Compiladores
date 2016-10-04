@@ -280,5 +280,6 @@ public class AnalizadorLexico {
 			cadena =cadena + t.imprimirToken() + "\n";
 		cadena = cadena + "\n";
 		return cadena;
+		
 	}
 }
