@@ -54,7 +54,7 @@ lista_variables : lista_variables ',' ID
                 | ID
                 ;
 
-matriz : MATRIX ID '[' CTEI ']' '[' CTEI ']' inicializacion anotacion/*creo que esta mal esto. no tendria que poder incializar aca*/
+matriz : MATRIX ID '[' CTEI ']' '[' CTEI ']' inicializacion anotacion
           | MATRIX ID '[' CTEI ']' '[' CTEI ']' anotacion
           | MATRIX ID '[' CTEI ']' '[' CTEI ']' inicializacion ';'
           | MATRIX ID '[' CTEI ']' '[' CTEI ']' ';'
