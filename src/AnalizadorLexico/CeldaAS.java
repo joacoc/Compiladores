@@ -6,10 +6,10 @@ public class CeldaAS extends CeldaAbs {
 	static final String identificador = "I";
 	static final String constanteL = "CL";
 	
-	static final int maximo = 32767;
-	static final int minimo = -32768;
-	static final int maximoL = 2147483647;
-	static final int minimoL = -2147483648;
+	static final long maximo = 32767;
+	static final long minimo = -32768;
+	static final long maximoL = 2147483647;
+	static final long minimoL = -2147483648;
 	
 	static final String Smaximo = "_i32767";
 	static final String Sminimo = "_i-32768";
@@ -47,6 +47,7 @@ public class CeldaAS extends CeldaAbs {
 					if ( (t.getValor().length()>20) && (t.getUso()== AnalizadorLexico.ID) ){
 						String truncar=t.getValor() ;
 						t.setValor( truncar.substring(0, 19) );
+						tablaSimb.addSimbolo(t);
 						return -3;
 					}
 				
@@ -63,24 +64,28 @@ public class CeldaAS extends CeldaAbs {
 						
 						//int valor;
 						//if(cadena.length()<=10)
-							int valor = Integer.parseInt(cadena.substring(2)); //Se extrae el valor despues de _i o _l
+							long valor = Long.parseLong(cadena.substring(2)); //Se extrae el valor despues de _i o _l
 						//else
 							//valor = Integer.parseInt(cadena.substring(0,9));
 							
 						if ( (valor>maximo) && (t.getUso()== AnalizadorLexico.CTEI) ){
 							t.setValor(Smaximo);
+							tablaSimb.addSimbolo(t);
 							return -4;
 						}
-						if ( (t.getValor().length()<minimo) && (t.getUso()== AnalizadorLexico.CTEI) ){
+						if ( (valor<minimo) && (t.getUso()== AnalizadorLexico.CTEI) ){
 							t.setValor(Sminimo);
+							tablaSimb.addSimbolo(t);
 							return -4;
 						}
-						if ( (t.getValor().length()>maximoL) && (t.getUso()== AnalizadorLexico.CTEL) ){
+						if ( (valor>maximoL) && (t.getUso()== AnalizadorLexico.CTEL) ){
 							t.setValor(SmaximoL);
+							tablaSimb.addSimbolo(t);
 							return -4;
 						}
-						if ( (t.getValor().length()<minimoL) && (t.getUso()== AnalizadorLexico.CTEL) ){
+						if ( (valor<minimoL) && (t.getUso()== AnalizadorLexico.CTEL) ){
 							t.setValor(SminimoL);
+							tablaSimb.addSimbolo(t);
 							return -4;
 						}
 					}

@@ -84,7 +84,7 @@ public class Token {
 	}
 	
 	public String imprimirToken(){
-		String imprimir = "<b>" + tipo + ": " + "</b>"  + valor + " [" +uso + "] ";
+		String imprimir = tipo + ": " + valor + " [" +uso + "] ";
 		return imprimir;
 	}
 }
