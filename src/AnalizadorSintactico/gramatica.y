@@ -46,7 +46,7 @@ declaraciones : declaraciones declaracion
 			  ;
               
 declaracion : tipo lista_variables ';'
-            | matriz ';'
+            | tipo matriz ';'
             ;
 
 lista_variables : lista_variables ',' ID
