@@ -46,7 +46,7 @@ declaraciones : declaraciones declaracion
 			  ;
               
 declaracion : tipo lista_variables ';'
-            | matriz ';'
+            | tipo matriz ';'
             ;
 
 lista_variables : lista_variables ',' ID
@@ -58,7 +58,7 @@ matriz : MATRIX ID '[' CTEI ']' '[' CTEI ']' inicializacion anotacion/*creo que 
           | MATRIX ID '[' CTEI ']' '[' CTEI ']' inicializacion
           | MATRIX ID '[' CTEI ']' '[' CTEI ']'
           ;
-          
+
 
 inicializacion : '{' filas '}' ;
 
