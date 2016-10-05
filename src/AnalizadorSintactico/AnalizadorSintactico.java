@@ -38,6 +38,7 @@ public class AnalizadorSintactico {
 	static final String errorDeclaracionVar = "No se declaró correctamente las variables. ";
 	static final String errorSentencias = "No se declararon sentencias dentro del programa. ";
 	static final String errorAsignacion = "Error en la asignacion.";
+	static final String errorFaltoPalabraIF = "Error en la palabra reservada if";
 	
 	ArrayList<Error> erroresSint;
 	ArrayList<Error > estructuras;
