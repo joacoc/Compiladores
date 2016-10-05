@@ -64,7 +64,8 @@ matriz : MATRIX ID '[' CTEI ']' '[' CTEI ']' inicializacion anotacion
 anotacion : ANOTACIONC
             | ANOTACIONF
             ;
-inicializacion : '{' filas '}' ;
+inicializacion : '{' filas '}' 
+                ;
 
 filas : filas ';' fila
       | fila
@@ -157,7 +158,7 @@ sentencia_seleccion  : IF  condicion  '{' bloque_de_sentencia '}' ELSE '{' bloqu
 
                      | IF  condicion  sentencia ENDIF ';' { analizadorS.addEstructura (new Error ( analizadorS.estructuraIF,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
                      | IF  condicion  sentencia ENDIF error {  analizadorS.addError (new Error ( analizadorS.errorPuntoComa,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
-                            
+                    | error  condicion  sentencia ELSE sentencia ENDIF ';'{ analizadorS.addError (new Error ( analizadorS.errorFaltoPalabraIF,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
                      ;
 
 condicion_sin_parentesis : expresion operador expresion {analizadorS.addEstructura( new Error (analizadorS.estructuraCONDICION,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
