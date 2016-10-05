@@ -51,7 +51,10 @@ declaracion : tipo lista_variables ';'
             
             | tipo matriz
             | error matriz { analizadorS.addError (new Error ( analizadorS.errorTipo,"ERROR SINTACTICO", controladorArchivo.getLinea() )); } 
+           
             | ALLOW tipo TO tipo ';' { analizadorS.addEstructura (new Error ( analizadorS.estructuraALLOW,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
+            | ALLOW error TO tipo ';'{ analizadorS.addError(new Error ( analizadorS.errorTipo,"ERROR SINTACTICO", controladorArchivo.getLinea() )); } 
+            | ALLOW tipo TO error ';'{ analizadorS.addError(new Error ( analizadorS.errorTipo,"ERROR SINTACTICO", controladorArchivo.getLinea() )); } 
             ;
 
 lista_variables : lista_variables ',' ID
@@ -59,10 +62,17 @@ lista_variables : lista_variables ',' ID
                 | error { analizadorS.addError (new Error ( analizadorS.errorDeclaracionVar,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
                 ;
 
-matriz : MATRIX ID '[' CTEI ']' '[' CTEI ']' inicializacion anotacion
-       | MATRIX ID '[' CTEI ']' '[' CTEI ']' anotacion
-       | MATRIX ID '[' CTEI ']' '[' CTEI ']' inicializacion ';'
-       | MATRIX ID '[' CTEI ']' '[' CTEI ']' ';'
+declaracion_matriz : MATRIX ID '[' CTEI ']' '[' CTEI ']'
+				   | MATRIX error '[' CTEI ']' '[' CTEI ']' { analizadorS.addError (new Error ( analizadorS.errorDeclaracionMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
+				   | MATRIX ID '[' error ']' '[' CTEI ']' { analizadorS.addError (new Error ( analizadorS.errorDeclaracionMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
+				   | MATRIX ID '[' CTEI ']' '[' error ']'	{ analizadorS.addError (new Error ( analizadorS.errorDeclaracionMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
+				   ;
+
+matriz : declaracion_matriz inicializacion ';' anotacion
+       | declaracion_matriz ';' anotacion
+       | declaracion_matriz inicializacion ';'
+       | declaracion_matriz ';'
+
        ;
 
 anotacion : ANOTACIONC
