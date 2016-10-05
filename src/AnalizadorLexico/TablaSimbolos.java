@@ -24,7 +24,8 @@ public class TablaSimbolos {
 	public boolean es_Agregable( Token t){
 		if(t.getUso() == AnalizadorLexico.ID ||
 				t.getUso() == AnalizadorLexico.CTEI ||
-				t.getUso() == AnalizadorLexico.CTEL)
+				t.getUso() == AnalizadorLexico.CTEL || 
+				t.getUso() == AnalizadorLexico.MULTI_LINEA)
 			return true;
 		else
 			return false;

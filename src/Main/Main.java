@@ -59,7 +59,7 @@ public class Main {
         parser.setSintactico(analizadorSintactico);
         parser.setControladorArchivo(archivo);
         parser.run();
-        
+
         System.out.println( analizadorLexico.mostrarTokens() );
         System.out.println( analizadorLexico.mostrarTs() );
         System.out.println(analizadorLexico.mostrarWarning());
