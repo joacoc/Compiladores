@@ -40,16 +40,10 @@ programa_principal  : ID declaraciones '{' bloque_de_sentencia '}' { analizadorS
                     | ID declaraciones '{' '}'         { analizadorS.addError (new Error ( analizadorS.errorSentencias,"ERROR SINTACTICO", controladorArchivo.getLinea() )); } 
                     ;
 
-<<<<<<< HEAD
-ineinitnqejlevwbt
-envqjeñjvlektñkkbdf
-earookebkevokelf
-erooavejrvoejrl
-=======
+
 declaraciones : declaraciones declaracion 
         | declaracion 
         ;
->>>>>>> 72dbeec59f7008ce8b84de12bb2d716c2bef905f
               
 declaracion : tipo lista_variables ';'
             | tipo matriz
