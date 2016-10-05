@@ -146,6 +146,8 @@ sentencia_for : FOR '(' asignacion condicion_sin_parentesis ';' asignacion_sin_p
               ;
 
 
+
+
 sentencia_seleccion  : IF  condicion  '{' bloque_de_sentencia '}' ELSE '{' bloque_de_sentencia '}' ENDIF ';' { analizadorS.addEstructura (new Error ( analizadorS.estructuraIF,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
                      | IF  condicion bloque_de_sentencia '}' ELSE '{' bloque_de_sentencia '}' ENDIF ';' { analizadorS.addError (new Error ( analizadorS.errorLlaveAIF,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
                      | IF  condicion  '{' bloque_de_sentencia ELSE '{' bloque_de_sentencia '}' ENDIF ';' { analizadorS.addError (new Error ( analizadorS.errorLlaveCIF,"ERROR SINTACTICO", controladorArchivo.getLinea()  ));}
@@ -196,8 +198,14 @@ tipo : INTEGER
 
 
 celda_matriz : ID '[' ID ']' '[' ID ']'
-              | ID '[' CTEI ']' '[' CTEI ']'
-              ;
+             | ID '[' CTEI ']' '[' CTEI ']'
+             | ID '[' error ']' '[' ID ']'  { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
+             | ID '[' error ']' '[' CTEI ']'  { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
+             | ID '[' ID ']' '[' error ']'  { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
+             | ID '[' CTEI ']' '[' error ']'   { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
+
+             ;
+             
 operador : '<' 
 		 | '>' 
 		 | S_MAYOR_IGUAL 
