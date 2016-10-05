@@ -34,11 +34,12 @@ public class AnalizadorSintactico {
 	static final String errorLlaveCIF = "Llaves no equilibradas. Faltó cerrar llaves en la rama del IF. ";	
 	static final String errorLlaveAELSE = "Llaves no equilibradas. Faltó abrir llaves en la rama del ELSE. ";
 	static final String errorLlaveCELSE = "Llaves no equilibradas. Faltó cerrar llaves en la rama del ELSE. ";	
-	static final String errorProgram = "Se esperaba la palabra reservada 'PROGRAM' ";
+	static final String errorProgram = "No es correcto el nombre del programa. ";
 	static final String errorDeclaracionVar = "No se declaró correctamente las variables. ";
 	static final String errorSentencias = "No se declararon sentencias dentro del programa. ";
 	static final String errorAsignacion = "Error en la asignacion.";
 	static final String errorFaltoPalabraIF = "Error en la palabra reservada if";
+	static final String errorTipo = "Error al declarar el tipo en la declaracion";
 	
 	ArrayList<Error> erroresSint;
 	ArrayList<Error > estructuras;

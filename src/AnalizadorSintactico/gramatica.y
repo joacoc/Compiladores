@@ -42,28 +42,30 @@ programa_principal  : ID declaraciones '{' bloque_de_sentencia '}' { analizadorS
 
 
 declaraciones : declaraciones declaracion 
-        | declaracion 
-        ;
+        	  | declaracion 
+        	  ;
               
 declaracion : tipo lista_variables ';'
+			| tipo lista_variables { analizadorS.addError (new Error ( analizadorS.errorPuntoComa,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
+			| error lista_variables { analizadorS.addError (new Error ( analizadorS.errorTipo,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
             | tipo matriz
             | ALLOW tipo TO tipo ';' { analizadorS.addEstructura (new Error ( analizadorS.estructuraALLOW,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
             ;
 
 lista_variables : lista_variables ',' ID
                 | ID
-                | error
+                | error { analizadorS.addError (new Error ( analizadorS.errorDeclaracionVar,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
                 ;
 
 matriz : MATRIX ID '[' CTEI ']' '[' CTEI ']' inicializacion anotacion
-          | MATRIX ID '[' CTEI ']' '[' CTEI ']' anotacion
-          | MATRIX ID '[' CTEI ']' '[' CTEI ']' inicializacion ';'
-          | MATRIX ID '[' CTEI ']' '[' CTEI ']' ';'
-          ;
+       | MATRIX ID '[' CTEI ']' '[' CTEI ']' anotacion
+       | MATRIX ID '[' CTEI ']' '[' CTEI ']' inicializacion ';'
+       | MATRIX ID '[' CTEI ']' '[' CTEI ']' ';'
+       ;
 
 anotacion : ANOTACIONC
-            | ANOTACIONF
-            ;
+          | ANOTACIONF
+          ;
 inicializacion : '{' filas '}' 
                 ;
 
@@ -75,7 +77,7 @@ fila : fila ',' CTEI
       | CTEI
       ;
 
-bloque_de_sentencia : bloque_de_sentencia sentencias
+bloque_de_sentencia : bloque_de_sentencia sentencia
                     | sentencia 
                     ;
 
@@ -83,8 +85,7 @@ sentencia : print
 		  | sentencia_seleccion
 		  | asignacion
 		  | sentencia_for 
-      | asignacion_sin_punto_coma { analizadorS.addError (new Error ( analizadorS.errorAsignacion,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
-	    | error
+      	  | asignacion_sin_punto_coma { analizadorS.addError (new Error ( analizadorS.errorAsignacion,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
   	  ;
 
 lado_izquierdo : ID
