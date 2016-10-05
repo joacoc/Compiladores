@@ -52,6 +52,7 @@ declaracion : tipo lista_variables ';'
 
 lista_variables : lista_variables ',' ID
                 | ID
+                | error
                 ;
 
 matriz : MATRIX ID '[' CTEI ']' '[' CTEI ']' inicializacion anotacion
