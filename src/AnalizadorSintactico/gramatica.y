@@ -47,7 +47,7 @@ declaraciones : declaraciones declaracion
               
 declaracion : tipo lista_variables ';'
             | tipo matriz
-            | ALLOW tipo TO tipo ';'
+            | ALLOW tipo TO tipo ';' { analizadorS.addEstructura (new Error ( analizadorS.estructuraALLOW,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
             ;
 
 lista_variables : lista_variables ',' ID
@@ -74,7 +74,7 @@ fila : fila ',' CTEI
       | CTEI
       ;
 
-bloque_de_sentencia : bloque_de_sentencia sentencia
+bloque_de_sentencia : bloque_de_sentencia sentencias
                     | sentencia 
                     ;
 
@@ -82,7 +82,9 @@ sentencia : print
 		  | sentencia_seleccion
 		  | asignacion
 		  | sentencia_for 
-		  ;
+      | asignacion_sin_punto_coma { analizadorS.addError (new Error ( analizadorS.errorAsignacion,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
+	    | error
+  	  ;
 
 lado_izquierdo : ID
             	| celda_matriz
@@ -91,7 +93,7 @@ lado_izquierdo : ID
 operador_menos_menos : ID S_RESTA_RESTA
 			;
 
-asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion { analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
+asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion 
                             | operador_menos_menos { analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
                             ;
 
