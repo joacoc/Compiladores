@@ -47,7 +47,7 @@ declaraciones : declaraciones declaracion
               
 declaracion : tipo lista_variables ';'
 			| tipo lista_variables { analizadorS.addError (new Error ( analizadorS.errorPuntoComa,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
-			| error lista_variables { analizadorS.addError (new Error ( analizadorS.errorTipo,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
+			| error lista_variables ';' { analizadorS.addError (new Error ( analizadorS.errorTipo,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
             | tipo matriz
             | ALLOW tipo TO tipo ';' { analizadorS.addEstructura (new Error ( analizadorS.estructuraALLOW,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
             ;
@@ -78,14 +78,14 @@ fila : fila ',' CTEI
       ;
 
 bloque_de_sentencia : bloque_de_sentencia sentencia
-                    | sentencia 
+                    | sentencia
                     ;
 
 sentencia : print
 		  | sentencia_seleccion
 		  | asignacion
 		  | sentencia_for 
-      	  | asignacion_sin_punto_coma { analizadorS.addError (new Error ( analizadorS.errorAsignacion,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
+      	  | asignacion_sin_punto_coma { analizadorS.addError (new Error ( analizadorS.errorPuntoComa,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
   	  ;
 
 lado_izquierdo : ID
@@ -95,13 +95,13 @@ lado_izquierdo : ID
 operador_menos_menos : ID S_RESTA_RESTA
 			;
 
-asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion 
+asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion { analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
                             | operador_menos_menos { analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
                             ;
 
 asignacion :  asignacion_sin_punto_coma ';'
-    	   | lado_izquierdo S_ASIGNACION ';' { analizadorS.addError (new Error ( analizadorS.errorAsignacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
-		   
+    	   | lado_izquierdo S_ASIGNACION error ';' { analizadorS.addError (new Error ( analizadorS.errorAsignacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }		   
+         | error S_ASIGNACION expresion ';' { analizadorS.addError (new Error ( analizadorS.errorAsignacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }   
 		;
 
 expresion : expresion '+' termino
