@@ -40,6 +40,7 @@ public class AnalizadorSintactico {
 	static final String errorAsignacion = "Error en la asignacion.";
 	static final String errorFaltoPalabraIF = "Error en la palabra reservada if";
 	static final String errorTipo = "Error al declarar el tipo.";
+	static final String errorSimboloAsignacion = "La asignacion es con :=";
 	
 	ArrayList<Error> erroresSint;
 	ArrayList<Error > estructuras;
