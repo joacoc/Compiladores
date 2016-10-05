@@ -41,9 +41,6 @@ programa_principal  : ID declaraciones '{' bloque_de_sentencia '}' { analizadorS
                     ;
 
 
-declaraciones : declaraciones declaracion 
-			  | declaracion 
-			  ;
               
 declaracion : tipo lista_variables ';'
             | tipo matriz
