@@ -107,7 +107,11 @@ lado_izquierdo : ID
 operador_menos_menos : ID S_RESTA_RESTA
 			;
 
-asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion { analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
+asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion { 
+												analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); 
+												System.out.println("Asignacion sin punto y coma" +"Uso" +((Token)$2.obj).getUso()
+																								+"Tipo" +((Token)$2.obj).getTipo()
+																								+"Valor" +((Token)$2.obj).getValor());}
                             | operador_menos_menos { analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
                            | lado_izquierdo S_ASIGNACION error { analizadorS.addError (new Error ( analizadorS.errorAsignacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }      
                            | error S_ASIGNACION expresion { analizadorS.addError (new Error ( analizadorS.errorAsignacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
@@ -117,7 +121,7 @@ asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion { analizadorS.
 asignacion :  asignacion_sin_punto_coma ';'
 		;
 
-expresion : expresion '+' termino
+expresion : expresion '+' termino	{ts}
       | expresion '-' termino
       | termino
 ;
@@ -134,7 +138,7 @@ factor : CTEI
 		| celda_matriz
 ;
  
- print : PRINT '(' MULTI_LINEA ')' ';' {analizadorS.addEstructura (new Error ( analizadorS.estructuraPrint,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
+print : PRINT '(' MULTI_LINEA ')' ';' {analizadorS.addEstructura (new Error ( analizadorS.estructuraPrint,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
 		  | PRINT '(' error ')' ';' { analizadorS.addError (new Error ( analizadorS.errorPrint1,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }	 
 		  | PRINT '(' MULTI_LINEA ')' error{ analizadorS.addError (new Error ( analizadorS.errorPrint1,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
 		  | error '(' MULTI_LINEA ')' ';' { analizadorS.addError (new Error ( analizadorS.errorPrint2,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
@@ -199,7 +203,7 @@ tipo : INTEGER
 
 
 celda_matriz : ID '[' ID ']' '[' ID ']' 
-             | ID '[' CTEI ']' '[' CTEI ']' {System.out.println("Celda_Matriz: " +((Token)$$.obj).getTipo())}
+             | ID '[' CTEI ']' '[' CTEI ']' {}
              | ID '[' error ']' '[' ID ']'  { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
              | ID '[' error ']' '[' CTEI ']'  { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
              | ID '[' ID ']' '[' error ']'  { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
