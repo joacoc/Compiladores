@@ -198,8 +198,8 @@ tipo : INTEGER
      ; 
 
 
-celda_matriz : ID '[' ID ']' '[' ID ']'
-             | ID '[' CTEI ']' '[' CTEI ']'
+celda_matriz : ID '[' ID ']' '[' ID ']' 
+             | ID '[' CTEI ']' '[' CTEI ']' {System.out.println("Celda_Matriz: " +((Token)$$.obj).getTipo())}
              | ID '[' error ']' '[' ID ']'  { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
              | ID '[' error ']' '[' CTEI ']'  { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
              | ID '[' ID ']' '[' error ']'  { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
@@ -240,7 +240,9 @@ public void setControladorArchivo ( ControladorArchivo ca){
 
 int yylex()
 {
-   	int val = ((Token)(analizadorL).yylex()).getUso();
+	Token token = ((Token)(analizadorL).yylex());
+   	int val = token.getUso();
+   	yylval = new ParserVal(token);
     return val;
 }
 

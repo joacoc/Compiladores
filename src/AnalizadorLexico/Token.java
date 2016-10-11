@@ -2,7 +2,7 @@ package AnalizadorLexico;
 
 import java.util.Hashtable;
 
-public class Token {
+public class Token{
 	
 	String valor;
 	String tipo;
@@ -71,14 +71,16 @@ public class Token {
 	}
 	
 	public String getValor(){
-			return valor;
+		return valor;
 	}
 	
 	public int getUso() {
 		return uso;
 	}
 	
-	
+	public String getTipo(){
+		return tipo;
+	}
 	public void setValor(String valor) {
 		this.valor = valor;
 	}
