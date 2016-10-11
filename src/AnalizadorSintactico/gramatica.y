@@ -117,10 +117,11 @@ asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion { analizadorS.
 asignacion :  asignacion_sin_punto_coma ';'
 		;
 
-expresion : expresion '+' termino
-     	  | expresion '-' termino
-          | termino
- 		  ;
+expresion : expresion '+' termino {System.out.println(((Token)$1.obj).getTipo());}
+      | expresion '-' termino
+      | termino
+;
+
 
 termino : termino '*' factor
     | termino '/' factor
@@ -197,9 +198,10 @@ tipo : INTEGER
      | MATRIX
      ; 
 
-
-celda_matriz : ID '[' ID ']' '[' ID ']' 
-             | ID '[' CTEI ']' '[' CTEI ']' {System.out.println("Celda_Matriz: " +((Token)$$.obj).getTipo());}
+celda_matriz : ID '[' ID ']' '[' ID ']'
+			 | ID '[' ID ']' '[' CTEI ']'
+             | ID '[' CTEI ']' '[' CTEI ']' {System.out.println(((Token)$7.obj).getTipo());}
+             | ID '[' CTEI ']' '[' ID ']'
              | ID '[' error ']' '[' ID ']'  { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
              | ID '[' error ']' '[' CTEI ']'  { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
              | ID '[' ID ']' '[' error ']'  { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
