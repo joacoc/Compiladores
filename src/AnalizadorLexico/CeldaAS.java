@@ -44,9 +44,9 @@ public class CeldaAS extends CeldaAbs {
 				if (t != null){
 					//Se chequea si es un ID, si el nombre es >20 lo trunco.
 					//TODO: Deberia tener un warning o alfinal no?
-					if ( (t.getValor().length()>20) && (t.getUso()== AnalizadorLexico.ID) ){
-						String truncar=t.getValor() ;
-						t.setValor( truncar.substring(0, 19) );
+					if ( (t.getNombre().length()>20) && (t.getUso()== AnalizadorLexico.ID) ){
+						String truncar=t.getNombre() ;
+						t.setNombre( truncar.substring(0, 19) );
 						tablaSimb.addSimbolo(t);
 						return -3;
 					}
@@ -56,7 +56,7 @@ public class CeldaAS extends CeldaAbs {
 					//TODO: Si lo trunco no lo deberia agregar tmb a la tabla de simb. ? 
 					
 					if ( (t.getUso() == AnalizadorLexico.CTEI) || (t.getUso() == AnalizadorLexico.CTEL) ) {
-						String cadena = t.getValor();
+						String cadena = t.getNombre();
 							
 						//TODO:
 						//Integer.parseInt() soporta hasta numeros de diez digitos, si se le da un string mas grande
@@ -69,22 +69,22 @@ public class CeldaAS extends CeldaAbs {
 							//valor = Integer.parseInt(cadena.substring(0,9));
 							
 						if ( (valor>maximo) && (t.getUso()== AnalizadorLexico.CTEI) ){
-							t.setValor(Smaximo);
+							t.setNombre(Smaximo);
 							tablaSimb.addSimbolo(t);
 							return -4;
 						}
 						if ( (valor<minimo) && (t.getUso()== AnalizadorLexico.CTEI) ){
-							t.setValor(Sminimo);
+							t.setNombre(Sminimo);
 							tablaSimb.addSimbolo(t);
 							return -4;
 						}
 						if ( (valor>maximoL) && (t.getUso()== AnalizadorLexico.CTEL) ){
-							t.setValor(SmaximoL);
+							t.setNombre(SmaximoL);
 							tablaSimb.addSimbolo(t);
 							return -4;
 						}
 						if ( (valor<minimoL) && (t.getUso()== AnalizadorLexico.CTEL) ){
-							t.setValor(SminimoL);
+							t.setNombre(SminimoL);
 							tablaSimb.addSimbolo(t);
 							return -4;
 						}

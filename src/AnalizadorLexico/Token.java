@@ -4,15 +4,16 @@ import java.util.Hashtable;
 
 public class Token{
 	
-	String valor;
+	String nombre;
+	long valor;
 	String tipo;
 	String lexema;
 	int uso;
 	Hashtable<String, Integer> tablaTokens = new Hashtable<>();
 	AnalizadorLexico analizador = new AnalizadorLexico(null,null);
 	
-	public Token (String valor, int uso){
-		this.valor = valor;
+	public Token (String nombre, int uso){
+		this.nombre = nombre;
 		this.uso = uso;
 
 		if ( (uso>=analizador.IF) && (uso<=analizador.LONGINT) )
@@ -60,18 +61,8 @@ public class Token{
 																lexema = "Simbolo";	
 			
 	}
-	
-	public int getToken() {
-		if (valor.charAt(0) <= 256 ){ 		//ACORDARME QUE LO CAMBIE
-			char c = valor.charAt(0);
-			return c;
-		}
-		else{
-			return 1;	//Poner aca lo de variables, palabra reservada o constantes
-		}		
-	}
-	
-	public String getValor(){
+		
+	public long getValor(){
 		return valor;
 	}
 	
@@ -87,7 +78,7 @@ public class Token{
 		this.tipo = tipo;
 	}
 	
-	public void setValor(String valor) {
+	public void setValor(long valor) {
 		this.valor = valor;
 	}
 	
@@ -102,5 +93,13 @@ public class Token{
 	
 	public void setLexema(String lexema) {
 		this.lexema = lexema;
+	}
+	
+	public String getNombre() {
+		return nombre;
+	}
+	
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
 	}
 }
