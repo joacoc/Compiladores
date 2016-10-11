@@ -6,6 +6,7 @@ public class Token{
 	
 	String valor;
 	String tipo;
+	String lexema;
 	int uso;
 	Hashtable<String, Integer> tablaTokens = new Hashtable<>();
 	AnalizadorLexico analizador = new AnalizadorLexico(null,null);
@@ -15,48 +16,48 @@ public class Token{
 		this.uso = uso;
 
 		if ( (uso>=analizador.IF) && (uso<=analizador.LONGINT) )
-			tipo = "Palabra reservada";
+			lexema = "Palabra reservada";
 		else
 			if (uso==analizador.ID)
-				tipo = "Identificador";		
+				lexema = "Identificador";		
 			else
 				if (uso==analizador.MULTI_LINEA) 
-					tipo = "Cadena de caracteres";
+					lexema = "Cadena de caracteres";
 				else
 					if (uso==analizador.CTEL) 
-						tipo = "Constante long";
+						lexema = "Constante long";
 					else
 						if (uso==analizador.S_ASIGNACION)
-							tipo = "Asignacion";
+							lexema = "Asignacion";
 						else
 							if (uso==analizador.S_MAYOR_IGUAL)
-								tipo = "Simbolo Mayor igual";
+								lexema = "Simbolo Mayor igual";
 							else
 								if (uso==analizador.S_MENOR_IGUAL)
-									tipo = "Simbolo Menor igual";
+									lexema = "Simbolo Menor igual";
 								else
 									if (uso==analizador.S_EXCLAMACION_IGUAL)
-										tipo = "Simbolo distinto";
+										lexema = "Simbolo distinto";
 									else
 										if (uso==analizador.CTEI)
-											tipo = "Constante entera";
+											lexema = "Constante entera";
 										else
 											if (uso==analizador.S_RESTA_RESTA)
-												tipo = "Simbolo --";
+												lexema = "Simbolo --";
 											else
 												if (uso==analizador.CTEI)
-													tipo = "Constante entera";
+													lexema = "Constante entera";
 												else
 													if (uso==analizador.COMENTARIO)
-														tipo = "Comentario";
+														lexema = "Comentario";
 													else
 														if (uso==analizador.ANOTACIONF)
-															tipo = "Anotacion por filas";
+															lexema = "Anotacion por filas";
 														else
 															if (uso==analizador.ANOTACIONC)
-																tipo = "Anotacion por columnas";
+																lexema = "Anotacion por columnas";
 															else
-																tipo = "Simbolo";	
+																lexema = "Simbolo";	
 			
 	}
 	
@@ -81,12 +82,25 @@ public class Token{
 	public String getTipo(){
 		return tipo;
 	}
+	
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+	
 	public void setValor(String valor) {
 		this.valor = valor;
 	}
 	
 	public String imprimirToken(){
-		String imprimir = tipo + ": " + valor + " [" +uso + "] ";
+		String imprimir = lexema + ": " + valor + " [" +uso + "] ";
 		return imprimir;
+	}
+	
+	public String getLexema() {
+		return lexema;
+	}
+	
+	public void setLexema(String lexema) {
+		this.lexema = lexema;
 	}
 }
