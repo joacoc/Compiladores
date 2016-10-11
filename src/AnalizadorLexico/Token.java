@@ -4,10 +4,11 @@ import java.util.Hashtable;
 
 public class Token{
 	
-	String nombre;
-	long valor;
-	String tipo;
-	String lexema;
+	String nombre; //pepe,
+	long valorLong;
+	long [][] valorMatriz;
+	String tipo; //integer, longint
+	String lexema; //ID, CTE
 	int uso;
 	Hashtable<String, Integer> tablaTokens = new Hashtable<>();
 	AnalizadorLexico analizador = new AnalizadorLexico(null,null);
@@ -63,8 +64,9 @@ public class Token{
 	}
 		
 	public long getValor(){
-		return valor;
+		return valorLong;
 	}
+	
 	
 	public int getUso() {
 		return uso;
@@ -79,11 +81,11 @@ public class Token{
 	}
 	
 	public void setValor(long valor) {
-		this.valor = valor;
+		this.valorLong = valor;
 	}
 	
 	public String imprimirToken(){
-		String imprimir = lexema + ": " + valor + " [" +uso + "] ";
+		String imprimir = lexema + ": " + nombre + " [" +uso + "] ";
 		return imprimir;
 	}
 	
