@@ -83,7 +83,7 @@ public class Token{
 	}
 	
 	public String imprimirToken(){
-		String imprimir = lexema + ": " + valor + " [" +uso + "] ";
+		String imprimir = lexema + ": " + nombre + " [" +uso + "] ";
 		return imprimir;
 	}
 	
