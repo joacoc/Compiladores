@@ -45,7 +45,7 @@ declaraciones : declaraciones declaracion
         	  | declaracion 
         	  ;
               
-declaracion : tipo lista_variables ';'
+declaracion : tipo lista_variables ';' { for ( int  }
 		    	| tipo lista_variables { analizadorS.addError (new Error ( analizadorS.errorPuntoComa,"ERROR SINTACTICO",    controladorArchivo.getLinea() )); }
 		      	| error lista_variables ';' { analizadorS.addError (new Error ( analizadorS.errorTipo,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
             
@@ -104,23 +104,23 @@ lado_izquierdo : ID
             	| celda_matriz
                 ;
 
-operador_menos_menos : ID S_RESTA_RESTA
+operador_menos_menos : ID S_RESTA_RESTA { System.out.println(" anda:" + ((Token)$1.obj).getTipo() ); }
 			;
 
 asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion { analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
-                            | operador_menos_menos { analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
-                           | lado_izquierdo S_ASIGNACION error { analizadorS.addError (new Error ( analizadorS.errorAsignacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }      
-                           | error S_ASIGNACION expresion { analizadorS.addError (new Error ( analizadorS.errorAsignacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
-                           | lado_izquierdo '=' expresion { analizadorS.addError (new Error ( analizadorS.errorSimboloAsignacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
+                          | operador_menos_menos { analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
+                          | lado_izquierdo S_ASIGNACION error { analizadorS.addError (new Error ( analizadorS.errorAsignacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }      
+                          | error S_ASIGNACION expresion { analizadorS.addError (new Error ( analizadorS.errorAsignacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
+                          | lado_izquierdo '=' expresion { analizadorS.addError (new Error ( analizadorS.errorSimboloAsignacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
                                               ;
 
 asignacion :  asignacion_sin_punto_coma ';'
 		;
 
 expresion : expresion '+' termino
-      | expresion '-' termino
-      | termino
-;
+     	  | expresion '-' termino
+          | termino
+ 		  ;
 
 termino : termino '*' factor
     | termino '/' factor
@@ -199,7 +199,7 @@ tipo : INTEGER
 
 
 celda_matriz : ID '[' ID ']' '[' ID ']' 
-             | ID '[' CTEI ']' '[' CTEI ']' {System.out.println("Celda_Matriz: " +((Token)$$.obj).getTipo())}
+             | ID '[' CTEI ']' '[' CTEI ']' {System.out.println("Celda_Matriz: " +((Token)$$.obj).getTipo());}
              | ID '[' error ']' '[' ID ']'  { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
              | ID '[' error ']' '[' CTEI ']'  { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
              | ID '[' ID ']' '[' error ']'  { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
