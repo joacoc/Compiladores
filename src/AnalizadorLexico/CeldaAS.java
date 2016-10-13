@@ -95,8 +95,7 @@ public class CeldaAS extends CeldaAbs {
 						tablaSimb.addSimbolo(t);	
 					
 					//Si es una palabra reservada la tengo que devolver de alguna tabla
-					
-					//return t.getToken();
+					return -1;
 				}
 				return -1;
 		}

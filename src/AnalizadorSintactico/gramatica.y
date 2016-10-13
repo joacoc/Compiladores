@@ -45,7 +45,10 @@ declaraciones : declaraciones declaracion
         	  | declaracion 
         	  ;
               
-declaracion : tipo lista_variables ';' { for ( int  }
+declaracion : tipo lista_variables ';' { Token token = (Token)$1.obj;
+										 String tipo= token.getNombre();
+										 
+										 }
 		    	| tipo lista_variables { analizadorS.addError (new Error ( analizadorS.errorPuntoComa,"ERROR SINTACTICO",    controladorArchivo.getLinea() )); }
 		      	| error lista_variables ';' { analizadorS.addError (new Error ( analizadorS.errorTipo,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
             
@@ -104,7 +107,7 @@ lado_izquierdo : ID
             	| celda_matriz
                 ;
 
-operador_menos_menos : ID S_RESTA_RESTA { System.out.println(" anda:" + ((Token)$1.obj).getTipo() ); }
+operador_menos_menos : ID S_RESTA_RESTA
 			;
 
 asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion { 
@@ -203,7 +206,7 @@ tipo : INTEGER
 
 celda_matriz : ID '[' ID ']' '[' ID ']' 
 			 | ID '[' ID ']' '[' CTEI ']'
-             | ID '[' CTEI ']' '[' CTEI ']' {System.out.println(((Token)$7.obj).getTipo());}
+             | ID '[' CTEI ']' '[' CTEI ']'
              | ID '[' CTEI ']' '[' ID ']'
              | ID '[' error ']' '[' ID ']'  { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
              | ID '[' error ']' '[' CTEI ']'  { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
