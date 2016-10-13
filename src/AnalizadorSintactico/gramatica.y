@@ -123,15 +123,15 @@ asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion {
 asignacion :  asignacion_sin_punto_coma ';'
 		;
 
-expresion : expresion '+' termino	{$$ = Suma(((Token)$1.obj), ((Token)$3.obj));}
-      | expresion '-' termino 		{$$ = Resta(((Token)$1.obj), ((Token)$3.obj));}
-      | termino						{$$ = $1;}
+expresion : expresion '+' termino	{}
+      | expresion '-' termino 		{}
+      | termino						{}
 ;
 
 
-termino : termino '*' factor	{$$ = Multiplicacion(((Token)$1.obj), ((Token)$3.obj))}
-    | termino '/' factor		{$$ = Division(((Token)$1.obj), ((Token)$3.obj))}
-    | factor					{$$ = $1}
+termino : termino '*' factor	{}
+    | termino '/' factor		{}
+    | factor					
 ;
 
 factor : CTEI 
