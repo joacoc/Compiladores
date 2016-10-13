@@ -200,14 +200,10 @@ tipo : INTEGER
      | MATRIX
      ; 
 
-celda_matriz : ID '[' ID ']' '[' ID ']' 
-			 | ID '[' ID ']' '[' CTEI ']'
-             | ID '[' CTEI ']' '[' CTEI ']'
-             | ID '[' CTEI ']' '[' ID ']'
-             | ID '[' error ']' '[' ID ']'  { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
-             | ID '[' error ']' '[' CTEI ']'  { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
-             | ID '[' ID ']' '[' error ']'  { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
-             | ID '[' CTEI ']' '[' error ']'   { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
+celda_matriz : ID '[' expresion ']' '[' expresion ']'
+             | ID '[' error ']' '[' expresion ']'  { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
+             | ID '[' expresion ']' '[' error ']'  { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
+             | ID '[' error ']' '[' error ']'  { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
 
              ;
              
