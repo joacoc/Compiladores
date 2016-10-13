@@ -120,15 +120,15 @@ asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion {
 asignacion :  asignacion_sin_punto_coma ';'
 		;
 
-expresion : expresion '+' termino	{ts}
-      | expresion '-' termino
-      | termino
+expresion : expresion '+' termino	{$$ = Suma(((Token)$1.obj), ((Token)$3.obj));}
+      | expresion '-' termino 		{$$ = Resta(((Token)$1.obj), ((Token)$3.obj));}
+      | termino						{$$ = $1;}
 ;
 
 
-termino : termino '*' factor
-    | termino '/' factor
-    | factor
+termino : termino '*' factor	{$$ = Multiplicacion(((Token)$1.obj), ((Token)$3.obj))}
+    | termino '/' factor		{$$ = Division(((Token)$1.obj), ((Token)$3.obj))}
+    | factor					{$$ = $1}
 ;
 
 factor : CTEI 
@@ -201,7 +201,7 @@ tipo : INTEGER
      | MATRIX
      ; 
 
-celda_matriz : ID '[' ID ']' '[' ID ']'
+celda_matriz : ID '[' ID ']' '[' ID ']' 
 			 | ID '[' ID ']' '[' CTEI ']'
              | ID '[' CTEI ']' '[' CTEI ']' {System.out.println(((Token)$7.obj).getTipo());}
              | ID '[' CTEI ']' '[' ID ']'

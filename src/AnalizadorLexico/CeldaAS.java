@@ -96,7 +96,7 @@ public class CeldaAS extends CeldaAbs {
 					
 					//Si es una palabra reservada la tengo que devolver de alguna tabla
 					
-					return t.getToken();
+					//return t.getToken();
 				}
 				return -1;
 		}
