@@ -112,9 +112,6 @@ operador_menos_menos : ID S_RESTA_RESTA
 
 asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion { 
 												analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); 
-												System.out.println("Asignacion sin punto y coma" +"Uso" +((Token)$2.obj).getUso()
-																								+"Tipo" +((Token)$2.obj).getTipo()
-																								+"Valor" +((Token)$2.obj).getValor());}
                             | operador_menos_menos { analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
                            | lado_izquierdo S_ASIGNACION error { analizadorS.addError (new Error ( analizadorS.errorAsignacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }      
                            | error S_ASIGNACION expresion { analizadorS.addError (new Error ( analizadorS.errorAsignacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
