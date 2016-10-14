@@ -17,6 +17,7 @@ public class AnalizadorSintactico {
 	static final String estructuraCONDICION = "Sentencia de CONDICION ";
 	static final String estructuraPRINCIPAL = "Estructura del programa principal ";
 	static final String estructuraALLOW = "Sentencia ALLOW.";
+	static final String estructuraDECLARACION = "Sentencia de declaracion de variables.";
 
 	
 	
