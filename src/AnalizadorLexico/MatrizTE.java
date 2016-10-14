@@ -315,7 +315,7 @@ public class MatrizTE {
 	private void fila15(){
 		
 		for (int i = 0; i<col; i++ )
-			matTrans[15][i]= new Celda(17);
+			matTrans[15][i]= new CeldaAS(-1, tablaSimb);
 		
 		matTrans[15][19]= new CeldaAS(-1, tablaSimb);
 		matTrans[15][21]= new CeldaAS(-1, tablaSimb);

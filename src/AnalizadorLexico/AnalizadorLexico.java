@@ -178,6 +178,20 @@ public class AnalizadorLexico {
 	    	Token token = new Token(token_buffer.toString(), calcularUso(estadoAnterior, token_buffer.toString()));
 	    	celdaActual.ejecutar_celda(token);
 	    	tokens.add(token);
+
+	    	if(token.getUso()== ANOTACIONF || token.getUso() == ANOTACIONC){
+	    		//1- Puedo o hacer un yylex() y tirar a la basura el token que sigue, 
+	    		//pero si tengo &&@F por filas. &&@F = Anotacion, por = ID (Se descarta), filas = ID (No se descarta)
+	    		//2- O puedo agregar && y hacer que lo que siga sea un comentario.
+	    		//Por lo tanto del estado 15 y 16 se pasa a esdtado FINAL.
+	    		//3- Tambien se podria hacer que se lea todo como comentario y que el sintactico se encargue de leer
+	    		// @F o @C y hacer las modificaciones correspondientes.
+	    		archivo.add("&&");
+	    		archivo.retroceder();
+	    		System.out.println("Actual: "+archivo.getActual());
+	    		sigToken(); // Se descarta
+	    	}
+	    	
 	    	if (token.getUso() == COMENTARIO)
 	    		return yylex();
 	    	else
@@ -188,6 +202,7 @@ public class AnalizadorLexico {
 	    	tokens.add(token);
 	    	celdaActual.ejecutar_celda(token);
 	    	archivo.avanzar();
+	    	
     		return yylex(); //token.calcularToken();
 	    }
 	}

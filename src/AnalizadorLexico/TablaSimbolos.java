@@ -34,4 +34,8 @@ public class TablaSimbolos {
 	public ArrayList<Token> getTokens(){
 		return new ArrayList<>(tSimb.values());
 	}
+	
+	public boolean existe(String nombre){
+		return tSimb.containsKey(nombre);
+	}
 }
