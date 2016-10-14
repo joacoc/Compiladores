@@ -17,6 +17,7 @@ public class AnalizadorSintactico {
 	static final String estructuraCONDICION = "Sentencia de CONDICION ";
 	static final String estructuraPRINCIPAL = "Estructura del programa principal ";
 	static final String estructuraALLOW = "Sentencia ALLOW.";
+	static final String estructuraDECLARACION = "Sentencia de declaracion de variables.";
 
 	
 	
@@ -38,14 +39,14 @@ public class AnalizadorSintactico {
 	static final String errorDeclaracionVar = "No se declaró correctamente las variables. ";
 	static final String errorSentencias = "No se declararon sentencias dentro del programa. ";
 	static final String errorAsignacion = "Error en la asignacion.";
-	static final String errorFaltoPalabraIF = "Error en la palabra reservada if";
 	static final String errorTipo = "Error al declarar el tipo.";
 	static final String errorSimboloAsignacion = "La asignacion es con :=";
 	static final String errorDeclaracionMatriz = "No se declaró correctamente la matriz ";
 	static final String errorPalabraFOR = "Se esperaba la palabra for en minuscula ";
 	static final String errorCeldaMatriz = "Se espera una constante entera o variable dentro de los corchetes ";
 	static final String errorTipo_operacion = "Los tipos de las variables son incompatibles.";
-	
+	static final String errorPalabraIF = "Se esperaba la palabra if en minuscula ";
+
 
 	ArrayList<Error> erroresSint;
 	ArrayList<Error > estructuras;

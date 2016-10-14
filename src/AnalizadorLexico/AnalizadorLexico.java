@@ -120,13 +120,8 @@ public class AnalizadorLexico {
 		char ultimoChar;
 		int lineaActual=0;
 		
-	    if (estadoAnterior == 16)
-	    	//si es una anotacion viene un comentario
-	    	estadoActual = 17;
-	    else{
-	    	estadoActual = 0;
-	    	estadoAnterior = 0;	    	
-	    }
+    	estadoActual = 0;
+	   	estadoAnterior = 0;	    	
 		
 		//Para que no almacene en el buffer los espacios vacios
 		while ( (archivo.getActual() == ' ' ) || (archivo.getActual() == '	'  ) || (archivo.getActual() == '\n' ))
@@ -185,14 +180,16 @@ public class AnalizadorLexico {
 	    	celdaActual.ejecutar_celda(token);
 	    	tokens.add(token);
 
-	    	if(token.getUso()== ANOTACIONF || token.getUso() == ANOTACIONC){
+	    	if (token.getUso()== ANOTACIONF || token.getUso() == ANOTACIONC ) {
 	    		//1- Puedo o hacer un yylex() y tirar a la basura el token que sigue, 
 	    		//pero si tengo &&@F por filas. &&@F = Anotacion, por = ID (Se descarta), filas = ID (No se descarta)
 	    		//2- O puedo agregar && y hacer que lo que siga sea un comentario.
 	    		//Por lo tanto del estado 15 y 16 se pasa a esdtado FINAL.
 	    		//3- Tambien se podria hacer que se lea todo como comentario y que el sintactico se encargue de leer
 	    		// @F o @C y hacer las modificaciones correspondientes.
-	    		archivo.add("&&");
+	 
+	    		if (archivo.getActual()!='\n') //para que si la anotacion no tiene comentario no agregue uno vacio.
+	    			archivo.add("&&");
 	    	}
 	    	
 	    	if (token.getUso() == COMENTARIO)
