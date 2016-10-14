@@ -20,6 +20,7 @@ public class ControladorArchivo {
 		actual = buffer.charAt(pos);
 		linea= 1;
 	}
+	
 	public ControladorArchivo() {
 		linea = 1;
 		pos = 0;
@@ -57,6 +58,12 @@ public class ControladorArchivo {
 	
 	public char getActual(){
 		return actual;
+	}
+	
+	
+	public void add(String str){
+		buffer.insert(pos,str);
+		actual = buffer.charAt(pos);
 	}
 	
 }
