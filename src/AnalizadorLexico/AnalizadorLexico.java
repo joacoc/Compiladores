@@ -119,8 +119,14 @@ public class AnalizadorLexico {
 			token_buffer.delete(0, token_buffer.length());
 		char ultimoChar;
 		int lineaActual=0;
-		estadoActual = 0;
-		estadoAnterior = 0;
+		
+	    if (estadoAnterior == 16)
+	    	//si es una anotacion viene un comentario
+	    	estadoActual = 17;
+	    else{
+	    	estadoActual = 0;
+	    	estadoAnterior = 0;	    	
+	    }
 		
 		//Para que no almacene en el buffer los espacios vacios
 		while ( (archivo.getActual() == ' ' ) || (archivo.getActual() == '	'  ) || (archivo.getActual() == '\n' ))
@@ -141,7 +147,7 @@ public class AnalizadorLexico {
     		
     		estadoAux = estadoAnterior;
     		estadoAnterior = estadoActual;
-    		
+    			
     		estadoActual = celdaActual.ejecutar_celda(null);
     		
     		
