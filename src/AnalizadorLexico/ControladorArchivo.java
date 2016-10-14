@@ -63,6 +63,7 @@ public class ControladorArchivo {
 	
 	public void add(String str){
 		buffer.insert(pos,str);
+		actual = buffer.charAt(pos);
 	}
 	
 }

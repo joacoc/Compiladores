@@ -193,9 +193,6 @@ public class AnalizadorLexico {
 	    		//3- Tambien se podria hacer que se lea todo como comentario y que el sintactico se encargue de leer
 	    		// @F o @C y hacer las modificaciones correspondientes.
 	    		archivo.add("&&");
-	    		archivo.retroceder();
-	    		System.out.println("Actual: "+archivo.getActual());
-	    		sigToken(); // Se descarta
 	    	}
 	    	
 	    	if (token.getUso() == COMENTARIO)
