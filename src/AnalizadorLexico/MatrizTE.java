@@ -323,7 +323,7 @@ public class MatrizTE {
 	
 	private void fila16(){
 		for (int i = 0; i<col; i++ )
-			if ( ( i == 19) || (i == 21) )
+			if ( ( i == 19) || ( i == 20 ) || (i == 21) )
 				matTrans[16][i]= new CeldaAS(-1, tablaSimb);
 			else
 				matTrans[16][i]= new Celda(17);
