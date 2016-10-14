@@ -1,7 +1,5 @@
 package Calculadora;
 
-import java.util.ArrayList;
-
 import AnalizadorLexico.Token;
 
 public interface Calculador {
@@ -11,5 +9,7 @@ public interface Calculador {
 	//	int
 	//	float
 	//	string
-	Token calcular(Token t1, Token t2);
+	public final int ID = 257;
+	
+	public Token calcular(Token t1, Token t2);
 }

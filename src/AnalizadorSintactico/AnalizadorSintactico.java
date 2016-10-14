@@ -44,6 +44,7 @@ public class AnalizadorSintactico {
 	static final String errorDeclaracionMatriz = "No se declaró correctamente la matriz ";
 	static final String errorPalabraFOR = "Se esperaba la palabra for en minuscula ";
 	static final String errorCeldaMatriz = "Se espera una constante entera o variable dentro de los corchetes ";
+	static final String errorTipo_operacion = "Los tipos de las variables son incompatibles.";
 	
 
 	ArrayList<Error> erroresSint;

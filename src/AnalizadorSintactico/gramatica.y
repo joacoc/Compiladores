@@ -29,6 +29,8 @@ package AnalizadorSintactico;
 import AnalizadorLexico.*;
 import AnalizadorLexico.Error;
 import AnalizadorSintactico.*;
+import Calculadora.*;
+
 %}
 
 programa_principal  : ID declaraciones '{' bloque_de_sentencia '}' { analizadorS.addEstructura (new Error ( analizadorS.estructuraPRINCIPAL,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
@@ -55,7 +57,8 @@ declaracion : tipo lista_variables ';' { Token token = (Token)$1.obj;
             | tipo matriz
             | error matriz { analizadorS.addError (new Error ( analizadorS.errorTipo,"ERROR SINTACTICO", controladorArchivo.getLinea() )); } 
            
-            | ALLOW tipo TO tipo ';' { analizadorS.addEstructura (new Error ( analizadorS.estructuraALLOW,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
+            | ALLOW tipo TO tipo ';' { allow = true;
+            							analizadorS.addEstructura (new Error ( analizadorS.estructuraALLOW,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
             | ALLOW error TO tipo ';'{ analizadorS.addError(new Error ( analizadorS.errorTipo,"ERROR SINTACTICO", controladorArchivo.getLinea() )); } 
             | ALLOW tipo TO error ';'{ analizadorS.addError(new Error ( analizadorS.errorTipo,"ERROR SINTACTICO", controladorArchivo.getLinea() )); } 
             ;
@@ -120,14 +123,50 @@ asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion { analizadorS.
 asignacion :  asignacion_sin_punto_coma ';'
 		;
 
-expresion : expresion '+' termino	{}
-      | expresion '-' termino 		{}
-      | termino						{}
+expresion : expresion '+' termino	{		/*
+										Token t1 = (Token) $1.obj;
+										Token t2 = (Token) $3.obj;
+										if(tipoCompatible(t1,t2)){
+											Token res = new Suma().calcular(t1, t2);
+											$$ = new ParserVal(res);
+										}else
+											analizadorS.addError (new Error ( analizadorS.errorTipo_operacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  ));
+									*/
+									}
+      | expresion '-' termino 		{/*
+										Token t1 = (Token) $1.obj;
+										Token t2 = (Token) $3.obj;
+										if(tipoCompatible(t1,t2)){
+											Token res = new Resta().calcular(t1, t2);
+											$$ = new ParserVal(res);
+										}else
+											analizadorS.addError (new Error ( analizadorS.errorTipo_operacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  ));
+									*/
+									}
+      | termino						
 ;
 
 
-termino : termino '*' factor	{}
-    | termino '/' factor		{}
+termino : termino '*' factor	{/*
+										Token t1 = (Token) $1.obj;
+										Token t2 = (Token) $3.obj;
+										if(tipoCompatible(t1,t2)){
+											Token res = new Multiplicacion().calcular(t1, t2);
+										$$ = new ParserVal(res);
+										}else
+											analizadorS.addError (new Error ( analizadorS.errorTipo_operacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  ));
+								*/
+								}
+    | termino '/' factor		{/*		
+										Token t1 = (Token) $1.obj;
+										Token t2 = (Token) $3.obj;
+										if(tipoCompatible(t1,t2)){
+											Token res = new Division().calcular(t1, t2);
+											$$ = new ParserVal(res);
+										}else
+											analizadorS.addError (new Error ( analizadorS.errorTipo_operacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  ));
+								*/
+								}
     | factor					
 ;
 
@@ -222,6 +261,7 @@ AnalizadorLexico analizadorL;
 AnalizadorSintactico analizadorS;
 TablaSimbolos tablaSimbolo;
 ControladorArchivo controladorArchivo;
+boolean allow = false;
 
 public void setLexico(AnalizadorLexico al) {
        analizadorL = al;
@@ -245,6 +285,29 @@ int yylex()
    	int val = token.getUso();
    	yylval = new ParserVal(token);
     return val;
+}
+
+public boolean tipoCompatible(Token t1, Token t2){
+if(t1.getTipo()!=null && t2.getTipo()!=null){
+		if(t1.getTipo().equals("integer")){
+			if(t2.getTipo().equals("integer"))
+				return true;
+			else
+				if(t2.getTipo().equals("longint"))
+					if(allow)
+						return true;
+		}else{
+			if(t1.getTipo().equals("longint")){
+				if(t2.getTipo().equals("integer"))
+					if(allow)
+						return true;
+				else
+					if(t2.getTipo().equals("longint"))
+						return true;
+			}
+		}
+}
+		return false;
 }
 
 void yyerror(String s) {
