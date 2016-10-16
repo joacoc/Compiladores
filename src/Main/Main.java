@@ -1,6 +1,7 @@
 package Main;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -19,14 +20,14 @@ public class Main {
 
 	private static BufferedReader codigo;
 
-	private static StringBuilder getCodigo(){
+	private static StringBuilder getCodigo(BufferedReader ubicacion){
 		
 		StringBuilder buffer = new StringBuilder();
 		try{			
 			//lectura de ubicacion de archivo
-			System.out.print("Ingrese la ubicacion del archivo: ");
-			BufferedReader ubicacion = new BufferedReader(new InputStreamReader(System.in));
-			codigo = new BufferedReader( new FileReader( ubicacion.readLine()) );
+//			System.out.print("Ingrese la ubicacion del archivo: ");
+//			BufferedReader ubicacion = new BufferedReader(new InputStreamReader(System.in));
+			codigo = new BufferedReader( new FileReader( ubicacion.readLine() ) );
 			String readLine;
 			//TODO: Check que el \n no arruine nada
 			while ((readLine = codigo.readLine())!= null) {
@@ -47,7 +48,13 @@ public class Main {
 	
 	public static void main(String[] args) throws IOException {
 		
-		ControladorArchivo archivo =new ControladorArchivo(new StringBuilder( getCodigo() ) );
+		InputStream is = new ByteArrayInputStream(args[0].getBytes());
+		BufferedReader br = new BufferedReader(new InputStreamReader(is));
+		
+		StringBuilder codigo = null;
+		System.out.println(args[0]);
+		codigo= new StringBuilder( getCodigo( br ) );
+		ControladorArchivo archivo =new ControladorArchivo( codigo );
 		TablaSimbolos ts = new TablaSimbolos();
     	AnalizadorLexico analizadorLexico = new AnalizadorLexico(archivo,ts);
     	AnalizadorSintactico analizadorSintactico = new AnalizadorSintactico( );
