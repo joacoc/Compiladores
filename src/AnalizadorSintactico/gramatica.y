@@ -47,8 +47,13 @@ declaraciones : declaraciones declaracion
         	  | declaracion 
         	  ;
               
-declaracion : tipo lista_variables ';' { Token token = (Token)$1.obj;
-										 String tipo= token.getNombre();
+declaracion : tipo lista_variables ';' { 
+											String tipo = ((Token) $1.obj).getNombre();
+											for(Token t : (ArrayList<Token>)$2.obj ){ 
+												t.setTipo(tipo);
+												tablaSimbolo.addSimbolo(t);
+											}
+										 
 										 analizadorS.addEstructura (new Error ( analizadorS.estructuraDECLARACION,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); 
 										 }
 			| tipo error ';' { analizadorS.addError (new Error ( analizadorS.errorDeclaracionVar,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
@@ -66,8 +71,14 @@ declaracion : tipo lista_variables ';' { Token token = (Token)$1.obj;
             | ALLOW tipo TO error ';'{ analizadorS.addError(new Error ( analizadorS.errorTipo,"ERROR SINTACTICO", controladorArchivo.getLinea() )); } 
             ;
 
-lista_variables : lista_variables ',' ID
-                | ID
+lista_variables : lista_variables ',' ID {	ArrayList<Token> lista = (ArrayList<Token>) $1.obj;
+											lista.add((Token)$3.obj);
+											$$ = new ParserVal(lista);
+											}
+											
+                | ID	{	ArrayList<Token> lista = new ArrayList<>();
+                			lista.add((Token)$1.obj);
+                			$$ = new ParserVal(lista);}
                 ;
 
 declaracion_matriz : MATRIX ID '[' CTEI ']' '[' CTEI ']' { analizadorS.addEstructura (new Error ( analizadorS.estructuraDECLARACION,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
@@ -112,11 +123,24 @@ lado_izquierdo : ID
             	| celda_matriz
                 ;
 
-operador_menos_menos : ID S_RESTA_RESTA
+operador_menos_menos : ID S_RESTA_RESTA {/*
+										Token t1 = (Token) $1.obj;
+										t1.setValor(t1.getValor(-1))
+										$$ = new ParserVal(t1);
+										*/
+										}
 			;
 
 
-asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion { analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));} 
+asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion { 
+																	analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));
+																	/*
+																	Token t1 = (Token) $1.obj;
+																	Token t2 = (Token) $3.obj;
+																	if(tipoCompatible(t1,t2))
+																		t1 = t2;
+																	*/
+																	} 
                             | operador_menos_menos { analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
                            | lado_izquierdo S_ASIGNACION error { analizadorS.addError (new Error ( analizadorS.errorAsignacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }      
                            | error S_ASIGNACION expresion { analizadorS.addError (new Error ( analizadorS.errorAsignacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }

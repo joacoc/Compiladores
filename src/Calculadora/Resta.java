@@ -12,5 +12,13 @@ public class Resta implements Calculador {
 		t.setValor(t1.getValor()-t2.getValor());
 		return t;
 	}
+	
+	public Token menosMenos(Token t1) {
+		Token t = null;
+
+		t = new Token("aux",ID);
+		t.setValor(t1.getValor()-1);
+		return t;
+	}
 
 }
