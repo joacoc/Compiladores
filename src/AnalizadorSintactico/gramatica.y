@@ -30,7 +30,7 @@ import AnalizadorLexico.*;
 import AnalizadorLexico.Error;
 import AnalizadorSintactico.*;
 import Calculadora.*;
-
+import CodigoIntermedio.*;
 %}
 
 programa_principal  : ID declaraciones '{' bloque_de_sentencia '}' { analizadorS.addEstructura (new Error ( analizadorS.estructuraPRINCIPAL,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
@@ -149,9 +149,11 @@ asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion {
 asignacion :  asignacion_sin_punto_coma ';'
 		;
 
-expresion : expresion '+' termino	{ 	//String valor ="+";
-										//Terceto terceto = new Terceto ( new TercetoSimple( new Token("+",(int) valor.charAt(0) ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( (Token)$3.obj ), 1 );
-										//terceto.imprimirTerceto();
+expresion : expresion '+' termino	{ 	String valor ="+";
+										Terceto terceto = new Terceto ( new TercetoSimple( new Token("+",(int) valor.charAt(0) ) ),new TercetoSimple( $1.obj ), new TercetoSimple( $3.obj ), controladorTercetos.getProxNumero() );
+										controladorTercetos.addTerceto (terceto);
+										$$ = new ParserVal(new Integer( controladorTercetos.getProxNumero()-1 ));
+										 
 		/*
 										Token t1 = (Token) $1.obj;
 										Token t2 = (Token) $3.obj;
@@ -172,7 +174,7 @@ expresion : expresion '+' termino	{ 	//String valor ="+";
 											analizadorS.addError (new Error ( analizadorS.errorTipo_operacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  ));
 									*/
 									}
-      | termino						
+      | termino		{ $$ = new ParserVal( (Token)$1.obj ); }				
 ;
 
 
@@ -273,6 +275,7 @@ operador : '<'
 
 
 %%
+ControladorTercetos controladorTercetos;
 
 AnalizadorLexico analizadorL;
 AnalizadorSintactico analizadorS;
@@ -294,6 +297,10 @@ public void setTS (TablaSimbolos ts){
 
 public void setControladorArchivo ( ControladorArchivo ca){
 	controladorArchivo = ca;
+}
+
+public void setControladorTercetos ( ControladorTercetos ct){
+	controladorTercetos = ct;
 }
 
 int yylex()

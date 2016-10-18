@@ -13,7 +13,6 @@ public class Terceto {
 		elementos.add(medio);
 		elementos.add(der);
 		this.numeroTerceto = numeroTerceto;
-		
 	}
 	
 	public String imprimirTerceto(){
