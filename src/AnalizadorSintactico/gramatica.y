@@ -149,7 +149,10 @@ asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion {
 asignacion :  asignacion_sin_punto_coma ';'
 		;
 
-expresion : expresion '+' termino	{		/*
+expresion : expresion '+' termino	{ 	//String valor ="+";
+										//Terceto terceto = new Terceto ( new TercetoSimple( new Token("+",(int) valor.charAt(0) ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( (Token)$3.obj ), 1 );
+										//terceto.imprimirTerceto();
+		/*
 										Token t1 = (Token) $1.obj;
 										Token t2 = (Token) $3.obj;
 										if(tipoCompatible(t1,t2)){

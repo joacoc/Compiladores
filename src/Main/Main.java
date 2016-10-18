@@ -48,11 +48,11 @@ public class Main {
 	
 	public static void main(String[] args) throws IOException {
 		
-		InputStream is = new ByteArrayInputStream(args[0].getBytes());
+		String direccion = new String("C:\\Users\\juan\\Desktop\\Casos de pruba\\HelloWorld.txt");
+		InputStream is = new ByteArrayInputStream(direccion.getBytes());
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
 		
 		StringBuilder codigo = null;
-		System.out.println(args[0]);
 		codigo= new StringBuilder( getCodigo( br ) );
 		ControladorArchivo archivo =new ControladorArchivo( codigo );
 		TablaSimbolos ts = new TablaSimbolos();
