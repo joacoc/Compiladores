@@ -18,6 +18,8 @@
 
 //#line 28 "gramatica.y"
 package AnalizadorSintactico;
+import java.util.ArrayList;
+
 import AnalizadorLexico.*;
 import AnalizadorLexico.Error;
 import AnalizadorSintactico.*;
@@ -590,7 +592,7 @@ final static String yyrule[] = {
 "operador : '='",
 };
 
-//#line 249 "gramatica.y"
+//#line 274 "gramatica.y"
 
 AnalizadorLexico analizadorL;
 AnalizadorSintactico analizadorS;
@@ -821,82 +823,118 @@ case 7:
 break;
 case 10:
 //#line 50 "gramatica.y"
-{ Token token = (Token)val_peek(2).obj;
-										 String tipo= token.getNombre();
+{ 
+											String tipo = ((Token) val_peek(2).obj).getNombre();
+											System.out.println(tipo);
+											for(Token t : (ArrayList<Token>)val_peek(1).obj ){ 
+												t.setTipo(tipo);
+												tablaSimbolo.addSimbolo(t);
+											}
+										 
 										 analizadorS.addEstructura (new Error ( analizadorS.estructuraDECLARACION,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); 
 										 }
 break;
 case 11:
-//#line 54 "gramatica.y"
+//#line 60 "gramatica.y"
 { analizadorS.addError (new Error ( analizadorS.errorDeclaracionVar,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
 break;
 case 12:
-//#line 57 "gramatica.y"
+//#line 63 "gramatica.y"
 { analizadorS.addError (new Error ( analizadorS.errorPuntoComa,"ERROR SINTACTICO",    controladorArchivo.getLinea() )); }
 break;
 case 13:
-//#line 58 "gramatica.y"
+//#line 64 "gramatica.y"
 { analizadorS.addError (new Error ( analizadorS.errorTipo,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
 break;
 case 15:
-//#line 61 "gramatica.y"
+//#line 67 "gramatica.y"
 { analizadorS.addError (new Error ( analizadorS.errorTipo,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
 break;
 case 16:
-//#line 63 "gramatica.y"
+//#line 69 "gramatica.y"
 { allow = true;
             							analizadorS.addEstructura (new Error ( analizadorS.estructuraALLOW,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
 break;
 case 17:
-//#line 65 "gramatica.y"
+//#line 71 "gramatica.y"
 { analizadorS.addError(new Error ( analizadorS.errorTipo,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
 break;
 case 18:
-//#line 66 "gramatica.y"
+//#line 72 "gramatica.y"
 { analizadorS.addError(new Error ( analizadorS.errorTipo,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
 break;
+case 19:
+//#line 75 "gramatica.y"
+{	ArrayList<Token> lista = (ArrayList<Token>) val_peek(2).obj;
+											lista.add((Token)val_peek(0).obj);
+											yyval = new ParserVal(lista);
+											}
+break;
+case 20:
+//#line 80 "gramatica.y"
+{	ArrayList<Token> lista = new ArrayList<>();
+                			lista.add((Token)val_peek(0).obj);
+                			yyval = new ParserVal(lista);}
+break;
 case 21:
-//#line 73 "gramatica.y"
+//#line 85 "gramatica.y"
 { analizadorS.addEstructura (new Error ( analizadorS.estructuraDECLARACION,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
 break;
 case 22:
-//#line 74 "gramatica.y"
+//#line 86 "gramatica.y"
 { analizadorS.addError (new Error ( analizadorS.errorDeclaracionMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
 break;
 case 23:
-//#line 75 "gramatica.y"
+//#line 87 "gramatica.y"
 { analizadorS.addError (new Error ( analizadorS.errorDeclaracionMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
 break;
 case 24:
-//#line 76 "gramatica.y"
+//#line 88 "gramatica.y"
 { analizadorS.addError (new Error ( analizadorS.errorDeclaracionMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
 break;
 case 42:
-//#line 108 "gramatica.y"
+//#line 120 "gramatica.y"
 { analizadorS.addError (new Error ( analizadorS.errorPuntoComa,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
 break;
+case 45:
+//#line 127 "gramatica.y"
+{/*
+										Token t1 = (Token) $1.obj;
+										t1.setValor(t1.getValor(-1))
+										$$ = new ParserVal(t1);
+										*/
+										}
+break;
 case 46:
-//#line 119 "gramatica.y"
-{ analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));}
+//#line 136 "gramatica.y"
+{ 
+																	analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));
+																	/*
+																	Token t1 = (Token) $1.obj;
+																	Token t2 = (Token) $3.obj;
+																	if(tipoCompatible(t1,t2))
+																		t1 = t2;
+																	*/
+																	}
 break;
 case 47:
-//#line 120 "gramatica.y"
+//#line 145 "gramatica.y"
 { analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
 break;
 case 48:
-//#line 121 "gramatica.y"
+//#line 146 "gramatica.y"
 { analizadorS.addError (new Error ( analizadorS.errorAsignacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
 break;
 case 49:
-//#line 122 "gramatica.y"
+//#line 147 "gramatica.y"
 { analizadorS.addError (new Error ( analizadorS.errorAsignacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
 break;
 case 50:
-//#line 123 "gramatica.y"
+//#line 148 "gramatica.y"
 { analizadorS.addError (new Error ( analizadorS.errorSimboloAsignacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
 break;
 case 52:
-//#line 128 "gramatica.y"
+//#line 153 "gramatica.y"
 {		/*
 										Token t1 = (Token) $1.obj;
 										Token t2 = (Token) $3.obj;
@@ -909,7 +947,7 @@ case 52:
 									}
 break;
 case 53:
-//#line 138 "gramatica.y"
+//#line 163 "gramatica.y"
 {/*
 										Token t1 = (Token) $1.obj;
 										Token t2 = (Token) $3.obj;
@@ -922,7 +960,7 @@ case 53:
 									}
 break;
 case 55:
-//#line 152 "gramatica.y"
+//#line 177 "gramatica.y"
 {/*
 										Token t1 = (Token) $1.obj;
 										Token t2 = (Token) $3.obj;
@@ -935,7 +973,7 @@ case 55:
 								}
 break;
 case 56:
-//#line 162 "gramatica.y"
+//#line 187 "gramatica.y"
 {/*		
 										Token t1 = (Token) $1.obj;
 										Token t2 = (Token) $3.obj;
@@ -948,110 +986,110 @@ case 56:
 								}
 break;
 case 63:
-//#line 182 "gramatica.y"
+//#line 207 "gramatica.y"
 {analizadorS.addEstructura (new Error ( analizadorS.estructuraPrint,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
 break;
 case 64:
-//#line 183 "gramatica.y"
+//#line 208 "gramatica.y"
 { analizadorS.addError (new Error ( analizadorS.errorPrint1,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
 break;
 case 65:
-//#line 184 "gramatica.y"
+//#line 209 "gramatica.y"
 { analizadorS.addError (new Error ( analizadorS.errorPrint1,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
 break;
 case 66:
-//#line 185 "gramatica.y"
+//#line 210 "gramatica.y"
 { analizadorS.addError (new Error ( analizadorS.errorPrint2,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
 break;
 case 67:
-//#line 188 "gramatica.y"
+//#line 213 "gramatica.y"
 {analizadorS.addEstructura (new Error ( analizadorS.estructuraFOR,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ) ); }
 break;
 case 68:
-//#line 189 "gramatica.y"
+//#line 214 "gramatica.y"
 { analizadorS.addError (new Error ( analizadorS.errorPalabraFOR,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
 break;
 case 69:
-//#line 190 "gramatica.y"
+//#line 215 "gramatica.y"
 {analizadorS.addEstructura (new Error ( analizadorS.estructuraFOR,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ) ); }
 break;
 case 70:
-//#line 191 "gramatica.y"
+//#line 216 "gramatica.y"
 { analizadorS.addError (new Error ( analizadorS.errorPalabraFOR,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
 break;
 case 73:
-//#line 197 "gramatica.y"
+//#line 222 "gramatica.y"
 { analizadorS.addError (new Error ( analizadorS.errorLlaveAIF,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
 break;
 case 74:
-//#line 198 "gramatica.y"
+//#line 223 "gramatica.y"
 { analizadorS.addError (new Error ( analizadorS.errorLlaveCIF,"ERROR SINTACTICO", controladorArchivo.getLinea()  ));}
 break;
 case 77:
-//#line 203 "gramatica.y"
+//#line 228 "gramatica.y"
 { analizadorS.addError (new Error ( analizadorS.errorLlaveAELSE,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
 break;
 case 78:
-//#line 204 "gramatica.y"
+//#line 229 "gramatica.y"
 { analizadorS.addError (new Error ( analizadorS.errorLlaveCELSE,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
 break;
 case 79:
-//#line 207 "gramatica.y"
+//#line 232 "gramatica.y"
 { analizadorS.addEstructura (new Error ( analizadorS.estructuraIF,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
 break;
 case 80:
-//#line 208 "gramatica.y"
+//#line 233 "gramatica.y"
 { analizadorS.addError (new Error ( analizadorS.errorPuntoComa,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
 break;
 case 81:
-//#line 209 "gramatica.y"
+//#line 234 "gramatica.y"
 { analizadorS.addError (new Error ( analizadorS.errorPalabraIF,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
 break;
 case 82:
-//#line 211 "gramatica.y"
+//#line 236 "gramatica.y"
 { analizadorS.addEstructura (new Error ( analizadorS.estructuraIF,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
 break;
 case 83:
-//#line 212 "gramatica.y"
+//#line 237 "gramatica.y"
 { analizadorS.addError (new Error ( analizadorS.errorPuntoComa,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
 break;
 case 84:
-//#line 213 "gramatica.y"
+//#line 238 "gramatica.y"
 { analizadorS.addError (new Error ( analizadorS.errorPalabraIF,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
 break;
 case 85:
-//#line 216 "gramatica.y"
+//#line 241 "gramatica.y"
 {analizadorS.addEstructura( new Error ( analizadorS.estructuraCONDICION,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
 break;
 case 86:
-//#line 217 "gramatica.y"
+//#line 242 "gramatica.y"
 { analizadorS.addError (new Error ( analizadorS.errorCondicionI,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
 break;
 case 87:
-//#line 218 "gramatica.y"
+//#line 243 "gramatica.y"
 { analizadorS.addError (new Error ( analizadorS.errorCondicionD,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
 break;
 case 89:
-//#line 223 "gramatica.y"
+//#line 248 "gramatica.y"
 { analizadorS.addError (new Error ( analizadorS.errorParentesisA,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
 break;
 case 90:
-//#line 224 "gramatica.y"
+//#line 249 "gramatica.y"
 { analizadorS.addError (new Error ( analizadorS.errorParentesisC,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
 break;
 case 95:
-//#line 234 "gramatica.y"
+//#line 259 "gramatica.y"
 { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
 break;
 case 96:
-//#line 235 "gramatica.y"
+//#line 260 "gramatica.y"
 { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
 break;
 case 97:
-//#line 236 "gramatica.y"
+//#line 261 "gramatica.y"
 { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
 break;
-//#line 987 "Parser.java"
+//#line 1023 "Parser.java"
 //########## END OF USER-SUPPLIED ACTIONS ##########
     }//switch
     //#### Now let's reduce... ####

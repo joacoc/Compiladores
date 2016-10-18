@@ -17,7 +17,7 @@ public class TablaSimbolos {
 	}
 	
 	public void addSimbolo( Token t){
-		tSimb.put(t.getNombre(), t);
+		tSimb.put(t.getNombre()+t.getTipo(), t);
 	}
 	
 	//Me confirma si el token es agregable a la tabla de simbolos.
