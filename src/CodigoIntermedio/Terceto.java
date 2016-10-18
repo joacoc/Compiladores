@@ -5,10 +5,15 @@ import java.util.ArrayList;
 public class Terceto {
 	
 	private ArrayList<TercetoSimple> elementos;
-	protected int numeroTerceto;
+	private int numeroTerceto;
 	
-	public Terceto() {
+	public Terceto(TercetoSimple izq, TercetoSimple medio, TercetoSimple der, int numeroTerceto) {
 		elementos = new ArrayList<TercetoSimple>();
+		elementos.add(izq);
+		elementos.add(medio);
+		elementos.add(der);
+		this.numeroTerceto = numeroTerceto;
+		
 	}
 	
 	public String imprimirTerceto(){
