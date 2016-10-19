@@ -19,9 +19,9 @@ public class AnalizadorLexico {
 	static final int ID = 257;
 	static final int MULTI_LINEA = 258;
 	static final int CTEL = 259;
-	static final int S_ASIGNACION = 260;
-	static final int S_MAYOR_IGUAL = 261;
-	static final int S_MENOR_IGUAL = 262;	
+	public static final int S_ASIGNACION = 260;
+	public static final int S_MAYOR_IGUAL = 261;
+	public static final int S_MENOR_IGUAL = 262;	
 	static final int S_EXCLAMACION_IGUAL = 263;	//!=
 	static final int CTEI = 264;
 	static final int S_RESTA_RESTA = 265;

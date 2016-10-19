@@ -26,6 +26,7 @@
 
 %{
 package AnalizadorSintactico;
+import java.util.ArrayList;
 import AnalizadorLexico.*;
 import AnalizadorLexico.Error;
 import AnalizadorSintactico.*;
@@ -132,7 +133,10 @@ operador_menos_menos : ID S_RESTA_RESTA {/*
 			;
 
 
-asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion { 
+asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion { String valor =":=";
+																	Terceto terceto = new Terceto ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( $1.obj ), new TercetoSimple( $3.obj ), controladorTercetos.getProxNumero() );
+																	controladorTercetos.addTerceto (terceto);
+																	$$ = new ParserVal(new Integer( controladorTercetos.getProxNumero()-1 ));
 																	analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));
 																	/*
 																	Token t1 = (Token) $1.obj;
@@ -164,7 +168,11 @@ expresion : expresion '+' termino	{ 	String valor ="+";
 											analizadorS.addError (new Error ( analizadorS.errorTipo_operacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  ));
 									*/
 									}
-      | expresion '-' termino 		{/*
+      | expresion '-' termino 		{	String valor ="-";
+										Terceto terceto = new Terceto ( new TercetoSimple( new Token("-",(int) valor.charAt(0) ) ),new TercetoSimple( $1.obj ), new TercetoSimple( $3.obj ), controladorTercetos.getProxNumero() );
+										controladorTercetos.addTerceto (terceto);
+										$$ = new ParserVal(new Integer( controladorTercetos.getProxNumero()-1 ));
+      								/*
 										Token t1 = (Token) $1.obj;
 										Token t2 = (Token) $3.obj;
 										if(tipoCompatible(t1,t2)){
@@ -174,11 +182,15 @@ expresion : expresion '+' termino	{ 	String valor ="+";
 											analizadorS.addError (new Error ( analizadorS.errorTipo_operacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  ));
 									*/
 									}
-      | termino		{ $$ = new ParserVal( (Token)$1.obj ); }				
+      | termino						
 ;
 
 
-termino : termino '*' factor	{/*
+termino : termino '*' factor	{	String valor ="*";
+										Terceto terceto = new Terceto ( new TercetoSimple( new Token("*",(int) valor.charAt(0) ) ),new TercetoSimple( $1.obj ), new TercetoSimple( $3.obj ), controladorTercetos.getProxNumero() );
+										controladorTercetos.addTerceto (terceto);
+										$$ = new ParserVal(new Integer( controladorTercetos.getProxNumero()-1 ));
+									/*
 										Token t1 = (Token) $1.obj;
 										Token t2 = (Token) $3.obj;
 										if(tipoCompatible(t1,t2)){
@@ -188,7 +200,12 @@ termino : termino '*' factor	{/*
 											analizadorS.addError (new Error ( analizadorS.errorTipo_operacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  ));
 								*/
 								}
-    | termino '/' factor		{/*		
+    | termino '/' factor		{ String valor ="/";
+										Terceto terceto = new Terceto ( new TercetoSimple( new Token("/",(int) valor.charAt(0) ) ),new TercetoSimple( $1.obj ), new TercetoSimple( $3.obj ), controladorTercetos.getProxNumero() );
+										controladorTercetos.addTerceto (terceto);
+										$$ = new ParserVal(new Integer( controladorTercetos.getProxNumero()-1 ));
+    
+    /*		
 										Token t1 = (Token) $1.obj;
 										Token t2 = (Token) $3.obj;
 										if(tipoCompatible(t1,t2)){
@@ -198,7 +215,7 @@ termino : termino '*' factor	{/*
 											analizadorS.addError (new Error ( analizadorS.errorTipo_operacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  ));
 								*/
 								}
-    | factor					
+    | factor			{ $$ = new ParserVal( (Token)$1.obj ); }		
 ;
 
 factor : CTEI 
@@ -242,7 +259,10 @@ sentencia_seleccion  : IF  condicion  cuerpo_if ELSE cuerpo_else ENDIF ';' { ana
                      | error  condicion  cuerpo_if ENDIF ';' { analizadorS.addError (new Error ( analizadorS.errorPalabraIF,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
                      ;
 
-condicion_sin_parentesis : expresion operador expresion {analizadorS.addEstructura( new Error ( analizadorS.estructuraCONDICION,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
+condicion_sin_parentesis : expresion operador expresion {	Terceto terceto = new Terceto ( new TercetoSimple( $2.obj ) ,new TercetoSimple( $1.obj ), new TercetoSimple( $3.obj ), controladorTercetos.getProxNumero() );
+															controladorTercetos.addTerceto (terceto);
+															$$ = new ParserVal(new Integer( controladorTercetos.getProxNumero()-1 ));
+															analizadorS.addEstructura( new Error ( analizadorS.estructuraCONDICION,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
                           |  error operador expresion { analizadorS.addError (new Error ( analizadorS.errorCondicionI,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
                           |  expresion operador error  { analizadorS.addError (new Error ( analizadorS.errorCondicionD,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
                           ;
@@ -266,11 +286,14 @@ celda_matriz : ID '[' expresion ']' '[' expresion ']'
 
              ;
              
-operador : '<' 
-		 | '>' 
-		 | S_MAYOR_IGUAL 
-		 | S_MENOR_IGUAL 
-		 | '='
+operador : '<' 				{ String valor = "<";
+							  $$ = new ParserVal(  new Token("<",(int) valor.charAt(0) ) ); }
+		 | '>' 				{ String valor = ">";
+		 					  $$ = new ParserVal(  new Token(">",(int) valor.charAt(0) ) ); }
+		 | S_MAYOR_IGUAL 	{ $$ = new ParserVal(  new Token(">=", analizadorL.S_MAYOR_IGUAL ) ); }
+		 | S_MENOR_IGUAL 	{ $$ = new ParserVal(  new Token("<=", analizadorL.S_MENOR_IGUAL ) ); }
+		 | '='				{ String valor = "=";
+		 					  $$ = new ParserVal(  new Token("=",(int) valor.charAt(0) ) ); }
 		 ;
 
 
