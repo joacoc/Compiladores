@@ -49,7 +49,7 @@ public class Main {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		
+	
 		String direccion = new String("C:\\Users\\lautarofernandez27\\workspace\\Compilador\\variableNOdeclarada.txt");
 		InputStream is = new ByteArrayInputStream(direccion.getBytes());
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
