@@ -30,7 +30,9 @@ import java.util.ArrayList;
 import AnalizadorLexico.*;
 import AnalizadorLexico.Error;
 import AnalizadorSintactico.*;
+import CodigoIntermedio.*;
 import Calculadora.*;
+import java.util.ArrayList;
 import CodigoIntermedio.*;
 %}
 
@@ -50,7 +52,9 @@ declaraciones : declaraciones declaracion
               
 declaracion : tipo lista_variables ';' { 
 											String tipo = ((Token) $1.obj).getNombre();
+											
 											for(Token t : (ArrayList<Token>)$2.obj ){ 
+												/*Chequear que la variable ya no este declarada*/
 												t.setTipo(tipo);
 												tablaSimbolo.addSimbolo(t);
 											}
@@ -63,7 +67,10 @@ declaracion : tipo lista_variables ';' {
 		    | tipo lista_variables { analizadorS.addError (new Error ( analizadorS.errorPuntoComa,"ERROR SINTACTICO",    controladorArchivo.getLinea() )); }
 		    | error lista_variables ';' { analizadorS.addError (new Error ( analizadorS.errorTipo,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
             
-            | tipo matriz 
+            | tipo matriz { ((Token) $2.obj).setTipo(((Token)$1.obj).getNombre());
+							tablaSimbolo.addSimbolo((Token) $2.obj);
+							/*Checkear que no se haya agregado*/
+							}
             | error matriz { analizadorS.addError (new Error ( analizadorS.errorTipo,"ERROR SINTACTICO", controladorArchivo.getLinea() )); } 
            
             | ALLOW tipo TO tipo ';' { allow = true;
@@ -82,7 +89,7 @@ lista_variables : lista_variables ',' ID {	ArrayList<Token> lista = (ArrayList<T
                 			$$ = new ParserVal(lista);}
                 ;
 
-declaracion_matriz : MATRIX ID '[' CTEI ']' '[' CTEI ']' { analizadorS.addEstructura (new Error ( analizadorS.estructuraDECLARACION,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
+declaracion_matriz : MATRIX ID '[' CTEI ']' '[' CTEI ']' {  analizadorS.addEstructura (new Error ( analizadorS.estructuraDECLARACION,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
 				   | MATRIX error '[' CTEI ']' '[' CTEI ']' { analizadorS.addError (new Error ( analizadorS.errorDeclaracionMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
 				   | MATRIX ID '[' error ']' '[' CTEI ']' { analizadorS.addError (new Error ( analizadorS.errorDeclaracionMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
 				   | MATRIX ID '[' CTEI ']' '[' error ']'	{ analizadorS.addError (new Error ( analizadorS.errorDeclaracionMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
@@ -120,36 +127,30 @@ sentencia : print
       	  | asignacion_sin_punto_coma { analizadorS.addError (new Error ( analizadorS.errorPuntoComa,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
   	  ;
 
-lado_izquierdo : ID
-            	| celda_matriz
+lado_izquierdo : ID {$$ = new ParserVal(obtenerSimbolo(((Token) $1.obj).getNombre(),false));}
+            	| celda_matriz {$$ = new ParserVal(obtenerSimbolo(((Token) $1.obj).getNombre(),true));}
                 ;
 
 operador_menos_menos : ID S_RESTA_RESTA { 	Terceto terceto = new Terceto ( new TercetoSimple( new Token("--",analizadorL.S_RESTA_RESTA ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( new Token("_i1",analizadorL.CTEI) ), controladorTercetos.getProxNumero() );
 											controladorTercetos.addTerceto (terceto);
 											$$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ) );
-											analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));
-																	
-
-										/*
-										Token t1 = (Token) $1.obj;
-										t1.setValor(t1.getValor(-1))
-										$$ = new ParserVal(t1);
-										*/
-										}
-			;
-
+											analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));								
+						| celda_matriz  S_RESTA_RESTA
+						;
 
 asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion { String valor =":=";
 																	Terceto terceto = new Terceto ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
 																	controladorTercetos.addTerceto (terceto);
 																	$$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ));
 																	analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));
-																	/*
 																	Token t1 = (Token) $1.obj;
 																	Token t2 = (Token) $3.obj;
-																	if(tipoCompatible(t1,t2))
-																		t1 = t2;
-																	*/
+																	if(tipoCompatible(t1,t2)){
+																		System.out.println("Compatibles");
+																		t1.setValor(t2.getValor());
+																		tablaSimbolo.addSimbolo(t1);
+																	}
+																	/*TODO: else Error, tipos incompatibles */
 																	} 
                             | operador_menos_menos { analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
                            | lado_izquierdo S_ASIGNACION error { analizadorS.addError (new Error ( analizadorS.errorAsignacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }      
@@ -226,7 +227,11 @@ termino : termino '*' factor	{	String valor ="*";
 
 factor : CTEI  { $$ = new ParserVal( (Token)$1.obj ); }
         | CTEL { $$ = new ParserVal( (Token)$1.obj ); }
-        | ID   { $$ = new ParserVal( (Token)$1.obj ); }
+        | ID   { $$ = new ParserVal( (Token)$1.obj );
+        		 Token t1 = (Token) $1.obj;
+        		if (t1.getTipo() == null) 
+        		 analizadorCI.addError (new Error ( analizadorCI.errorNoExisteVariable,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
+         }
         | operador_menos_menos 
 		| celda_matriz { $$ = new ParserVal( (Token)$1.obj ); }
 ;
@@ -297,7 +302,7 @@ tipo : INTEGER
      | MATRIX
      ; 
 
-celda_matriz : ID '[' expresion ']' '[' expresion ']'
+celda_matriz : ID '[' expresion ']' '[' expresion ']' {  }
              | ID '[' error ']' '[' expresion ']'  { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
              | ID '[' expresion ']' '[' error ']'  { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
              | ID '[' error ']' '[' error ']'  { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
@@ -318,7 +323,7 @@ operador : '<' 				{ String valor = "<";
 
 %%
 ControladorTercetos controladorTercetos;
-
+AnalizadorCodigoIntermedio analizadorCI;
 AnalizadorLexico analizadorL;
 AnalizadorSintactico analizadorS;
 TablaSimbolos tablaSimbolo;
@@ -328,7 +333,9 @@ boolean allow = false;
 public void setLexico(AnalizadorLexico al) {
        analizadorL = al;
 }
-
+public void setCodigoIntermedio(AnalizadorCodigoIntermedio aci){
+	analizadorCI = aci;
+}
 public void setSintactico (AnalizadorSintactico as){
 	analizadorS = as;
 }
@@ -354,7 +361,9 @@ int yylex()
 }
 
 public boolean tipoCompatible(Token t1, Token t2){
+
 if(t1.getTipo()!=null && t2.getTipo()!=null){
+		System.out.println("Ambos tipos distintos de null");
 		if(t1.getTipo().equals("integer")){
 			if(t2.getTipo().equals("integer"))
 				return true;
@@ -374,6 +383,21 @@ if(t1.getTipo()!=null && t2.getTipo()!=null){
 		}
 }
 		return false;
+}
+
+public Token obtenerSimbolo(String nombre,boolean esMatriz){
+	if(!esMatriz){
+		if(tablaSimbolo.getToken(nombre+"integer")!= null)
+			return tablaSimbolo.getToken(nombre+"integer");
+		else if (tablaSimbolo.getToken(nombre+"long")!= null)
+			return tablaSimbolo.getToken(nombre+"long");
+	}else{
+		if(tablaSimbolo.getToken(nombre+"matInteger")!= null)
+			return tablaSimbolo.getToken(nombre+"matInteger");
+		else if (tablaSimbolo.getToken(nombre+"matLong")!= null)
+			return tablaSimbolo.getToken(nombre+"matLong");
+	}
+	return null;
 }
 
 void yyerror(String s) {

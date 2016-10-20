@@ -1,12 +1,12 @@
 package AnalizadorSintactico;
 
 import java.awt.List;
+
 import java.util.ArrayList;
 
 import AnalizadorLexico.AnalizadorLexico;
 import AnalizadorLexico.Error;
 import AnalizadorLexico.TablaSimbolos;
-
 public class AnalizadorSintactico {
 	
 	//descripcion estructura sintactica
@@ -49,7 +49,7 @@ public class AnalizadorSintactico {
 
 
 	ArrayList<Error> erroresSint;
-	ArrayList<Error > estructuras;
+	ArrayList<Error > estructuras;	
 	AnalizadorLexico analizadorL;
 	TablaSimbolos tablaS;
 	
