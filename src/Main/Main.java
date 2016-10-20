@@ -14,6 +14,7 @@ import AnalizadorLexico.ControladorArchivo;
 import AnalizadorLexico.TablaSimbolos;
 import AnalizadorSintactico.AnalizadorSintactico;
 import AnalizadorSintactico.Parser;
+import CodigoIntermedio.AnalizadorCodigoIntermedio;
 import CodigoIntermedio.ControladorTercetos;
 import Window.MainWindow;
 
@@ -49,7 +50,7 @@ public class Main {
 	
 	public static void main(String[] args) throws IOException {
 		
-		String direccion = new String("C:\\Users\\juan\\Desktop\\Casos de pruba\\HelloWorld.txt");
+		String direccion = new String("C:\\Users\\lautarofernandez27\\workspace\\Compilador\\variableNOdeclarada.txt");
 		InputStream is = new ByteArrayInputStream(direccion.getBytes());
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
 		
@@ -59,24 +60,27 @@ public class Main {
 		TablaSimbolos ts = new TablaSimbolos();
     	AnalizadorLexico analizadorLexico = new AnalizadorLexico(archivo,ts);
     	AnalizadorSintactico analizadorSintactico = new AnalizadorSintactico( );
+    	AnalizadorCodigoIntermedio analizadorCodigoIntermedio = new AnalizadorCodigoIntermedio();
     	ControladorTercetos controladorTercetos = new ControladorTercetos();
     	
         Parser parser;
         parser = new Parser();
         parser.setLexico(analizadorLexico);
+        parser.setCodigoIntermedio(analizadorCodigoIntermedio);
         parser.setTS(ts);
         parser.setSintactico(analizadorSintactico);
         parser.setControladorArchivo(archivo);
         parser.setControladorTercetos(controladorTercetos);
         parser.run();
 
-//        System.out.println( analizadorLexico.mostrarTokens() );
+        System.out.println( analizadorLexico.mostrarTokens() );
 //        System.out.println( analizadorLexico.mostrarTs() );
 //        System.out.println(analizadorLexico.mostrarWarning());
-//        System.out.println(analizadorLexico.mostrarErrorComp());
-//        System.out.println(analizadorSintactico.getErroresSint());
-//        System.out.println(analizadorSintactico.getEstructuras());
-		System.out.println( controladorTercetos.imprimirTercetos() );
+        System.out.println(analizadorLexico.mostrarErrorComp());
+        System.out.println(analizadorSintactico.getErroresSint());
+        System.out.println(analizadorSintactico.getEstructuras());
+        System.out.println(analizadorCodigoIntermedio.getErroresCI());
+//		System.out.println( controladorTercetos.imprimirTercetos() );
   
 	}
 }

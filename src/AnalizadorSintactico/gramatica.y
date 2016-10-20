@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import AnalizadorLexico.*;
 import AnalizadorLexico.Error;
 import AnalizadorSintactico.*;
+import CodigoIntermedio.*;
 import Calculadora.*;
 import CodigoIntermedio.*;
 %}
@@ -220,7 +221,12 @@ termino : termino '*' factor	{	String valor ="*";
 
 factor : CTEI 
         | CTEL
-        | ID
+        | ID { Token t1 = (Token) $1.obj;
+        		System.out.println("chaaaaaaaaaaaaaaaaaaaaaaaaaaaau");
+        		if (t1.getTipo() == null) 
+        			 analizadorCI.addError (new Error ( analizadorCI.errorNoExisteVariable,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
+        	}	 
+        
         | operador_menos_menos 
 		| celda_matriz
 ;
@@ -279,7 +285,7 @@ tipo : INTEGER
      | MATRIX
      ; 
 
-celda_matriz : ID '[' expresion ']' '[' expresion ']'
+celda_matriz : ID '[' expresion ']' '[' expresion ']' {  }
              | ID '[' error ']' '[' expresion ']'  { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
              | ID '[' expresion ']' '[' error ']'  { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
              | ID '[' error ']' '[' error ']'  { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
@@ -299,7 +305,7 @@ operador : '<' 				{ String valor = "<";
 
 %%
 ControladorTercetos controladorTercetos;
-
+AnalizadorCodigoIntermedio analizadorCI;
 AnalizadorLexico analizadorL;
 AnalizadorSintactico analizadorS;
 TablaSimbolos tablaSimbolo;
@@ -309,7 +315,9 @@ boolean allow = false;
 public void setLexico(AnalizadorLexico al) {
        analizadorL = al;
 }
-
+public void setCodigoIntermedio(AnalizadorCodigoIntermedio aci){
+	analizadorCI = aci;
+}
 public void setSintactico (AnalizadorSintactico as){
 	analizadorS = as;
 }
