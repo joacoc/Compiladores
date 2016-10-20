@@ -6,8 +6,11 @@ public class TercetoSimple {
 	Token t;
 	int referenciaTerceto; //tiene el numero de terceto por si es compuesto
 	
-	public TercetoSimple(Token t) {
-		this.t=t;
+	public TercetoSimple(Object t) {
+		if (t instanceof Token)
+			this.t=(Token) t;
+		else
+			referenciaTerceto=(Integer) t;
 	}
 
 	public TercetoSimple(int rt){
@@ -16,7 +19,7 @@ public class TercetoSimple {
 	
 	public String imprimirTerceto() {
 		if (t == null)
-			return String.valueOf(referenciaTerceto);  
+			return String.valueOf(referenciaTerceto);
 		else
 			return t.getNombre();
 	}

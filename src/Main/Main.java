@@ -14,6 +14,7 @@ import AnalizadorLexico.ControladorArchivo;
 import AnalizadorLexico.TablaSimbolos;
 import AnalizadorSintactico.AnalizadorSintactico;
 import AnalizadorSintactico.Parser;
+import CodigoIntermedio.ControladorTercetos;
 import Window.MainWindow;
 
 public class Main {
@@ -58,6 +59,7 @@ public class Main {
 		TablaSimbolos ts = new TablaSimbolos();
     	AnalizadorLexico analizadorLexico = new AnalizadorLexico(archivo,ts);
     	AnalizadorSintactico analizadorSintactico = new AnalizadorSintactico( );
+    	ControladorTercetos controladorTercetos = new ControladorTercetos();
     	
         Parser parser;
         parser = new Parser();
@@ -65,14 +67,16 @@ public class Main {
         parser.setTS(ts);
         parser.setSintactico(analizadorSintactico);
         parser.setControladorArchivo(archivo);
+        parser.setControladorTercetos(controladorTercetos);
         parser.run();
 
-        System.out.println( analizadorLexico.mostrarTokens() );
-        System.out.println( analizadorLexico.mostrarTs() );
-        System.out.println(analizadorLexico.mostrarWarning());
-        System.out.println(analizadorLexico.mostrarErrorComp());
-        System.out.println(analizadorSintactico.getErroresSint());
-        System.out.println(analizadorSintactico.getEstructuras());
-        
+//        System.out.println( analizadorLexico.mostrarTokens() );
+//        System.out.println( analizadorLexico.mostrarTs() );
+//        System.out.println(analizadorLexico.mostrarWarning());
+//        System.out.println(analizadorLexico.mostrarErrorComp());
+//        System.out.println(analizadorSintactico.getErroresSint());
+//        System.out.println(analizadorSintactico.getEstructuras());
+		System.out.println( controladorTercetos.imprimirTercetos() );
+  
 	}
 }
