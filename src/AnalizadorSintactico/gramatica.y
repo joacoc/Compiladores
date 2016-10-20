@@ -32,12 +32,8 @@ import AnalizadorLexico.Error;
 import AnalizadorSintactico.*;
 import CodigoIntermedio.*;
 import Calculadora.*;
-<<<<<<< HEAD
 import java.util.ArrayList;
-
-=======
 import CodigoIntermedio.*;
->>>>>>> 28ade2e99055937d1282ef547cc4ed44ff3daefe
 %}
 
 programa_principal  : ID declaraciones '{' bloque_de_sentencia '}' { analizadorS.addEstructura (new Error ( analizadorS.estructuraPRINCIPAL,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
@@ -131,8 +127,8 @@ sentencia : print
       	  | asignacion_sin_punto_coma { analizadorS.addError (new Error ( analizadorS.errorPuntoComa,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
   	  ;
 
-lado_izquierdo : ID {$$ = new ParserVal(obtenerSimbolo(((Token) $1.obj).getNombre(),false)));}
-            	| celda_matriz {$$ = new ParserVal(obtenerSimbolo(((Token) $1.obj).getNombre(),true)));}
+lado_izquierdo : ID {$$ = new ParserVal(obtenerSimbolo(((Token) $1.obj).getNombre(),false));}
+            	| celda_matriz {$$ = new ParserVal(obtenerSimbolo(((Token) $1.obj).getNombre(),true));}
                 ;
 
 operador_menos_menos : ID S_RESTA_RESTA {
