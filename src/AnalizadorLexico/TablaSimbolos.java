@@ -12,6 +12,7 @@ public class TablaSimbolos {
 	//*
 	//*
 	private Hashtable<String, Token> tSimb;
+	
 	public TablaSimbolos(){
 		tSimb = new Hashtable<>();
 	}
@@ -38,4 +39,11 @@ public class TablaSimbolos {
 	public boolean existe(String nombre){
 		return tSimb.containsKey(nombre);
 	}
+	
+	public Token getToken(String nombre){
+		if (tSimb.containsKey(nombre))
+			return tSimb.get(nombre);
+		else
+			return null;
+	};
 }

@@ -40,6 +40,7 @@ public class CeldaAS extends CeldaAbs {
 	public int ejecutar_celda(Token t) {
 		//si error es null es un estado final. Devuelvo -1 si es Final o -2 si es Error.  
 		int warning;
+		
 		if  ( error == null ) {
 				if (t != null){
 					//Se chequea si es un ID, si el nombre es >20 lo trunco.
@@ -57,6 +58,11 @@ public class CeldaAS extends CeldaAbs {
 					
 					if ( (t.getUso() == AnalizadorLexico.CTEI) || (t.getUso() == AnalizadorLexico.CTEL) ) {
 						String cadena = t.getNombre();
+						
+						if(t.getUso() == AnalizadorLexico.CTEI)
+							t.setTipo("integer");
+						else
+							t.setTipo("long");
 							
 						//TODO:
 						//Integer.parseInt() soporta hasta numeros de diez digitos, si se le da un string mas grande
@@ -65,26 +71,31 @@ public class CeldaAS extends CeldaAbs {
 						//int valor;
 						//if(cadena.length()<=10)
 							long valor = Long.parseLong(cadena.substring(2)); //Se extrae el valor despues de _i o _l
+							t.setValor(valor);
 						//else
 							//valor = Integer.parseInt(cadena.substring(0,9));
 							
 						if ( (valor>maximo) && (t.getUso()== AnalizadorLexico.CTEI) ){
 							t.setNombre(Smaximo);
+							t.setValor(maximo);
 							tablaSimb.addSimbolo(t);
 							return -4;
 						}
 						if ( (valor<minimo) && (t.getUso()== AnalizadorLexico.CTEI) ){
 							t.setNombre(Sminimo);
+							t.setValor(minimo);
 							tablaSimb.addSimbolo(t);
 							return -4;
 						}
 						if ( (valor>maximoL) && (t.getUso()== AnalizadorLexico.CTEL) ){
 							t.setNombre(SmaximoL);
+							t.setValor(maximoL);
 							tablaSimb.addSimbolo(t);
 							return -4;
 						}
 						if ( (valor<minimoL) && (t.getUso()== AnalizadorLexico.CTEL) ){
 							t.setNombre(SminimoL);
+							t.setValor(minimoL);
 							tablaSimb.addSimbolo(t);
 							return -4;
 						}
