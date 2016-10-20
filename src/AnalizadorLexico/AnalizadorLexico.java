@@ -23,8 +23,8 @@ public class AnalizadorLexico {
 	public static final int S_MAYOR_IGUAL = 261;
 	public static final int S_MENOR_IGUAL = 262;	
 	static final int S_EXCLAMACION_IGUAL = 263;	//!=
-	static final int CTEI = 264;
-	static final int S_RESTA_RESTA = 265;
+	public static final int CTEI = 264;
+	public static final int S_RESTA_RESTA = 265;
 	static final int COMENTARIO = 266;
 	static final int ANOTACIONF = 267;
 	static final int ANOTACIONC = 268;
