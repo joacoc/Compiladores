@@ -33,7 +33,7 @@ public class AnalizadorLexico {
 	static final int IF = 269;
 	static final int ELSE = 270;
 	static final int ENDIF = 271;
-	static final int PRINT = 272;
+	public static final int PRINT = 272;
 	static final int FOR = 273;
 	//static final int PROGRAMA = 274;
 	static final int MATRIX = 275;

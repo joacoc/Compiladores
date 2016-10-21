@@ -6,7 +6,7 @@ public class TercetoSimple {
 	Token t;
 	
 	public TercetoSimple(Token t) {
-		this.t=(Token) t;
+		this.t= t;
 	}
 	
 	public String imprimirTerceto() {

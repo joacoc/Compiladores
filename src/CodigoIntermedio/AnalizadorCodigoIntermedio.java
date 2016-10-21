@@ -17,7 +17,6 @@ public class AnalizadorCodigoIntermedio {
 	}
 	public void addError(Error error){
 		erroresCodigoIntermedio.add(error);
-		System.out.println("HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 	}
 	public String getErroresCI(){
 		String aux = "Errores Codigo Intermedio: \n";

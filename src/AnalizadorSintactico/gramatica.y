@@ -127,15 +127,21 @@ sentencia : print
       	  | asignacion_sin_punto_coma { analizadorS.addError (new Error ( analizadorS.errorPuntoComa,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
   	  ;
 
-lado_izquierdo : ID {$$ = new ParserVal(obtenerSimbolo(((Token) $1.obj).getNombre(),false));}
-            	| celda_matriz {$$ = new ParserVal(obtenerSimbolo(((Token) $1.obj).getNombre(),true));}
+lado_izquierdo : ID {$$ = new ParserVal( (Token) $1.obj );}
+            	| celda_matriz {$$ = new ParserVal( (Token) $1.obj );}
                 ;
 
-operador_menos_menos : ID S_RESTA_RESTA { 	Terceto terceto = new Terceto ( new TercetoSimple( new Token("--",analizadorL.S_RESTA_RESTA ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( new Token("_i1",analizadorL.CTEI) ), controladorTercetos.getProxNumero() );
+operador_menos_menos : ID S_RESTA_RESTA { 	String valor = "-";
+											Terceto terceto = new Terceto ( new TercetoSimple( new Token("-",(int) valor.charAt(0) ) ) ,new TercetoSimple( (Token) $1.obj ), new TercetoSimple( new Token("_i1",analizadorL.CTEI) ),  controladorTercetos.getProxNumero() );
 											controladorTercetos.addTerceto (terceto);
 											$$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ) );
-											analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));								
-						| celda_matriz  S_RESTA_RESTA
+											analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() )); }								
+						| celda_matriz  S_RESTA_RESTA { 	String valor = "-";
+															Terceto terceto = new Terceto ( new TercetoSimple( new Token("-",(int) valor.charAt(0) ) ) ,new TercetoSimple( (Token)$1.obj ), new TercetoSimple( new Token("_i1",analizadorL.CTEI) ), controladorTercetos.getProxNumero() );
+															controladorTercetos.addTerceto (terceto);
+															$$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ) );
+															analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));								
+													}	
 						;
 
 asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion { String valor =":=";
@@ -152,7 +158,7 @@ asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion { String valor
 																	}
 																	/*TODO: else Error, tipos incompatibles */
 																	} 
-                            | operador_menos_menos { analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
+                           | operador_menos_menos { analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
                            | lado_izquierdo S_ASIGNACION error { analizadorS.addError (new Error ( analizadorS.errorAsignacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }      
                            | error S_ASIGNACION expresion { analizadorS.addError (new Error ( analizadorS.errorAsignacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
                            | lado_izquierdo '=' expresion { analizadorS.addError (new Error ( analizadorS.errorSimboloAsignacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
@@ -236,24 +242,36 @@ factor : CTEI  { $$ = new ParserVal( (Token)$1.obj ); }
 		| celda_matriz { $$ = new ParserVal( (Token)$1.obj ); }
 ;
  
-print : PRINT '(' MULTI_LINEA ')' ';' {analizadorS.addEstructura (new Error ( analizadorS.estructuraPrint,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
+print : PRINT '(' MULTI_LINEA ')' ';' {	Terceto terceto = new Terceto ( new TercetoSimple( (Token)$1.obj ),new TercetoSimple( (Token)$3.obj ), null, controladorTercetos.getProxNumero() );
+										controladorTercetos.addTerceto (terceto);
+										analizadorS.addEstructura (new Error ( analizadorS.estructuraPrint,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
 		  | PRINT '(' error ')' ';' { analizadorS.addError (new Error ( analizadorS.errorPrint1,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }	 
 		  | PRINT '(' MULTI_LINEA ')' error{ analizadorS.addError (new Error ( analizadorS.errorPrint1,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
 		  | error '(' MULTI_LINEA ')' ';' { analizadorS.addError (new Error ( analizadorS.errorPrint2,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
 		    ;
 
-sentencia_for : FOR '(' asignacion condicion_sin_parentesis ';' asignacion_sin_punto_coma ')' sentencia {analizadorS.addEstructura (new Error ( analizadorS.estructuraFOR,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ) ); }
-              | ID '(' asignacion condicion_sin_parentesis ';' asignacion_sin_punto_coma ')' sentencia { analizadorS.addError (new Error ( analizadorS.errorPalabraFOR,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
-      		  |	FOR '(' asignacion condicion_sin_parentesis ';' asignacion_sin_punto_coma ')' '{' bloque_de_sentencia '}' {analizadorS.addEstructura (new Error ( analizadorS.estructuraFOR,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ) ); }
-              | ID '(' asignacion condicion_sin_parentesis ';' asignacion_sin_punto_coma ')' '{' bloque_de_sentencia '}' { analizadorS.addError (new Error ( analizadorS.errorPalabraFOR,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
+cuerpo_for : sentencia 
+		   | '{' bloque_de_sentencia '}' 
+		   ;
+
+sentencia_for : FOR  '(' asignacion {controladorTercetos.apilarFor();}
+				 condicion_sin_parentesis {	Terceto terceto = new Terceto ( new TercetoSimple( (new Token( controladorTercetos.BF) ) ), new TercetoSimple(new Token( controladorTercetos.numeroTercetoString() ) ), null, controladorTercetos.getProxNumero() );
+											controladorTercetos.addTerceto (terceto);
+											controladorTercetos.apilar(); 
+														}
+				 ';' asignacion_sin_punto_coma ')' 
+				cuerpo_for { 	
+								Terceto terceto = new Terceto ( new TercetoSimple( new Token( controladorTercetos.BI)  ), null, null, controladorTercetos.getProxNumero() );
+								controladorTercetos.addTerceto (terceto);
+								controladorTercetos.desapilar();
+								controladorTercetos.desapilarFor();
+
+								analizadorS.addEstructura (new Error ( analizadorS.estructuraFOR,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ) ); }
+              | ID '(' asignacion condicion_sin_parentesis ';' asignacion_sin_punto_coma ')' cuerpo_for { analizadorS.addError (new Error ( analizadorS.errorPalabraFOR,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
               ;
 
 
-cuerpo_if : '{' bloque_de_sentencia '}' {	controladorTercetos.desapilar();
-											Terceto terceto = new Terceto ( new TercetoSimple( new Token( controladorTercetos.BI)  ), new TercetoSimple(new Token( controladorTercetos.numeroTercetoString() ) ), null, controladorTercetos.getProxNumero() );
-											controladorTercetos.addTerceto (terceto);
-											System.out.println(terceto.imprimirTerceto());																	 
-										}
+cuerpo_if : '{' bloque_de_sentencia '}' 
 		  | sentencia
           |  bloque_de_sentencia '}'    { analizadorS.addError (new Error ( analizadorS.errorLlaveAIF,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
           | '{' bloque_de_sentencia     { analizadorS.addError (new Error ( analizadorS.errorLlaveCIF,"ERROR SINTACTICO", controladorArchivo.getLinea()  ));}
@@ -272,11 +290,18 @@ sentecia_if_condicion : IF  condicion 	{	Terceto terceto = new Terceto ( new Ter
 										}
 					  ;
 
-sentencia_seleccion  : 	sentecia_if_condicion  cuerpo_if ELSE cuerpo_else ENDIF ';' { analizadorS.addEstructura (new Error ( analizadorS.estructuraIF,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
-                     | sentecia_if_condicion  cuerpo_if ELSE cuerpo_else ENDIF error { analizadorS.addError (new Error ( analizadorS.errorPuntoComa,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
+sentencia_seleccion  : sentecia_if_condicion  cuerpo_if ELSE {	
+													Terceto terceto = new Terceto ( new TercetoSimple( new Token( controladorTercetos.BI)  ), null, null, controladorTercetos.getProxNumero() );
+													controladorTercetos.addTerceto (terceto);
+													controladorTercetos.desapilar();
+													controladorTercetos.apilar();
+										}
+						cuerpo_else ENDIF ';' { 	controladorTercetos.desapilar();
+													analizadorS.addEstructura (new Error ( analizadorS.estructuraIF,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
                  	 | error  condicion  cuerpo_if ELSE cuerpo_else ENDIF ';' { analizadorS.addError (new Error ( analizadorS.errorPalabraIF,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }                     
                                         	 
-                     | sentecia_if_condicion  cuerpo_if ENDIF ';' { analizadorS.addEstructura (new Error ( analizadorS.estructuraIF,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
+                     | sentecia_if_condicion  cuerpo_if ENDIF ';' { controladorTercetos.desapilar();
+                     												analizadorS.addEstructura (new Error ( analizadorS.estructuraIF,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
                      | sentecia_if_condicion cuerpo_if ENDIF error { analizadorS.addError (new Error ( analizadorS.errorPuntoComa,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
                      | error  condicion  cuerpo_if ENDIF ';' { analizadorS.addError (new Error ( analizadorS.errorPalabraIF,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
                      ;

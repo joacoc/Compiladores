@@ -44,9 +44,25 @@ public class ControladorTercetos {
 	
 	public void desapilar(){
 		int tercetoMod = pila.get(pila.size()-1);
-		Terceto nuevo = tercetos.remove(tercetoMod);
-		TercetoSimple add = new TercetoSimple(new Token( numeroTercetoString() ) );
-		nuevo.setElemento(2, add);
+		pila.remove(pila.size()-1);
+		Terceto nuevo = tercetos.get(tercetoMod);
+		TercetoSimple add = new TercetoSimple(new Token( String.valueOf(tercetos.size()+1) ) );
+		if (nuevo.getTerceto(1) == null){System.out.println("entra aca");
+			nuevo.setElemento(1, add);}
+		else
+			nuevo.setElemento(2, add);
 		tercetos.set(tercetoMod, nuevo);
 	}
+	
+	public void apilarFor(){
+		pila.add(new Integer(tercetos.size()+1) );
+	}
+	
+	public void desapilarFor(){
+		Terceto nuevo = tercetos.get(tercetos.size()-1);
+		TercetoSimple add = new TercetoSimple(new Token( String.valueOf(pila.remove(pila.size()-1)) ) );
+		nuevo.setElemento(1, add);
+	
+	}
+
 }
