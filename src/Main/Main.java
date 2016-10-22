@@ -62,7 +62,7 @@ public class Main {
     	AnalizadorSintactico analizadorSintactico = new AnalizadorSintactico( );
     	AnalizadorCodigoIntermedio analizadorCodigoIntermedio = new AnalizadorCodigoIntermedio();
     	ControladorTercetos controladorTercetos = new ControladorTercetos();
-    	
+
         Parser parser;
         parser = new Parser();
         parser.setLexico(analizadorLexico);
@@ -74,13 +74,13 @@ public class Main {
         parser.run();
 
 //        System.out.println( analizadorLexico.mostrarTokens() );
-//        System.out.println( analizadorLexico.mostrarTs() );
+          System.out.println( analizadorLexico.mostrarTs() );
 //        System.out.println(analizadorLexico.mostrarWarning());
 //        System.out.println(analizadorLexico.mostrarErrorComp());
 //        System.out.println(analizadorSintactico.getErroresSint());
 //        System.out.println(analizadorSintactico.getEstructuras());
-//        System.out.println(analizadorCodigoIntermedio.getErroresCI());
-        System.out.println( controladorTercetos.imprimirTercetos() );
+        System.out.println(analizadorCodigoIntermedio.getErroresCI());
+//        System.out.println( controladorTercetos.imprimirTercetos() );
   
 	}
 }

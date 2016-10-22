@@ -55,9 +55,24 @@ declaracion : tipo lista_variables ';' {
 											
 											for(Token t : (ArrayList<Token>)$2.obj ){ 
 												/*Chequear que la variable ya no este declarada*/
-												t.setTipo(tipo);
-												tablaSimbolo.addSimbolo(t);
+												Token t1 = new Token("var@" + t.getNombre(), t.getUso() );
+												
+												if (!tablaSimbolo.existe(t.getNombre())){
+		 											tablaSimbolo.borrarSimbolo(t.getNombre());
+		 											analizadorCI.addError (new Error ( analizadorCI.errorVariableRedeclarada,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
+												}
+		 										else{
+		 											String tipoT = tablaSimbolo.getToken(t.getNombre()).getTipo();
+													if (tipoT==null){
+														//la variable no fue declarada
+														t1.setTipo(tipo);
+													}
+												
+													tablaSimbolo.addSimbolo(t1);
+		 											tablaSimbolo.borrarSimbolo(t.getNombre());
+		 											}
 											}
+		 										
 										 
 										 analizadorS.addEstructura (new Error ( analizadorS.estructuraDECLARACION,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); 
 										 }
@@ -127,19 +142,47 @@ sentencia : print
       	  | asignacion_sin_punto_coma { analizadorS.addError (new Error ( analizadorS.errorPuntoComa,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
   	  ;
 
-lado_izquierdo : ID {$$ = new ParserVal( (Token) $1.obj );}
-            	| celda_matriz {$$ = new ParserVal( (Token) $1.obj );}
+lado_izquierdo : ID {	//chequeo semantico variable no declarada
+						Token t1 = tablaSimbolo.getToken(((Token) $1.obj).getNombre() ) ;
+		    			if  ( (t1!=null) && (t1.getTipo() == null) ) 
+							analizadorCI.addError (new Error ( analizadorCI.errorNoExisteVariable,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
+
+						$$ = new ParserVal( (Token) $1.obj );}
+    
+            	| celda_matriz {//chequeo semantico variable no declarada
+								Token t1 = (Token) $1.obj;
+				    			if (t1.getTipo() == null) 
+		 							analizadorCI.addError (new Error ( analizadorCI.errorNoExisteVariable,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
+								$$ = new ParserVal( (Token) $1.obj );}
                 ;
 
-operador_menos_menos : ID S_RESTA_RESTA { 	String valor = "-";
+operador_menos_menos : ID S_RESTA_RESTA { 	//agregando terceto
+											String valor = "-";
 											Terceto terceto = new Terceto ( new TercetoSimple( new Token("-",(int) valor.charAt(0) ) ) ,new TercetoSimple( (Token) $1.obj ), new TercetoSimple( new Token("_i1",analizadorL.CTEI) ),  controladorTercetos.getProxNumero() );
 											controladorTercetos.addTerceto (terceto);
 											$$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ) );
+											
+											//chequeo semantico variable no declarada
+											Token t1 = tablaSimbolo.getToken(((Token) $1.obj).getNombre() ) ;
+							    			if (t1.getTipo() == null) 
+        			 							analizadorCI.addError (new Error ( analizadorCI.errorNoExisteVariable,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
+
+
+											//agregar estructuras
 											analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() )); }								
-						| celda_matriz  S_RESTA_RESTA { 	String valor = "-";
+						| celda_matriz  S_RESTA_RESTA { 	
+															//agregando terceto
+															String valor = "-";
 															Terceto terceto = new Terceto ( new TercetoSimple( new Token("-",(int) valor.charAt(0) ) ) ,new TercetoSimple( (Token)$1.obj ), new TercetoSimple( new Token("_i1",analizadorL.CTEI) ), controladorTercetos.getProxNumero() );
 															controladorTercetos.addTerceto (terceto);
 															$$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ) );
+																									
+															//chequeo semantico variable no declarada
+															Token t1 = (Token) $1.obj;
+											    			if (t1.getTipo() == null) 
+        			 											analizadorCI.addError (new Error ( analizadorCI.errorNoExisteVariable,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
+
+															//agregar estructuras
 															analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));								
 													}	
 						;
@@ -231,12 +274,20 @@ termino : termino '*' factor	{	String valor ="*";
     | factor					
 ;
 
-factor : CTEI  { $$ = new ParserVal( (Token)$1.obj ); }
-        | CTEL { $$ = new ParserVal( (Token)$1.obj ); }
-        | ID   { $$ = new ParserVal( (Token)$1.obj );
-        		 Token t1 = (Token) $1.obj;
-        		if (t1.getTipo() == null) 
-        		 analizadorCI.addError (new Error ( analizadorCI.errorNoExisteVariable,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
+factor : CTEI  { Token t= (Token) $1.obj;
+				 t.setTipo(analizadorL.constanteI);
+				 $$ = new ParserVal( (Token)t ); }
+        | CTEL {  Token t= (Token) $1.obj;
+				  t.setTipo(analizadorL.constanteL);
+				  $$ = new ParserVal( (Token)t ); }
+        | ID   { 
+ 				 Token t1 = tablaSimbolo.getToken( "var@" + ((Token) $1.obj).getNombre() ) ;
+ 				 $$ = new ParserVal( t1 );
+
+    			 if (t1 == null) {
+    			 	tablaSimbolo.borrarSimbolo( ((Token) $1.obj).getNombre() );
+        			 analizadorCI.addError (new Error ( analizadorCI.errorNoExisteVariable,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
+    			 }
          }
         | operador_menos_menos 
 		| celda_matriz { $$ = new ParserVal( (Token)$1.obj ); }
@@ -322,8 +373,8 @@ condicion : '(' condicion_sin_parentesis ')'
           ;
 
 
-tipo : INTEGER
-     | LONGINT
+tipo : INTEGER {  $$ = new ParserVal(  new Token( analizadorL.variableI ) ); }
+     | LONGINT {  $$ = new ParserVal(  new Token( analizadorL.variableL ) ); }
      | MATRIX
      ; 
 

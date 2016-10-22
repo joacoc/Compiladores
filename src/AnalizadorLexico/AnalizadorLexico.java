@@ -11,9 +11,13 @@ public class AnalizadorLexico {
 	static final int WI = -3; //WI Es la constante que indica un Warning de identificador
 	static final int WC = -4; //WC Es la constante que indica un Warning de constante
 	
-	static final String constanteI = "CI";
+	public static final String constanteI = "Constante entera";
+	public static final String variableI = "integer";
+	
 	static final String identificador = "I";
-	static final String constanteL = "CL";
+	public static final String constanteL = "constante long";
+	public static final String variableL = "longint";
+
 	
 	//Constantes para YACC
 	static final int ID = 257;

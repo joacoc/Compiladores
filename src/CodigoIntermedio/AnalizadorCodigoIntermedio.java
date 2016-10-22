@@ -7,7 +7,7 @@ import AnalizadorLexico.Error;
 public class AnalizadorCodigoIntermedio {
 	
 	public static final String errorNoExisteVariable = "Esta variable no fue declarada";
-	
+	public static final String errorVariableRedeclarada= "Ya se declaró una variable con este nombre";
 	
 	
 	private ArrayList<Error> erroresCodigoIntermedio;
