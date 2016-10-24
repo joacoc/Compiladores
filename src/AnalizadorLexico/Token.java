@@ -63,6 +63,11 @@ public class Token{
 			
 	}
 		
+	public Token(String numeroTercetoString) {
+		// Usado para los tercetos
+		nombre = numeroTercetoString;
+	}
+
 	public long getValor(){
 		return valorLong;
 	}

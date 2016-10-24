@@ -48,7 +48,9 @@ public class CeldaAS extends CeldaAbs {
 					if ( (t.getNombre().length()>20) && (t.getUso()== AnalizadorLexico.ID) ){
 						String truncar=t.getNombre() ;
 						t.setNombre( truncar.substring(0, 19) );
-						tablaSimb.addSimbolo(t);
+						if (!tablaSimb.existe(t.getNombre() ))
+							tablaSimb.addSimbolo(t);
+
 						return -3;
 					}
 				
@@ -78,32 +80,38 @@ public class CeldaAS extends CeldaAbs {
 						if ( (valor>maximo) && (t.getUso()== AnalizadorLexico.CTEI) ){
 							t.setNombre(Smaximo);
 							t.setValor(maximo);
-							tablaSimb.addSimbolo(t);
+							if (!tablaSimb.existe(t.getNombre() ))
+									tablaSimb.addSimbolo(t);
 							return -4;
 						}
 						if ( (valor<minimo) && (t.getUso()== AnalizadorLexico.CTEI) ){
 							t.setNombre(Sminimo);
 							t.setValor(minimo);
-							tablaSimb.addSimbolo(t);
+							if (!tablaSimb.existe(t.getNombre() ))
+								tablaSimb.addSimbolo(t);
 							return -4;
 						}
 						if ( (valor>maximoL) && (t.getUso()== AnalizadorLexico.CTEL) ){
 							t.setNombre(SmaximoL);
 							t.setValor(maximoL);
-							tablaSimb.addSimbolo(t);
+							if (!tablaSimb.existe(t.getNombre() ))
+								tablaSimb.addSimbolo(t);
 							return -4;
 						}
 						if ( (valor<minimoL) && (t.getUso()== AnalizadorLexico.CTEL) ){
 							t.setNombre(SminimoL);
 							t.setValor(minimoL);
-							tablaSimb.addSimbolo(t);
+							if (!tablaSimb.existe(t.getNombre() ))
+								tablaSimb.addSimbolo(t);
 							return -4;
 						}
 					}
 					
 					//Si es un ID o CTE, va a la tabla de simbolos.
 					if(tablaSimb.es_Agregable(t))
-						tablaSimb.addSimbolo(t);	
+						if (!tablaSimb.existe(t.getNombre() ) && (!tablaSimb.existe("var@" + t.getNombre()) ))
+							tablaSimb.addSimbolo(t);
+	
 					
 					//Si es una palabra reservada la tengo que devolver de alguna tabla
 					return -1;
