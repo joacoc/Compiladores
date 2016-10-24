@@ -51,41 +51,54 @@ declaraciones : declaraciones declaracion
         	  ;
               
 declaracion : tipo lista_variables ';' { 
-											String tipo = ((Token) $1.obj).getNombre();
+										String tipo = ((Token) $1.obj).getNombre();
+										
+										for(Token t : (ArrayList<Token>)$2.obj ){ 
+											/*Chequear que la variable ya no este declarada*/
+											Token t1 = new Token("var@" + t.getNombre(), t.getUso() );
 											
-											for(Token t : (ArrayList<Token>)$2.obj ){ 
-												/*Chequear que la variable ya no este declarada*/
-												Token t1 = new Token("var@" + t.getNombre(), t.getUso() );
-												
-												if (!tablaSimbolo.existe(t.getNombre())){
-		 											tablaSimbolo.borrarSimbolo(t.getNombre());
-		 											analizadorCI.addError (new Error ( analizadorCI.errorVariableRedeclarada,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
-												}
-		 										else{
-		 											String tipoT = tablaSimbolo.getToken(t.getNombre()).getTipo();
-													if (tipoT==null){
-														//la variable no fue declarada
-														t1.setTipo(tipo);
-													}
-												
-													tablaSimbolo.addSimbolo(t1);
-		 											tablaSimbolo.borrarSimbolo(t.getNombre());
-		 											}
+											if (tablaSimbolo.existe(t1.getNombre())){
+	 											analizadorCI.addError (new Error ( analizadorCI.errorVariableRedeclarada,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
 											}
-		 										
-										 
+	 										else {
+	 											//la variable no fue declarada
+												t1.setTipo(tipo);
+												tablaSimbolo.addSimbolo(t1);
+	 											} 												
+	 											
+											}
+
+										//agregar estructura	
 										 analizadorS.addEstructura (new Error ( analizadorS.estructuraDECLARACION,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); 
 										 }
+
 			| tipo error ';' { analizadorS.addError (new Error ( analizadorS.errorDeclaracionVar,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
 			
 										 
 		    | tipo lista_variables { analizadorS.addError (new Error ( analizadorS.errorPuntoComa,"ERROR SINTACTICO",    controladorArchivo.getLinea() )); }
 		    | error lista_variables ';' { analizadorS.addError (new Error ( analizadorS.errorTipo,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
             
-            | tipo matriz { ((Token) $2.obj).setTipo(((Token)$1.obj).getNombre());
-							tablaSimbolo.addSimbolo((Token) $2.obj);
+            | tipo matriz { //((Token) $2.obj).setTipo(((Token)$1.obj).getNombre());
+							//tablaSimbolo.addSimbolo((Token) $2.obj);
 							/*Checkear que no se haya agregado*/
+
+							/*Chequear que la variable ya no este declarada*/
+							Token t = (Token)$2.obj;
+							Token t1 = new Token("mat@" + t.getNombre(), t.getUso() );
+							
+							if (tablaSimbolo.existe(t1.getNombre())){
+									analizadorCI.addError (new Error ( analizadorCI.errorMatrizRedeclarada,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
 							}
+							else{
+								//la variable no fue declarada
+								String tipo = ((Token) $1.obj).getNombre();
+								t1.setTipo(tipo);
+								tablaSimbolo.addSimbolo(t1);
+								}
+
+							
+							}
+
             | error matriz { analizadorS.addError (new Error ( analizadorS.errorTipo,"ERROR SINTACTICO", controladorArchivo.getLinea() )); } 
            
             | ALLOW tipo TO tipo ';' { allow = true;
@@ -104,13 +117,14 @@ lista_variables : lista_variables ',' ID {	ArrayList<Token> lista = (ArrayList<T
                 			$$ = new ParserVal(lista);}
                 ;
 
-declaracion_matriz : MATRIX ID '[' CTEI ']' '[' CTEI ']' {  analizadorS.addEstructura (new Error ( analizadorS.estructuraDECLARACION,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
+declaracion_matriz : MATRIX ID '[' CTEI ']' '[' CTEI ']' {  $$ = new ParserVal( (Token) $2.obj );
+															analizadorS.addEstructura (new Error ( analizadorS.estructuraDECLARACION,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
 				   | MATRIX error '[' CTEI ']' '[' CTEI ']' { analizadorS.addError (new Error ( analizadorS.errorDeclaracionMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
 				   | MATRIX ID '[' error ']' '[' CTEI ']' { analizadorS.addError (new Error ( analizadorS.errorDeclaracionMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
 				   | MATRIX ID '[' CTEI ']' '[' error ']'	{ analizadorS.addError (new Error ( analizadorS.errorDeclaracionMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
 				   ;
 
-matriz : declaracion_matriz inicializacion ';' anotacion
+matriz : declaracion_matriz inicializacion ';' anotacion 
        | declaracion_matriz ';' anotacion
        | declaracion_matriz inicializacion ';'
        | declaracion_matriz ';'
@@ -143,15 +157,15 @@ sentencia : print
   	  ;
 
 lado_izquierdo : ID {	//chequeo semantico variable no declarada
-						Token t1 = tablaSimbolo.getToken(((Token) $1.obj).getNombre() ) ;
-		    			if  ( (t1!=null) && (t1.getTipo() == null) ) 
+						Token t1 = tablaSimbolo.getToken( "var@" + ( (Token) $1.obj).getNombre() ) ;
+		    			if  ( t1 == null ) 
 							analizadorCI.addError (new Error ( analizadorCI.errorNoExisteVariable,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
 
 						$$ = new ParserVal( (Token) $1.obj );}
     
             	| celda_matriz {//chequeo semantico variable no declarada
-								Token t1 = (Token) $1.obj;
-				    			if (t1.getTipo() == null) 
+						Token t1 = tablaSimbolo.getToken( "mat@" + (  (Token) val_peek(0).obj).getNombre() ) ;
+				    			if (t1 == null) 
 		 							analizadorCI.addError (new Error ( analizadorCI.errorNoExisteVariable,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
 								$$ = new ParserVal( (Token) $1.obj );}
                 ;
@@ -164,7 +178,7 @@ operador_menos_menos : ID S_RESTA_RESTA { 	//agregando terceto
 											
 											//chequeo semantico variable no declarada
 											Token t1 = tablaSimbolo.getToken(((Token) $1.obj).getNombre() ) ;
-							    			if (t1.getTipo() == null) 
+							    			if (t1 == null) 
         			 							analizadorCI.addError (new Error ( analizadorCI.errorNoExisteVariable,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
 
 
@@ -178,7 +192,7 @@ operador_menos_menos : ID S_RESTA_RESTA { 	//agregando terceto
 															$$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ) );
 																									
 															//chequeo semantico variable no declarada
-															Token t1 = (Token) $1.obj;
+															Token t1 = tablaSimbolo.getToken( "mat@" + (  (Token) val_peek(0).obj).getNombre() ) ;
 											    			if (t1.getTipo() == null) 
         			 											analizadorCI.addError (new Error ( analizadorCI.errorNoExisteVariable,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
 
@@ -285,7 +299,6 @@ factor : CTEI  { Token t= (Token) $1.obj;
  				 $$ = new ParserVal( t1 );
 
     			 if (t1 == null) {
-    			 	tablaSimbolo.borrarSimbolo( ((Token) $1.obj).getNombre() );
         			 analizadorCI.addError (new Error ( analizadorCI.errorNoExisteVariable,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
     			 }
          }
@@ -375,10 +388,16 @@ condicion : '(' condicion_sin_parentesis ')'
 
 tipo : INTEGER {  $$ = new ParserVal(  new Token( analizadorL.variableI ) ); }
      | LONGINT {  $$ = new ParserVal(  new Token( analizadorL.variableL ) ); }
-     | MATRIX
      ; 
 
-celda_matriz : ID '[' expresion ']' '[' expresion ']' {  }
+celda_matriz : ID '[' expresion ']' '[' expresion ']' { Token t1 = tablaSimbolo.getToken( "mat@" + ((Token) $1.obj).getNombre() ) ;
+														$$ = new ParserVal( t1 );
+
+														if (t1 == null) {
+															tablaSimbolo.borrarSimbolo( ((Token) $1.obj).getNombre() );
+														 	analizadorCI.addError (new Error ( analizadorCI.errorNoExisteMatriz,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
+														}
+    			  }
              | ID '[' error ']' '[' expresion ']'  { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
              | ID '[' expresion ']' '[' error ']'  { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
              | ID '[' error ']' '[' error ']'  { analizadorS.addError (new Error ( analizadorS.errorCeldaMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }

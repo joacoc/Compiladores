@@ -23,7 +23,7 @@ public class TablaSimbolos {
 	
 	//Me confirma si el token es agregable a la tabla de simbolos.
 	public boolean es_Agregable( Token t){
-		if(t.getUso() == AnalizadorLexico.ID ||
+		if( //t.getUso() == AnalizadorLexico.ID || comento el identificador porque lo agregamos en la gramatica
 				t.getUso() == AnalizadorLexico.CTEI ||
 				t.getUso() == AnalizadorLexico.CTEL || 
 				t.getUso() == AnalizadorLexico.MULTI_LINEA)
