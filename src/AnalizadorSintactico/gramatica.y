@@ -31,12 +31,8 @@ import AnalizadorLexico.*;
 import AnalizadorLexico.Error;
 import AnalizadorSintactico.*;
 import Calculadora.*;
-<<<<<<< HEAD
 import java.util.ArrayList;
-
-=======
 import CodigoIntermedio.*;
->>>>>>> 28ade2e99055937d1282ef547cc4ed44ff3daefe
 %}
 
 programa_principal  : ID declaraciones '{' bloque_de_sentencia '}' { analizadorS.addEstructura (new Error ( analizadorS.estructuraPRINCIPAL,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
