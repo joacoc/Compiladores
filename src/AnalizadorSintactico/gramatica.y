@@ -307,10 +307,10 @@ termino : termino '*' factor	{	String valor ="*";
 ;
 
 factor : CTEI  { Token t= (Token) $1.obj;
-				 t.setTipo(analizadorL.constanteI);
+				 t.setTipo(analizadorL.variableI);
 				 $$ = new ParserVal( (Token)t ); }
         | CTEL {  Token t= (Token) $1.obj;
-				  t.setTipo(analizadorL.constanteL);
+				  t.setTipo(analizadorL.variableL);
 				  $$ = new ParserVal( (Token)t ); }
         | ID   { 
  				 Token t1 = tablaSimbolo.getToken( "var@" + ((Token) $1.obj).getNombre() ) ;
