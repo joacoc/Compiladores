@@ -19,11 +19,12 @@ public class TokenMatriz extends Token{
 
 	public TokenMatriz(String nombre, int uso) {
 		super(nombre,uso);
+		
 	}
 	
-	public TokenMatriz(String nombre, int uso, int filas, int columnas) {
+	public TokenMatriz(String nombre, int uso, long filas, long columnas) {
 		super(nombre,uso);
-		setDimensiones(filas,columnas);
+		setDimensiones((int)filas,(int)columnas);
 	}
 
 	public void setDimensiones(int filas, int columnas){
