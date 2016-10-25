@@ -125,7 +125,7 @@ declaracion_matriz : MATRIX ID '[' CTEI ']' '[' CTEI ']' {  Token t = (Token) $2
 
 matriz : declaracion_matriz inicializacion ';' anotacion { TokenMatriz declaracion_matriz = (TokenMatriz) $1.obj;
 															String orientacion = $3.sval;
-															String ArrayList<ArrayList<long>> valores = (ArrayList<ArrayList<long>>) $2.obj;
+															ArrayList<ArrayList<Long>> valores = (ArrayList<ArrayList<Long>>) $2.obj;
 															declaracion_matriz.setValores(valores,orientacion);
 															$$ = new ParserVal(declaracion_matriz);
 															}
@@ -137,7 +137,7 @@ matriz : declaracion_matriz inicializacion ';' anotacion { TokenMatriz declaraci
 															}
        | declaracion_matriz inicializacion ';'{
        														TokenMatriz declaracion_matriz = (TokenMatriz) $1.obj;
-															String ArrayList<ArrayList<long>> valores = (ArrayList<ArrayList<long>>) $2.obj;
+															ArrayList<ArrayList<Long>> valores = (ArrayList<ArrayList<Long>>) $2.obj;
 															declaracion_matriz.setValores(valores,null);
 															$$ = new ParserVal(declaracion_matriz);
 															}
@@ -152,20 +152,25 @@ matriz : declaracion_matriz inicializacion ';' anotacion { TokenMatriz declaraci
 anotacion : ANOTACIONC {$$ = new ParserVal("C");}
           | ANOTACIONF {$$ = new ParserVal("F");}
           ;
-inicializacion : '{' filas '}' {$$ = $2.obj;}
+inicializacion : '{' filas '}' {$$ = new ParserVal($2.obj);}
                 ;
 
-filas : filas ';' fila {ArrayList<ArrayList<long>> lista = (ArrayList<ArrayList<long>>)$1.obj;
-						lista.add(((ArrayList<long>)$3.obj));
-						$$ = lista;
+filas : filas ';' fila {ArrayList<ArrayList<Long>> lista = (ArrayList<ArrayList<Long>>)$1.obj;
+						lista.add(((ArrayList<Long>)$3.obj));
+						$$ = new ParserVal(lista);
 					}
-      | fila	{$$ = new ArrayList<ArrayList<long>>((ArrayList<long>)$1.obj);}
+      | fila	{
+      				ArrayList<ArrayList<Long>> lista = new ArrayList<>();
+      				lista.add((ArrayList<Long>)$1.obj);
+      				$$ = new ParserVal(lista);}
       ;
 
-fila : fila ',' CTEI {ArrayList<long> lista = (ArrayList<long>)$1.obj;
+fila : fila ',' CTEI {ArrayList<Long> lista = (ArrayList<Long>)$1.obj;
 						lista.add(((Token)$3.obj).getValor());
-						$$ = lista;}
-      | CTEI {$$ = new ArrayList<long>(((Token)$1).getValor());}
+						$$ = new ParserVal(lista);}
+      | CTEI {	ArrayList<Long> lista = new ArrayList<>();
+      			lista.add(((Token)$1.obj).getValor());
+      			$$ = new ParserVal( lista );}
       ;
 
 bloque_de_sentencia : bloque_de_sentencia sentencia
