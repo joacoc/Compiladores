@@ -259,20 +259,20 @@ asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion { String valor
 asignacion :  asignacion_sin_punto_coma ';'
 		;
 
-expresion : 
-/*Error reduce/reduce
-		operador_menos_menos {
-									//TODO
-								} 
-		|*/ expresion '+' termino	{ 	String valor ="+";
+expresion : expresion '+' termino	{ 	String valor ="+";
+										String tipo = getTipoCompatibleSuma((Token)$1.obj,(Token)$3.obj);
 										Terceto terceto = new Terceto ( new TercetoSimple( new Token("+",(int) valor.charAt(0) ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
 										controladorTercetos.addTerceto (terceto);
-										$$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ) );
+										Token nuevo = new Token( controladorTercetos.numeroTercetoString() ) ;
+										nuevo.setTipo(tipo);
+										$$ = new ParserVal(nuevo);
 									}
       | expresion '-' termino 		{	String valor ="-";
+      									String tipo = getTipoCompatibleSuma((Token)$1.obj,(Token)$3.obj);
 										Terceto terceto = new Terceto ( new TercetoSimple( new Token("-",(int) valor.charAt(0) ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
 										controladorTercetos.addTerceto (terceto);
-										$$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ));
+										Token nuevo = new Token( controladorTercetos.numeroTercetoString() ) ;
+										$$ = new ParserVal(nuevo);
 
 									}
       | termino						
@@ -282,12 +282,17 @@ expresion :
 termino : termino '*' factor	{	String valor ="*";
 										Terceto terceto = new Terceto ( new TercetoSimple( new Token("*",(int) valor.charAt(0) ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
 										controladorTercetos.addTerceto (terceto);
-										$$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ) );
+										Token nuevo = new Token( controladorTercetos.numeroTercetoString() );
+										nuevo.setTipo("longint");
+										$$ = new ParserVal(nuevo);
 								}
     | termino '/' factor		{ String valor ="/";
+    									String tipo = getTipoCompatibleDivision((Token)$1.obj,(Token)$3.obj);
 										Terceto terceto = new Terceto ( new TercetoSimple( new Token("/",(int) valor.charAt(0) ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
 										controladorTercetos.addTerceto (terceto);
-										$$ = new ParserVal( new Token( controladorTercetos.numeroTercetoString() ) );
+										Token nuevo = new Token( controladorTercetos.numeroTercetoString() );
+										nuevo.setTipo(tipo);
+										$$ = new ParserVal(nuevo);
     							}
     | factor					
 ;
@@ -306,7 +311,7 @@ factor : CTEI  { Token t= (Token) $1.obj;
         			 analizadorCI.addError (new Error ( analizadorCI.errorNoExisteVariable,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
     			 }
          }
-        | operador_menos_menos 
+        | operador_menos_menos
 		| celda_matriz { $$ = new ParserVal( (Token)$1.obj ); }
 ;
  
@@ -484,6 +489,21 @@ if(t1.getTipo()!=null && t2.getTipo()!=null){
 		}
 }
 		return false;
+}
+
+public String getTipoCompatibleSuma (Token t1,Token t2){
+	if ((t1.getTipo().equals("longint")) || (t2.getTipo().equals("longint")))
+		return "longint";
+	else
+		return "integer";
+}
+public String getTipoCompatibleDivision (Token t1,Token t2){
+	if ((t1.getTipo().equals("longint")) && (t1.getTipo().equals("longint")))
+		return "longint";
+	else if ((t1.getTipo().equals("longint")) && (t1.getTipo().equals("integer")))
+			return "longint";
+	else
+		return "integer";
 }
 
 public Token obtenerSimbolo(String nombre,boolean esMatriz){
