@@ -55,6 +55,7 @@ declaracion : tipo lista_variables ';' {
 											
 											for(Token t : (ArrayList<Token>)$2.obj ){ 
 												/*Chequear que la variable ya no este declarada*/
+												
 												Token t1 = new Token("var@" + t.getNombre(), t.getUso() );
 												
 												if (!tablaSimbolo.existe(t.getNombre())){
@@ -62,12 +63,12 @@ declaracion : tipo lista_variables ';' {
 		 											analizadorCI.addError (new Error ( analizadorCI.errorVariableRedeclarada,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
 												}
 		 										else{
+		 											 
 		 											String tipoT = tablaSimbolo.getToken(t.getNombre()).getTipo();
 													if (tipoT==null){
 														//la variable no fue declarada
 														t1.setTipo(tipo);
 													}
-												
 													tablaSimbolo.addSimbolo(t1);
 		 											tablaSimbolo.borrarSimbolo(t.getNombre());
 		 											}
@@ -82,9 +83,24 @@ declaracion : tipo lista_variables ';' {
 		    | tipo lista_variables { analizadorS.addError (new Error ( analizadorS.errorPuntoComa,"ERROR SINTACTICO",    controladorArchivo.getLinea() )); }
 		    | error lista_variables ';' { analizadorS.addError (new Error ( analizadorS.errorTipo,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
             
-            | tipo matriz { ((Token) $2.obj).setTipo(((Token)$1.obj).getNombre());
-							tablaSimbolo.addSimbolo((Token) $2.obj);
-							/*Checkear que no se haya agregado*/
+            | tipo matriz { 
+
+			            	Token t1 = new Token("mat@" + t.getNombre(), t.getUso() );
+							Token t = (Token)$2.obj;
+
+							if (!tablaSimbolo.existe(t.getNombre())){
+									tablaSimbolo.borrarSimbolo(t.getNombre());
+									analizadorCI.addError (new Error ( analizadorCI.errorVariableRedeclarada,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
+							}
+							else{
+								String tipoT = tablaSimbolo.getToken(t.getNombre()).getTipo();
+								if (tipoT==null){
+									//la variable no fue declarada
+									t1.setTipo(tipo);
+								}
+								tablaSimbolo.addSimbolo(t1);
+								tablaSimbolo.borrarSimbolo(t.getNombre());
+								}
 							}
             | error matriz { analizadorS.addError (new Error ( analizadorS.errorTipo,"ERROR SINTACTICO", controladorArchivo.getLinea() )); } 
            
@@ -110,7 +126,7 @@ declaracion_matriz : MATRIX ID '[' CTEI ']' '[' CTEI ']' {  analizadorS.addEstru
 				   | MATRIX ID '[' CTEI ']' '[' error ']'	{ analizadorS.addError (new Error ( analizadorS.errorDeclaracionMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
 				   ;
 
-matriz : declaracion_matriz inicializacion ';' anotacion
+matriz : declaracion_matriz inicializacion ';' anotacion 
        | declaracion_matriz ';' anotacion
        | declaracion_matriz inicializacion ';'
        | declaracion_matriz ';'
@@ -192,14 +208,17 @@ asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion { String valor
 																	controladorTercetos.addTerceto (terceto);
 																	$$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ));
 																	analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));
+																	
+																	
+																	//Se le asigna el valor
 																	Token t1 = (Token) $1.obj;
 																	Token t2 = (Token) $3.obj;
+																	
 																	if(tipoCompatible(t1,t2)){
-																		System.out.println("Compatibles");
 																		t1.setValor(t2.getValor());
 																		tablaSimbolo.addSimbolo(t1);
 																	}
-																	/*TODO: else Error, tipos incompatibles */
+																	
 																	} 
                            | operador_menos_menos { analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
                            | lado_izquierdo S_ASIGNACION error { analizadorS.addError (new Error ( analizadorS.errorAsignacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }      
@@ -209,7 +228,10 @@ asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion { String valor
 asignacion :  asignacion_sin_punto_coma ';'
 		;
 
-expresion : expresion '+' termino	{ 	String valor ="+";
+expresion :	operador_menos_menos {
+									//TODO
+								} 
+		| expresion '+' termino	{ 	String valor ="+";
 										Terceto terceto = new Terceto ( new TercetoSimple( new Token("+",(int) valor.charAt(0) ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
 										controladorTercetos.addTerceto (terceto);
 										$$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ) );
@@ -439,7 +461,7 @@ int yylex()
 public boolean tipoCompatible(Token t1, Token t2){
 
 if(t1.getTipo()!=null && t2.getTipo()!=null){
-		System.out.println("Ambos tipos distintos de null");
+
 		if(t1.getTipo().equals("integer")){
 			if(t2.getTipo().equals("integer"))
 				return true;
@@ -448,16 +470,10 @@ if(t1.getTipo()!=null && t2.getTipo()!=null){
 					if(allow)
 						return true;
 		}else{
-			if(t1.getTipo().equals("longint")){
-				if(t2.getTipo().equals("integer"))
-					if(allow)
-						return true;
-				else
-					if(t2.getTipo().equals("longint"))
-						return true;
-			}
+			if(t1.getTipo().equals("longint"))
+
 		}
-}
+		
 		return false;
 }
 
