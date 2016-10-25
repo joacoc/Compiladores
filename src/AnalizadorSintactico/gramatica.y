@@ -223,7 +223,12 @@ asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion { String valor
 asignacion :  asignacion_sin_punto_coma ';'
 		;
 
-expresion : expresion '+' termino	{ 	String valor ="+";
+expresion : 
+/*Error reduce/reduce
+		operador_menos_menos {
+									//TODO
+								} 
+		|*/ expresion '+' termino	{ 	String valor ="+";
 										Terceto terceto = new Terceto ( new TercetoSimple( new Token("+",(int) valor.charAt(0) ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
 										controladorTercetos.addTerceto (terceto);
 										$$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ) );
