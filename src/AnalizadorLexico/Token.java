@@ -4,12 +4,21 @@ import java.util.Hashtable;
 
 public class Token{
 	
-	String nombre; //pepe,
+	//Nombre del token dentro del codigo
+	String nombre;
+	
+	//Valor del token, p.e. _i453; valor = 453.
 	long valorLong;
-	long [][] valorMatriz;
-	String tipo; //integer, longint
-	String lexema; //ID, CTE
+	
+	//integer, longint
+	String tipo;
+	
+	//ID, CTE
+	String lexema;
+	
+	//Es el valor ASCII o el numero de token
 	int uso;
+	
 	Hashtable<String, Integer> tablaTokens = new Hashtable<>();
 	AnalizadorLexico analizador = new AnalizadorLexico(null,null);
 	
