@@ -269,12 +269,11 @@ cuerpo_else : '{' bloque_de_sentencia '}'
             ;         
 
 sentencia_seleccion  : IF  condicion  cuerpo_if ELSE cuerpo_else ENDIF ';' { analizadorS.addEstructura (new Error ( analizadorS.estructuraIF,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
-                     | IF  condicion  cuerpo_if ELSE cuerpo_else ENDIF error { analizadorS.addError (new Error ( analizadorS.errorPuntoComa,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
-                 	 | error  condicion  cuerpo_if ELSE cuerpo_else ENDIF ';' { analizadorS.addError (new Error ( analizadorS.errorPalabraIF,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }                     
+                     | IF  condicion  cuerpo_if ELSE cuerpo_else ENDIF error { analizadorS.addError (new Error ( analizadorS.errorPuntoComa,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }   
                                         	 
                      | IF  condicion  cuerpo_if ENDIF ';' { analizadorS.addEstructura (new Error ( analizadorS.estructuraIF,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
                      | IF  condicion  cuerpo_if ENDIF error { analizadorS.addError (new Error ( analizadorS.errorPuntoComa,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
-                     | error  condicion  cuerpo_if ENDIF ';' { analizadorS.addError (new Error ( analizadorS.errorPalabraIF,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
+                     
                      ;
 
 condicion_sin_parentesis : expresion operador expresion {	Terceto terceto = new Terceto ( new TercetoSimple( $2.obj ) ,new TercetoSimple( $1.obj ), new TercetoSimple( $3.obj ), controladorTercetos.getProxNumero() );
