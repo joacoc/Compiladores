@@ -36,13 +36,19 @@ import java.util.ArrayList;
 import CodigoIntermedio.*;
 %}
 
-programa_principal  : ID declaraciones '{' bloque_de_sentencia '}' { analizadorS.addEstructura (new Error ( analizadorS.estructuraPRINCIPAL,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
-                    | ID '{' bloque_de_sentencia '}' { analizadorS.addEstructura (new Error ( analizadorS.estructuraPRINCIPAL,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
+programa_principal  : ID declaraciones '{' bloque_de_sentencia '}' { 
+												tablaSimbolo.addUso(((Token)$1.obj).getNombre(),analizadorS.usoNombrePrograma);
+												analizadorS.addEstructura (new Error ( analizadorS.estructuraPRINCIPAL,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
+                    | ID '{' bloque_de_sentencia '}' { 
+												tablaSimbolo.addUso(((Token)$1.obj).getNombre(),analizadorS.usoNombrePrograma);
+												analizadorS.addEstructura (new Error ( analizadorS.estructuraPRINCIPAL,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
                     | ID declaraciones '{' bloque_de_sentencia  { analizadorS.addError (new Error ( analizadorS.errorLlaveA,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
                     | ID declaraciones bloque_de_sentencia '}'  { analizadorS.addError (new Error ( analizadorS.errorLlaveA,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
                     | error declaraciones '{' bloque_de_sentencia '}' { analizadorS.addError (new Error ( analizadorS.errorProgram,"ERROR SINTACTICO", controladorArchivo.getLinea() )); } 
                     | ID error '{' bloque_de_sentencia '}'    { analizadorS.addError (new Error ( analizadorS.errorDeclaracionVar,"ERROR SINTACTICO", controladorArchivo.getLinea() )); } 
-                    | ID declaraciones '{' '}'         { analizadorS.addError (new Error ( analizadorS.errorSentencias,"ERROR SINTACTICO", controladorArchivo.getLinea() )); } 
+                    | ID declaraciones '{' '}'         { 
+												tablaSimbolo.addUso(((Token)$1.obj).getNombre(),analizadorS.usoNombrePrograma);
+												analizadorS.addError (new Error ( analizadorS.errorSentencias,"ERROR SINTACTICO", controladorArchivo.getLinea() )); } 
                     ;
 
 
@@ -64,6 +70,7 @@ declaracion : tipo lista_variables ';' {
 	 											//la variable no fue declarada
 												t1.setTipo(tipo);
 												tablaSimbolo.addSimbolo(t1);
+												tablaSimbolo.addUso(t1.getNombre(),analizadorS.usoVariable);
 	 											} 												
 	 											
 											}
@@ -91,6 +98,7 @@ declaracion : tipo lista_variables ';' {
 								String tipo = ((Token) $1.obj).getNombre();
 								t1.setTipo(tipo);
 								tablaSimbolo.addSimbolo(t1);
+								tablaSimbolo.addUso(t1.getNombre(),analizadorS.usoVariableArreglo);
 								}
 
 							
@@ -185,11 +193,12 @@ sentencia : print
   	  ;
 
 lado_izquierdo : ID {	//chequeo semantico variable no declarada
+
 						Token t1 = tablaSimbolo.getToken( "var@" + ( (Token) $1.obj).getNombre() ) ;
 		    			if  ( t1 == null ) 
 							analizadorCI.addError (new Error ( analizadorCI.errorNoExisteVariable,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
 
-						$$ = new ParserVal( (Token) $1.obj );}
+						$$ = new ParserVal( t1 );}
     
             	| celda_matriz {//chequeo semantico variable no declarada
 						Token t1 = tablaSimbolo.getToken( "mat@" + (  (Token) val_peek(0).obj).getNombre() ) ;
@@ -200,12 +209,16 @@ lado_izquierdo : ID {	//chequeo semantico variable no declarada
 
 operador_menos_menos : ID S_RESTA_RESTA { 	//agregando terceto
 											String valor = "-";
-											Terceto terceto = new Terceto ( new TercetoSimple( new Token("-",(int) valor.charAt(0) ) ) ,new TercetoSimple( (Token) $1.obj ), new TercetoSimple( new Token("_i1",analizadorL.CTEI) ),  controladorTercetos.getProxNumero() );
+											Token t1 = tablaSimbolo.getToken("var@" + ((Token) $1.obj).getNombre() ) ;
+											Terceto terceto;
+											if ( t1.getTipo() == analizadorL.variableI )
+												terceto = new Terceto ( new TercetoSimple( new Token("-",(int) valor.charAt(0) ) ) ,new TercetoSimple( t1 ), new TercetoSimple( new Token("_i1",analizadorL.CTEI) ),  controladorTercetos.getProxNumero() );
+											else
+												terceto = new Terceto ( new TercetoSimple( new Token("-",(int) valor.charAt(0) ) ) ,new TercetoSimple( t1 ), new TercetoSimple( new Token("_l1",analizadorL.CTEL) ),  controladorTercetos.getProxNumero() );
 											controladorTercetos.addTerceto (terceto);
 											$$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ) );
 											
 											//chequeo semantico variable no declarada
-											Token t1 = tablaSimbolo.getToken(((Token) $1.obj).getNombre() ) ;
 							    			if (t1 == null) 
         			 							analizadorCI.addError (new Error ( analizadorCI.errorNoExisteVariable,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
 
@@ -232,6 +245,8 @@ operador_menos_menos : ID S_RESTA_RESTA { 	//agregando terceto
 asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion { String valor =":=";
 																	Terceto terceto = new Terceto ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
 																	controladorTercetos.addTerceto (terceto);
+
+																	$$ = new ParserVal((Token)$1.obj);
 																	analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));
 																	Token t1 = (Token) $1.obj;
 																	Token t2 = (Token) $3.obj;
@@ -250,7 +265,7 @@ asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion { String valor
                            | error S_ASIGNACION expresion { analizadorS.addError (new Error ( analizadorS.errorAsignacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
                            | lado_izquierdo '=' expresion { analizadorS.addError (new Error ( analizadorS.errorSimboloAsignacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
 
-asignacion :  asignacion_sin_punto_coma ';'
+asignacion :  asignacion_sin_punto_coma ';' 
 		;
 
 expresion : expresion '+' termino	{ 	String valor ="+";
@@ -324,9 +339,17 @@ cuerpo_for : sentencia
 sentencia_for : FOR  '(' asignacion {controladorTercetos.apilarFor();}
 				 condicion_sin_parentesis {	Terceto terceto = new Terceto ( new TercetoSimple( (new Token( controladorTercetos.BF) ) ), new TercetoSimple(new Token( controladorTercetos.numeroTercetoString() ) ), null, controladorTercetos.getProxNumero() );
 											controladorTercetos.addTerceto (terceto);
-											controladorTercetos.apilar(); 
-														}
-				 ';' asignacion_sin_punto_coma ')' 
+											controladorTercetos.apilar(); }
+				 ';' asignacion_sin_punto_coma ')' 	{ 
+											 			Token asig = (Token)$3.obj;
+														Token asigUlt = (Token)$7.obj;
+																												System.out.println(asig.getNombre());
+
+														System.out.println(asigUlt.getNombre());
+				 										//if (controladorTercetos.errorControlFOR(asig,asigUlt) )
+	 													//	analizadorCI.addError (new Error ( analizadorCI.errorVariableControlFOR,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
+
+				 									}
 				cuerpo_for { 	
 								Terceto terceto = new Terceto ( new TercetoSimple( new Token( controladorTercetos.BI)  ), null, null, controladorTercetos.getProxNumero() );
 								controladorTercetos.addTerceto (terceto);
@@ -406,7 +429,6 @@ celda_matriz : ID '[' expresion ']' '[' expresion ']' { Token t1 = tablaSimbolo.
 														$$ = new ParserVal( t1 );
 
 														if (t1 == null) {
-															tablaSimbolo.borrarSimbolo( ((Token) $1.obj).getNombre() );
 														 	analizadorCI.addError (new Error ( analizadorCI.errorNoExisteMatriz,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
 														}
     			  }

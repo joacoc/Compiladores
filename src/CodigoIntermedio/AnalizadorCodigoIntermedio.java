@@ -11,6 +11,8 @@ public class AnalizadorCodigoIntermedio {
 	public static final String errorVariableRedeclarada= "Ya se declaró una variable con este nombre";
 	public static final String errorMatrizRedeclarada= "Ya se declaró una matriz con este nombre";
 	public static final String errorFaltaAllow= "no se puede convertir de integer a longint si no esta la declaracion ALLOW LONGINT TO INTEGER";
+	public static final String errorVariableControlFOR = "No se actualiza la variable de control en el for.";
+
 	
 	private ArrayList<Error> erroresCodigoIntermedio;
 

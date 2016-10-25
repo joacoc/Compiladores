@@ -80,7 +80,7 @@ public class Main {
 //        System.out.println(analizadorSintactico.getErroresSint());
 //        System.out.println(analizadorSintactico.getEstructuras());
         System.out.println(analizadorCodigoIntermedio.getErroresCI());
-//        System.out.println( controladorTercetos.imprimirTercetos() );
+        System.out.println( controladorTercetos.imprimirTercetos() );
   
 	}
 }

@@ -65,4 +65,16 @@ public class ControladorTercetos {
 	
 	}
 
+	public boolean errorControlFOR(Token t1, Token t2){
+		char c = t2.getNombre().charAt(0);
+		System.out.println(c);
+		if (Character.isDigit(c)){
+			//es un terceto
+			return ( ( errorControlFOR(t1, tercetos.get(Integer.parseInt(t2.getNombre())).getTerceto(1).getToken() ) ) ||
+					( errorControlFOR(t1, tercetos.get(Integer.parseInt(t2.getNombre())).getTerceto(2).getToken() ) ) );
+		}
+		else	
+			return ( t1.getNombre() == t2.getNombre() );
+	}
+
 }

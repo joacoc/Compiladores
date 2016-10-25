@@ -1,5 +1,7 @@
 package CodigoIntermedio;
 
+import java.io.ObjectInputStream.GetField;
+
 import AnalizadorLexico.Token;
 
 public class TercetoSimple {
@@ -15,5 +17,9 @@ public class TercetoSimple {
 			return "[" + t.getNombre() + "]";
 		else
 			return t.getNombre();
+	}
+	
+	public Token getToken() {
+		return t;
 	}
 }
