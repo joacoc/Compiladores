@@ -109,7 +109,6 @@ public class CeldaAS extends CeldaAbs {
 					
 					//Si es un ID o CTE, va a la tabla de simbolos.
 					if(tablaSimb.es_Agregable(t))
-						if (!tablaSimb.existe(t.getNombre() ) && (!tablaSimb.existe("var@" + t.getNombre()) ))
 							tablaSimb.addSimbolo(t);
 	
 					
