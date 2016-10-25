@@ -6,9 +6,10 @@ public class TokenMatriz extends Token{
 
 	int filas = 0, columnas = 0;
 	long mat[][];
+	
+	
 	//Orientacion. False == filas. True == columnas. 
 	//Por defecto = filas.
-	
 	boolean orientacion = false;
 	
 	public TokenMatriz(String numeroTercetoString) {
@@ -19,7 +20,6 @@ public class TokenMatriz extends Token{
 
 	public TokenMatriz(String nombre, int uso) {
 		super(nombre,uso);
-		
 	}
 	
 	public TokenMatriz(String nombre, int uso, long filas, long columnas) {
@@ -70,7 +70,7 @@ public class TokenMatriz extends Token{
 	}
 	
 	public void setValor(long valor, int fila, int columna){
-		valorMatriz[fila][columna] = valor;
+		mat[fila][columna] = valor;
 	}
 
 	public long getValor(int fila, int columna){
