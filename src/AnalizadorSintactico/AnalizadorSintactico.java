@@ -19,7 +19,10 @@ public class AnalizadorSintactico {
 	static final String estructuraALLOW = "Sentencia ALLOW.";
 	static final String estructuraDECLARACION = "Sentencia de declaracion de variables.";
 
-	
+	//descripciones usos de identificadores
+	static final String usoVariable = "nombre de variable";
+	static final String usoVariableArreglo = "nombre de arreglo";
+	static final String usoNombrePrograma = "nombre del programa";
 	
 	//descripciones errores sintacticos
 	static final String errorPrint1 = "Existe un error en la sentencia print ";

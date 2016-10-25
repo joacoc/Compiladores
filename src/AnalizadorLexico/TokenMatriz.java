@@ -20,7 +20,6 @@ public class TokenMatriz extends Token{
 
 	public TokenMatriz(String nombre, int uso) {
 		super(nombre,uso);
-		
 	}
 	
 	public TokenMatriz(String nombre, int uso, long filas, long columnas) {
