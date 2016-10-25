@@ -7,8 +7,9 @@ import AnalizadorLexico.Error;
 public class AnalizadorCodigoIntermedio {
 	
 	public static final String errorNoExisteVariable = "Esta variable no fue declarada";
-	
-	
+	public static final String errorNoExisteMatriz = "Esta matriz no fue declarada";
+	public static final String errorVariableRedeclarada= "Ya se declaró una variable con este nombre";
+	public static final String errorMatrizRedeclarada= "Ya se declaró una matriz con este nombre";
 	
 	private ArrayList<Error> erroresCodigoIntermedio;
 
@@ -17,7 +18,6 @@ public class AnalizadorCodigoIntermedio {
 	}
 	public void addError(Error error){
 		erroresCodigoIntermedio.add(error);
-		System.out.println("HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 	}
 	public String getErroresCI(){
 		String aux = "Errores Codigo Intermedio: \n";

@@ -4,22 +4,15 @@ import AnalizadorLexico.Token;
 
 public class TercetoSimple {
 	Token t;
-	int referenciaTerceto; //tiene el numero de terceto por si es compuesto
 	
-	public TercetoSimple(Object t) {
-		if (t instanceof Token)
-			this.t=(Token) t;
-		else
-			referenciaTerceto=(Integer) t;
-	}
-
-	public TercetoSimple(int rt){
-		referenciaTerceto = rt;
+	public TercetoSimple(Token t) {
+		this.t= t;
 	}
 	
 	public String imprimirTerceto() {
-		if (t == null)
-			return String.valueOf(referenciaTerceto);
+		char c = t.getNombre().charAt(0);
+		if (Character.isDigit(c))
+			return "[" + t.getNombre() + "]";
 		else
 			return t.getNombre();
 	}

@@ -11,9 +11,14 @@ public class AnalizadorLexico {
 	static final int WI = -3; //WI Es la constante que indica un Warning de identificador
 	static final int WC = -4; //WC Es la constante que indica un Warning de constante
 	
-	static final String constanteI = "CI";
+	public static final String constanteI = "Constante entera";
+	public static final String variableI = "integer";
+	
 	static final String identificador = "I";
-	static final String constanteL = "CL";
+	public static final String constanteL = "constante long";
+	public static final String variableL = "longint";
+	public static final String matriz = "matrix";
+
 	
 	//Constantes para YACC
 	static final int ID = 257;
@@ -23,8 +28,8 @@ public class AnalizadorLexico {
 	public static final int S_MAYOR_IGUAL = 261;
 	public static final int S_MENOR_IGUAL = 262;	
 	static final int S_EXCLAMACION_IGUAL = 263;	//!=
-	static final int CTEI = 264;
-	static final int S_RESTA_RESTA = 265;
+	public static final int CTEI = 264;
+	public static final int S_RESTA_RESTA = 265;
 	static final int COMENTARIO = 266;
 	static final int ANOTACIONF = 267;
 	static final int ANOTACIONC = 268;
@@ -33,7 +38,7 @@ public class AnalizadorLexico {
 	static final int IF = 269;
 	static final int ELSE = 270;
 	static final int ENDIF = 271;
-	static final int PRINT = 272;
+	public static final int PRINT = 272;
 	static final int FOR = 273;
 	//static final int PROGRAMA = 274;
 	static final int MATRIX = 275;

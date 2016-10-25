@@ -18,12 +18,12 @@ public class TablaSimbolos {
 	}
 	
 	public void addSimbolo( Token t){
-		tSimb.put(t.getNombre()+t.getTipo(), t);
+		tSimb.put(t.getNombre(), t);
 	}
 	
 	//Me confirma si el token es agregable a la tabla de simbolos.
 	public boolean es_Agregable( Token t){
-		if(t.getUso() == AnalizadorLexico.ID ||
+		if( //t.getUso() == AnalizadorLexico.ID || comento el identificador porque lo agregamos en la gramatica
 				t.getUso() == AnalizadorLexico.CTEI ||
 				t.getUso() == AnalizadorLexico.CTEL || 
 				t.getUso() == AnalizadorLexico.MULTI_LINEA)
@@ -45,5 +45,10 @@ public class TablaSimbolos {
 			return tSimb.get(nombre);
 		else
 			return null;
+	}
+
+	public void borrarSimbolo(String nombre) {
+		if (tSimb.remove(nombre)!= null)
+			System.out.println("anda" );
 	};
 }

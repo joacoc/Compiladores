@@ -18,7 +18,10 @@ public class Terceto {
 	public String imprimirTerceto(){
 		String terceto = numeroTerceto + "  (";
 		for (int i = 0 ; i< elementos.size(); i++){
-			terceto = terceto + elementos.get(i).imprimirTerceto();
+			if (elementos.get(i) != null)
+				terceto = terceto + elementos.get(i).imprimirTerceto();
+			else
+				terceto = terceto + " - ";
 			if (i != elementos.size()-1)
 				terceto = terceto + ", ";
 			else
@@ -26,4 +29,16 @@ public class Terceto {
 		}
 		return terceto;
 	}
+	
+	public void setElemento(int index, TercetoSimple t){
+		elementos.set(index, t);
+	}
+	
+	public TercetoSimple getTerceto(int index){
+		if (elementos.get(index)==null)
+			return null;
+		else
+			return elementos.get(index);
+	}
+	
 }
