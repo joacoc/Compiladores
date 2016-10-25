@@ -232,15 +232,17 @@ operador_menos_menos : ID S_RESTA_RESTA { 	//agregando terceto
 asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion { String valor =":=";
 																	Terceto terceto = new Terceto ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
 																	controladorTercetos.addTerceto (terceto);
-																	$$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ));
 																	analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));
 																	Token t1 = (Token) $1.obj;
 																	Token t2 = (Token) $3.obj;
 																	if(tipoCompatible(t1,t2)){
 																		System.out.println("Compatibles");
-																		t1.setValor(t2.getValor());
-																		tablaSimbolo.addSimbolo(t1);
 																	}
+																	else {
+																		System.out.println("aca");
+																		analizadorCI.addError (new Error ( analizadorCI.errorFaltaAllow,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
+																		}
+																	$$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ));
 																	/*TODO: else Error, tipos incompatibles */
 																	} 
                            | operador_menos_menos { analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
@@ -375,7 +377,14 @@ sentencia_seleccion  : sentecia_if_condicion  cuerpo_if ELSE {
 
 condicion_sin_parentesis : expresion operador expresion {	Terceto terceto = new Terceto ( new TercetoSimple( (Token)$2.obj ) ,new TercetoSimple( (Token)$1.obj ), new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
 															controladorTercetos.addTerceto (terceto);
-															$$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ) );
+															String tipo;
+															if ((((Token)$1.obj).getTipo().equals("longint")) || (((Token)$3.obj).getTipo().equals("longint")))
+																tipo = "longint";
+															else
+																tipo= "integer";
+															Token nuevo = new Token( controladorTercetos.numeroTercetoString() );
+															nuevo.setTipo(tipo);
+															$$ = new ParserVal(nuevo);
 															analizadorS.addEstructura( new Error ( analizadorS.estructuraCONDICION,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ) ); 
 														}
                           |  error operador expresion { analizadorS.addError (new Error ( analizadorS.errorCondicionI,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
