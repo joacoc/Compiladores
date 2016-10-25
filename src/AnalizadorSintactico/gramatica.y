@@ -344,6 +344,7 @@ cuerpo_else : '{' bloque_de_sentencia '}'
             ;         
 
 
+
 sentecia_if_condicion : IF  condicion 	{	Terceto terceto = new Terceto ( new TercetoSimple( (new Token( controladorTercetos.BF) ) ), new TercetoSimple(new Token( controladorTercetos.numeroTercetoString() ) ), null, controladorTercetos.getProxNumero() );
 											controladorTercetos.addTerceto (terceto);
 											controladorTercetos.apilar(); 
@@ -364,6 +365,7 @@ sentencia_seleccion  : sentecia_if_condicion  cuerpo_if ELSE {
                      												analizadorS.addEstructura (new Error ( analizadorS.estructuraIF,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
                      | sentecia_if_condicion cuerpo_if ENDIF error { analizadorS.addError (new Error ( analizadorS.errorPuntoComa,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
                      | error  condicion  cuerpo_if ENDIF ';' { analizadorS.addError (new Error ( analizadorS.errorPalabraIF,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
+
                      ;
 
 condicion_sin_parentesis : expresion operador expresion {	Terceto terceto = new Terceto ( new TercetoSimple( (Token)$2.obj ) ,new TercetoSimple( (Token)$1.obj ), new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
