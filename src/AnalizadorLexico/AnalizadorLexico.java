@@ -23,7 +23,7 @@ public class AnalizadorLexico {
 	//Constantes para YACC
 	static final int ID = 257;
 	static final int MULTI_LINEA = 258;
-	static final int CTEL = 259;
+	public static final int CTEL = 259;
 	public static final int S_ASIGNACION = 260;
 	public static final int S_MAYOR_IGUAL = 261;
 	public static final int S_MENOR_IGUAL = 262;	
