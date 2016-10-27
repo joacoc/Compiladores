@@ -86,7 +86,7 @@ declaracion : tipo lista_variables ';' {
             
             | matriz { 
 							/*Chequear que la variable ya no este declarada*/
-							TokenMatriz t = (TokenMatriz)$2.obj;
+							TokenMatriz t = (TokenMatriz)$1.obj;
 							TokenMatriz t1 = new TokenMatriz("mat@" + t.getNombre(), t.getUso() );
 							
 							if (tablaSimbolo.existe(t1.getNombre())){
@@ -131,33 +131,40 @@ declaracion_matriz : MATRIX ID '[' CTEI ']' '[' CTEI ']' {  Token t = (Token) $2
 				   ;
 
 matriz : tipo declaracion_matriz inicializacion ';' anotacion { 	
-															TokenMatriz declaracion_matriz = (Token) $2.obj;
+															TokenMatriz declaracion_matriz = (TokenMatriz) $2.obj;
 															String tipo = ((Token)$1.obj).getNombre();
 															declaracion_matriz.setTipo(tipo);	
-															String orientacion = $4.sval;
+															String orientacion = $5.sval;
 															ArrayList<ArrayList<Token>> valores = (ArrayList<ArrayList<Token>>) $3.obj;
-															//declaracion_matriz.setValores(valores,orientacion);
-															//$$ = new ParserVal(declaracion_matriz);
+															
 															setTercetosMatriz(orientacion,valores,declaracion_matriz);
+															$$ = new ParserVal(declaracion_matriz);
 														}
 
        | tipo declaracion_matriz ';' anotacion 				{	
        														TokenMatriz declaracion_matriz = (TokenMatriz) $2.obj;
        														String tipo = ((Token)$1.obj).getNombre();
-															declaracion_matriz.setTipo(tipo);	
+       														String orientacion = $4.sval;
+															declaracion_matriz.setTipo(tipo);
+
+															setTercetosMatriz(orientacion,null,declaracion_matriz);	
+															$$ = new ParserVal(declaracion_matriz);
 															}
        | tipo declaracion_matriz inicializacion ';'{
        														TokenMatriz declaracion_matriz = (TokenMatriz) $2.obj;
        														String tipo = ((Token)$1.obj).getNombre();
 															declaracion_matriz.setTipo(tipo);	
-															ArrayList<ArrayList<Long>> valores = (ArrayList<ArrayList<Long>>) $3.obj;
+															ArrayList<ArrayList<Token>> valores = (ArrayList<ArrayList<Token>>) $3.obj;
 															setTercetosMatriz("F",valores,declaracion_matriz);
-															}
-       | tipo declaracion_matriz ';'{							TokenMatriz declaracion_matriz = (TokenMatriz) $1.obj;
-       															String tipo = ((Token)$1.obj).getNombre();
-																declaracion_matriz.setTipo(tipo);	
-																setTercetosMatriz("F",null,declaracion_matriz);
-															}
+															$$ = new ParserVal(declaracion_matriz);
+													}
+       | tipo declaracion_matriz ';'{						
+   															TokenMatriz declaracion_matriz = (TokenMatriz) $2.obj;
+   															String tipo = ((Token)$1.obj).getNombre();
+															declaracion_matriz.setTipo(tipo);	
+															setTercetosMatriz("F",null,declaracion_matriz);
+															$$ = new ParserVal(declaracion_matriz);
+									}
 
        ;
 
@@ -179,7 +186,7 @@ filas : filas ';' fila {ArrayList<ArrayList<Token>> lista = (ArrayList<ArrayList
       ;
 
 fila : fila ',' CTEI {ArrayList<Token> lista = (ArrayList<Token>)$1.obj;
-						lista.add(((Token)$3.obj).getValor());
+						lista.add(((Token)$3.obj));
 						$$ = new ParserVal(lista);
 					}
       | fila ',' CTEL {ArrayList<Token> lista = (ArrayList<Token>)$1.obj;
@@ -188,14 +195,14 @@ fila : fila ',' CTEI {ArrayList<Token> lista = (ArrayList<Token>)$1.obj;
       }
       | CTEI {	ArrayList<Token> lista = new ArrayList<>();
       			Token t= (Token) $1.obj;
-			 	t.setTipo(analizadorL.constanteI);
+			 	t.setTipo(analizadorL.variableI);
 				lista.add(t); 
       			$$ = new ParserVal( lista );
       		}
 
 	  | CTEL {  ArrayList<Token> lista = new ArrayList<>();
       			Token t= (Token) $1.obj;
-			 	t.setTipo(analizadorL.constanteL);
+			 	t.setTipo(analizadorL.variableL);
 				lista.add(t); 
       			$$ = new ParserVal( lista );
 	  }
@@ -213,7 +220,7 @@ sentencia : print
   	  ;
 
 lado_izquierdo : ID {	//chequeo semantico variable no declarada
-						Token t1 = tablaSimbolo.getToken( "var@" + ( (Token) $1.obj).getNombre() ) ;
+						Token t1 = tablaSimbolo.getToken( "var@" + ( (Token) $1.obj).getNombre() );
 		    			if  ( t1 == null ) 
 							analizadorCI.addError (new Error ( analizadorCI.errorNoExisteVariable,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
 
@@ -318,10 +325,10 @@ termino : termino '*' factor	{	String valor ="*";
 ;
 
 factor : CTEI  { Token t= (Token) $1.obj;
-				 t.setTipo(analizadorL.constanteI);
+				 t.setTipo(analizadorL.variableI);
 				 $$ = new ParserVal( (Token)t ); }
         | CTEL {  Token t= (Token) $1.obj;
-				  t.setTipo(analizadorL.constanteL);
+				  t.setTipo(analizadorL.variableL);
 				  $$ = new ParserVal( (Token)t ); }
         | ID   { 
  				 Token t1 = tablaSimbolo.getToken( "var@" + ((Token) $1.obj).getNombre() ) ;
@@ -542,13 +549,14 @@ public Token obtenerSimbolo(String nombre,boolean esMatriz){
 }
 
 public Token[][] getMatriz(ArrayList<ArrayList<Token>> tokens, TokenMatriz declaracion_matriz){
-	Token[][] arregloTokens = new Token[][]; 
+	Token[][] arregloTokens = new Token[declaracion_matriz.getFilas()][declaracion_matriz.getColumnas()]; 
 	int caux = 0, faux = 0;
-	for(ArrayList<Token> a : valores){
+	for(ArrayList<Token> a : tokens){
 		for(Token t : a){
-			arregloTokens[caux][faux] = a;
+			arregloTokens[caux][faux] = t;
 			caux++;		
 		}
+		caux=0;
 		faux++;
 	}
 
@@ -556,18 +564,22 @@ public Token[][] getMatriz(ArrayList<ArrayList<Token>> tokens, TokenMatriz decla
 }
 
 public boolean setTercetosMatriz(String orientacion, ArrayList<ArrayList<Token>> tokens, TokenMatriz declaracion_matriz){
-	Token matriz[][] = getMatriz(tokens, declaracion_matriz);
+	Token matriz[][];
+
 
 	if (tokens!=null) {
-		if (orientacion.equals("F")) {
-			//Orientacion por filas
+		matriz = getMatriz(tokens, declaracion_matriz);
+		if ((orientacion.equals("C"))) {
+			//Orientacion por columnas
 			for (int caux = 0; caux < declaracion_matriz.getColumnas() ; caux++ ) {
 				for (int faux = 0; faux < declaracion_matriz.getFilas() ; faux++ ) {
-					Token t = matriz[caux][faux];
+					Token t = matriz[faux][caux];
 					if (tipoCompatible(declaracion_matriz,t)) {
-						Terceto terceto = new Terceto ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( new Token() ), new TercetoSimple( t ), controladorTercetos.getProxNumero() );
+						Token inicializador = new Token("_l0",analizadorL.CTEI);
+						inicializador.setValor(0);
+						Terceto terceto = new Terceto ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( inicializador ), new TercetoSimple( t ), controladorTercetos.getProxNumero() );
 						controladorTercetos.addTerceto (terceto);
-						$$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ));
+						//$$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ));
 						analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));
 					}
 					else{
@@ -577,14 +589,16 @@ public boolean setTercetosMatriz(String orientacion, ArrayList<ArrayList<Token>>
 				}
 			}
 		}else{
-			//Orientacion por columnas
+			//Orientacion por filas
 			for (int faux = 0; faux < declaracion_matriz.getFilas() ; faux++ ) {
 				for (int caux = 0; caux < declaracion_matriz.getColumnas() ; caux++ ) {
-					Token t = matriz[caux][faux];
+					Token t = matriz[faux][caux];
 					if (tipoCompatible(declaracion_matriz,t)) {
-						Terceto terceto = new Terceto ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( new Token() ), new TercetoSimple( t ), controladorTercetos.getProxNumero() );
+						Token inicializador = new Token("_l0",analizadorL.CTEI);
+						inicializador.setValor(0);
+						Terceto terceto = new Terceto ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( inicializador ), new TercetoSimple( t ), controladorTercetos.getProxNumero() );
 						controladorTercetos.addTerceto (terceto);
-						$$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ));
+						// $$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ));
 						analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));
 					}
 					else{
@@ -595,19 +609,24 @@ public boolean setTercetosMatriz(String orientacion, ArrayList<ArrayList<Token>>
 			}
 		}
 	}else{
+		matriz = new Token[declaracion_matriz.getFilas()][declaracion_matriz.getColumnas()]; 
 		//No se paso una lista de valores para inicializar la matriz, por lo tanto
-		//lo creo como si fuera por filas pero con tokens de valor 0 
+		//lo creo como si fuera por filas pero con tokens de valor 0
+		 
 		for (int caux = 0; caux < declaracion_matriz.getColumnas() ; caux++ ) {
 			for (int faux = 0; faux < declaracion_matriz.getFilas() ; faux++ ) {
-				//CTE del tipo de la matriz
-				//Token t = new Token()
-				Terceto terceto = new Terceto ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( new Token() ), new TercetoSimple( t ), controladorTercetos.getProxNumero() );
+				//No es necesario chequear la compatibilidad
+				Token inicializador = new Token("_l0",analizadorL.CTEI);
+				inicializador.setValor(0);
+				Token t = matriz[faux][caux];	
+				Terceto terceto = new Terceto ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( inicializador ), new TercetoSimple( inicializador ), controladorTercetos.getProxNumero() );
 				controladorTercetos.addTerceto (terceto);
-				$$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ));
+			// $$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ));
 				analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));
 			}
 		}
 	}
+	return true;
 }
 
 void yyerror(String s) {

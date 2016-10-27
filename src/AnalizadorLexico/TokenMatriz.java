@@ -76,5 +76,13 @@ public class TokenMatriz extends Token{
 	public long getValor(int fila, int columna){
 		return mat[fila][columna];
 	}
+	
+	public int getFilas(){
+		return filas;
+	}
+	
+	public int getColumnas(){
+		return columnas;
+	}
 
 }
