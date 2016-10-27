@@ -250,15 +250,10 @@ asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion { String valor
 																	analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));
 																	Token t1 = (Token) $1.obj;
 																	Token t2 = (Token) $3.obj;
-																	if(tipoCompatible(t1,t2)){
-																		System.out.println("Compatibles");
-																	}
-																	else {
-																		System.out.println("aca");
-																		analizadorCI.addError (new Error ( analizadorCI.errorFaltaAllow,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
-																		}
-																	$$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ));
-																	/*TODO: else Error, tipos incompatibles */
+																	if ((t1 != null) && (t2 != null))
+																		if(!tipoCompatible(t1,t2))
+																			analizadorCI.addError (new Error ( analizadorCI.errorFaltaAllow,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
+																	
 																	} 
                            | operador_menos_menos { analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
                            | lado_izquierdo S_ASIGNACION error { analizadorS.addError (new Error ( analizadorS.errorAsignacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }      
@@ -492,19 +487,25 @@ int yylex()
 public boolean tipoCompatible(Token t1, Token t2){
 
 if(t1.getTipo()!=null && t2.getTipo()!=null){
-		System.out.println("Ambos tipos distintos de null");
 		if(t1.getTipo().equals("integer")){
-			if(t2.getTipo().equals("integer"))
+			if(t2.getTipo().equals("integer")){
 				return true;
+			}
 			else
-				if(t2.getTipo().equals("longint"))
-					if(allow)
+				if(t2.getTipo().equals("longint")){
+					if(allow){
 						return true;
+					}
+					else 
+						return false;
+				}
 		}else{
 			if(t1.getTipo().equals("longint")){
 				if(t2.getTipo().equals("integer"))
 					if(allow)
 						return true;
+					else
+						return false;
 				else
 					if(t2.getTipo().equals("longint"))
 						return true;
