@@ -27,4 +27,9 @@ public class TercetoSimple {
 		char c = t.getNombre().charAt(0);
 		return (!Character.isDigit(c));
 	}
+	
+	public int getNumeroTerceto(){
+		return ( Integer.parseInt( t.getNombre() ) );
+		
+	}
 }

@@ -50,8 +50,8 @@ public class Main {
 	}
 	
 	public static void main(String[] args) throws IOException {
-	
-		String direccion = new String("C:\\Users\\Joaking\\Desktop\\test2.txt");
+		
+		String direccion = new String("C:\\Users\\juan\\Desktop\\Casos de pruba\\HelloWorld.txt");
 		InputStream is = new ByteArrayInputStream(direccion.getBytes());
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
 		

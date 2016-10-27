@@ -10,8 +10,12 @@ public class TercetoAsignacion extends Terceto{
 		String assembler = "";
 		if ( elementos.get(2).esToken() ) 
 			assembler = "MOV " + elementos.get(1).getToken().getNombre() + " " + elementos.get(2).getToken().getNombre()+ '\n';
-		else
-			assembler = "MOV " + elementos.get(1).getToken().getNombre() + " R1" + '\n';
+		else{
+			Terceto terceto = controladorTercetos.getTerceto(elementos.get(2).getNumeroTerceto() );
+			assembler = "MOV " + elementos.get(1).getToken().getNombre() + terceto.getRegistro() + '\n';
+			controladorTercetos.liberarRegistro( terceto.getRegistro() );
+			
+		}
 		return assembler;
 	}
 }

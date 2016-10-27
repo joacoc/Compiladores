@@ -9,14 +9,21 @@ public class ControladorTercetos {
 	
 	public static final String BF = "BF";
 	public static final String BI = "BI";
+	public static final int cantReg = 4;
 	
 	private ArrayList<Terceto> tercetos ;
 	private ArrayList<Integer> pila ;
+	ArrayList<Boolean>registros; //ver el tipo
+	
 	
 	public ControladorTercetos() {
 		tercetos = new ArrayList<Terceto>();
 		pila = new ArrayList<Integer>();
-
+		registros = new ArrayList<Boolean>(cantReg);
+		registros.add(false);
+		registros.add(false);
+		registros.add(false);
+		registros.add(false);
 	}
 	
 	public String imprimirTercetos() {
@@ -85,5 +92,26 @@ public class ControladorTercetos {
 	public Terceto getTerceto (int index) {
 		return tercetos.get(index-1);
 	}
-
+	
+	public String getProxRegLibre(){
+		for (int i =0; i< registros.size(); i++)
+			if ( !registros.get(i) ){ 
+				//esta libre y lo ocupamos		
+				if ( i == 0 ) return Terceto.reg1;
+				if ( i == 0 ) return Terceto.reg2;
+				if ( i == 0 ) return Terceto.reg3;
+				return Terceto.reg4;
+			}
+		//estan todos los registros ocupados
+		return " ";
+	}
+	
+	public void liberarRegistro (String registro){
+		int index = 0;
+		if (registro == Terceto.reg1)  index = 0;
+		if (registro == Terceto.reg2)  index = 1;
+		if (registro == Terceto.reg3)  index = 2;
+		if (registro == Terceto.reg4)  index = 3;
+		registros.set(index, new Boolean(false));//paso a estado libre el registro en la pos index
+	}
 }

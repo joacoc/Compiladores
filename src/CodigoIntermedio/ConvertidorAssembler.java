@@ -11,13 +11,10 @@ import org.omg.CORBA.portable.InputStream;
 public class ConvertidorAssembler {
 
 	ControladorTercetos controladorTercetos;
-	ArrayList<String>registros; //ver el tipo
 	File arch;
 	
 	public ConvertidorAssembler( ControladorTercetos controladorTercetos ) {
 		this.controladorTercetos = controladorTercetos;
-//		for (String s: registros)
-//			s =
 	}
 	
 	public void generarAssembler () throws IOException{

@@ -20,5 +20,4 @@ public class TercetoIf extends Terceto {
 		}
 		return assembler;
 	}
-
 }

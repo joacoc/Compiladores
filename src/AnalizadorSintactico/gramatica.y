@@ -603,7 +603,7 @@ public boolean setTercetosMatriz(String orientacion, ArrayList<ArrayList<Token>>
 					if (tipoCompatible(declaracion_matriz,t)) {
 						Token inicializador = new Token("_l0",analizadorL.CTEI);
 						inicializador.setValor(0);
-						Terceto terceto = new Terceto ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( inicializador ), new TercetoSimple( t ), controladorTercetos.getProxNumero() );
+						TercetoAsignacion terceto = new TercetoAsignacion ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( inicializador ), new TercetoSimple( t ), controladorTercetos.getProxNumero() );
 						controladorTercetos.addTerceto (terceto);
 						//$$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ));
 						analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));
@@ -622,7 +622,7 @@ public boolean setTercetosMatriz(String orientacion, ArrayList<ArrayList<Token>>
 					if (tipoCompatible(declaracion_matriz,t)) {
 						Token inicializador = new Token("_l0",analizadorL.CTEI);
 						inicializador.setValor(0);
-						Terceto terceto = new Terceto ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( inicializador ), new TercetoSimple( t ), controladorTercetos.getProxNumero() );
+						Terceto terceto = new TercetoAsignacion ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( inicializador ), new TercetoSimple( t ), controladorTercetos.getProxNumero() );
 						controladorTercetos.addTerceto (terceto);
 						// $$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ));
 						analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));
@@ -645,7 +645,7 @@ public boolean setTercetosMatriz(String orientacion, ArrayList<ArrayList<Token>>
 				Token inicializador = new Token("_l0",analizadorL.CTEI);
 				inicializador.setValor(0);
 				Token t = matriz[faux][caux];	
-				Terceto terceto = new Terceto ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( inicializador ), new TercetoSimple( inicializador ), controladorTercetos.getProxNumero() );
+				Terceto terceto = new TercetoAsignacion ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( inicializador ), new TercetoSimple( inicializador ), controladorTercetos.getProxNumero() );
 				controladorTercetos.addTerceto (terceto);
 			// $$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ));
 				analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));

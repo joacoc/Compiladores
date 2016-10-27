@@ -2,7 +2,13 @@ package CodigoIntermedio;
 
 public class TercetoExpresion extends Terceto {
 	
-
+	public final static String MOV = "MOV";
+	public final static String ADD = "ADD";
+	public final static String SUB = "SUB";
+	public final static String MULT = "MULT";
+	public final static String DIV = "DIV";
+	
+	
 
 	public TercetoExpresion(TercetoSimple izq, TercetoSimple medio,	TercetoSimple der, int numeroTerceto) {
 		super(izq, medio, der, numeroTerceto);
@@ -32,30 +38,32 @@ public class TercetoExpresion extends Terceto {
 		
 		//caso 1: (OP, variable, variable)
 		if ( ( elementos.get(1).esToken() ) && ( elementos.get(2).esToken() ) ){
-			this.setRegistro(this.reg1);
-			assembler = "MOV R1, " + elementos.get(1).getToken().getNombre()  + '\n'; //no se si siempre es R1
-			assembler = assembler + opAssembler + " R1, " + elementos.get(2).getToken().getNombre() + '\n';
+			String registro = controladorTercetos.getProxRegLibre();
+			this.setRegistro(registro);
+			assembler = MOV + " " + registro +", " + elementos.get(1).getToken().getNombre()  + '\n'; 
+			assembler = assembler + opAssembler + " " + registro + ", " + elementos.get(2).getToken().getNombre() + '\n';
 		}
 		else
 		//caso 2: (OP, registro, variable)
 		if ( ( !elementos.get(1).esToken() ) && ( elementos.get(2).esToken() ) ){
-			this.setRegistro(this.reg1);
+			this.setRegistro(terceto1.getRegistro());// se usa el del primer terceto.
 			assembler = opAssembler + " " + terceto1.getRegistro() + " ," + elementos.get(1).getToken().getNombre()+ '\n';
 		}
 		else
 		//caso 3: (OP, registro, registro)
 		if ( ( !elementos.get(1).esToken() ) && ( !elementos.get(2).esToken() ) ){
-			this.setRegistro(this.reg1);
+			this.setRegistro( terceto1.getRegistro() );
 			assembler = opAssembler + " " + terceto1.getRegistro() + " , " + terceto2.getRegistro() + '\n';
 		}
 		//caso 4: (OP, registro, registro)
 		if ( ( elementos.get(1).esToken() ) && ( !elementos.get(2).esToken() ) ){
 			if ( esConmutativo(operador) ){
-				assembler = opAssembler + " " +  reg1 + ", " + elementos.get(1).getToken().getNombre()+ '\n'; // lo mismo, ver si es r1
-				this.setRegistro(reg1);
+				String registro = controladorTercetos.getProxRegLibre();
+				assembler = opAssembler + " " +  registro + ", " + elementos.get(1).getToken().getNombre()+ '\n'; // lo mismo, ver si es r1
+				this.setRegistro(registro);
 			}
 			else{
-				this.setRegistro(reg2);
+				this.setRegistro(terceto2.getRegistro());
 				assembler = "MOV R2," + elementos.get(1).getToken().getNombre() + '\n';
 				assembler = assembler + opAssembler + " "+ terceto1.getRegistro() + ", " + terceto2.getRegistro() + '\n';//mirar desp tambien
 			}
