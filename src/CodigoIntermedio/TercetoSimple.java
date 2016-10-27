@@ -22,4 +22,9 @@ public class TercetoSimple {
 	public Token getToken() {
 		return t;
 	}
+	
+	public boolean esToken(){
+		char c = t.getNombre().charAt(0);
+		return (!Character.isDigit(c));
+	}
 }

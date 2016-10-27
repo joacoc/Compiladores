@@ -31,7 +31,6 @@ import AnalizadorLexico.*;
 import AnalizadorLexico.Error;
 import AnalizadorSintactico.*;
 import CodigoIntermedio.*;
-import Calculadora.*;
 import java.util.ArrayList;
 import CodigoIntermedio.*;
 %}
@@ -210,11 +209,11 @@ lado_izquierdo : ID {	//chequeo semantico variable no declarada
 operador_menos_menos : ID S_RESTA_RESTA { 	//agregando terceto
 											String valor = "-";
 											Token t1 = tablaSimbolo.getToken("var@" + ((Token) $1.obj).getNombre() ) ;
-											Terceto terceto;
+											TercetoExpresion terceto;
 											if ( t1.getTipo() == analizadorL.variableI )
-												terceto = new Terceto ( new TercetoSimple( new Token("-",(int) valor.charAt(0) ) ) ,new TercetoSimple( t1 ), new TercetoSimple( new Token("_i1",analizadorL.CTEI) ),  controladorTercetos.getProxNumero() );
+												terceto = new TercetoExpresion ( new TercetoSimple( new Token("-",(int) valor.charAt(0) ) ) ,new TercetoSimple( t1 ), new TercetoSimple( new Token("_i1",analizadorL.CTEI) ),  controladorTercetos.getProxNumero() );
 											else
-												terceto = new Terceto ( new TercetoSimple( new Token("-",(int) valor.charAt(0) ) ) ,new TercetoSimple( t1 ), new TercetoSimple( new Token("_l1",analizadorL.CTEL) ),  controladorTercetos.getProxNumero() );
+												terceto = new TercetoExpresion ( new TercetoSimple( new Token("-",(int) valor.charAt(0) ) ) ,new TercetoSimple( t1 ), new TercetoSimple( new Token("_l1",analizadorL.CTEL) ),  controladorTercetos.getProxNumero() );
 											controladorTercetos.addTerceto (terceto);
 											$$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ) );
 											
@@ -228,7 +227,7 @@ operador_menos_menos : ID S_RESTA_RESTA { 	//agregando terceto
 						| celda_matriz  S_RESTA_RESTA { 	
 															//agregando terceto
 															String valor = "-";
-															Terceto terceto = new Terceto ( new TercetoSimple( new Token("-",(int) valor.charAt(0) ) ) ,new TercetoSimple( (Token)$1.obj ), new TercetoSimple( new Token("_i1",analizadorL.CTEI) ), controladorTercetos.getProxNumero() );
+															TercetoExpresion terceto = new TercetoExpresion ( new TercetoSimple( new Token("-",(int) valor.charAt(0) ) ) ,new TercetoSimple( (Token)$1.obj ), new TercetoSimple( new Token("_i1",analizadorL.CTEI) ), controladorTercetos.getProxNumero() );
 															controladorTercetos.addTerceto (terceto);
 															$$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ) );
 																									
@@ -243,7 +242,7 @@ operador_menos_menos : ID S_RESTA_RESTA { 	//agregando terceto
 						;
 
 asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion { String valor =":=";
-																	Terceto terceto = new Terceto ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
+																	TercetoAsignacion terceto = new TercetoAsignacion ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
 																	controladorTercetos.addTerceto (terceto);
 																	$$ = new ParserVal((Token)$1.obj);
 
@@ -267,7 +266,7 @@ asignacion :  asignacion_sin_punto_coma ';'
 
 expresion : expresion '+' termino	{ 	String valor ="+";
 										String tipo = getTipoCompatibleSuma((Token)$1.obj,(Token)$3.obj);
-										Terceto terceto = new Terceto ( new TercetoSimple( new Token("+",(int) valor.charAt(0) ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
+										TercetoExpresion terceto = new TercetoExpresion ( new TercetoSimple( new Token("+",(int) valor.charAt(0) ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
 										controladorTercetos.addTerceto (terceto);
 										Token nuevo = new Token( controladorTercetos.numeroTercetoString() ) ;
 										nuevo.setTipo(tipo);
@@ -275,9 +274,10 @@ expresion : expresion '+' termino	{ 	String valor ="+";
 									}
       | expresion '-' termino 		{	String valor ="-";
       									String tipo = getTipoCompatibleSuma((Token)$1.obj,(Token)$3.obj);
-										Terceto terceto = new Terceto ( new TercetoSimple( new Token("-",(int) valor.charAt(0) ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
+										TercetoExpresion terceto = new TercetoExpresion ( new TercetoSimple( new Token("-",(int) valor.charAt(0) ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
 										controladorTercetos.addTerceto (terceto);
 										Token nuevo = new Token( controladorTercetos.numeroTercetoString() ) ;
+										nuevo.setTipo(tipo);
 										$$ = new ParserVal(nuevo);
 
 									}
@@ -286,7 +286,7 @@ expresion : expresion '+' termino	{ 	String valor ="+";
 
 
 termino : termino '*' factor	{	String valor ="*";
-										Terceto terceto = new Terceto ( new TercetoSimple( new Token("*",(int) valor.charAt(0) ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
+										TercetoExpresion terceto = new TercetoExpresion ( new TercetoSimple( new Token("*",(int) valor.charAt(0) ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
 										controladorTercetos.addTerceto (terceto);
 										Token nuevo = new Token( controladorTercetos.numeroTercetoString() );
 										nuevo.setTipo("longint");
@@ -294,7 +294,7 @@ termino : termino '*' factor	{	String valor ="*";
 								}
     | termino '/' factor		{ String valor ="/";
     									String tipo = getTipoCompatibleDivision((Token)$1.obj,(Token)$3.obj);
-										Terceto terceto = new Terceto ( new TercetoSimple( new Token("/",(int) valor.charAt(0) ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
+										TercetoExpresion terceto = new TercetoExpresion ( new TercetoSimple( new Token("/",(int) valor.charAt(0) ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
 										controladorTercetos.addTerceto (terceto);
 										Token nuevo = new Token( controladorTercetos.numeroTercetoString() );
 										nuevo.setTipo(tipo);
@@ -321,7 +321,7 @@ factor : CTEI  { Token t= (Token) $1.obj;
 		| celda_matriz { $$ = new ParserVal( (Token)$1.obj ); }
 ;
  
-print : PRINT '(' MULTI_LINEA ')' ';' {	Terceto terceto = new Terceto ( new TercetoSimple( (Token)$1.obj ),new TercetoSimple( (Token)$3.obj ), null, controladorTercetos.getProxNumero() );
+print : PRINT '(' MULTI_LINEA ')' ';' {	TercetoPrint terceto = new TercetoPrint ( new TercetoSimple( (Token)$1.obj ),new TercetoSimple( (Token)$3.obj ), null, controladorTercetos.getProxNumero() );
 										controladorTercetos.addTerceto (terceto);
 										analizadorS.addEstructura (new Error ( analizadorS.estructuraPrint,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
 		  | PRINT '(' error ')' ';' { analizadorS.addError (new Error ( analizadorS.errorPrint1,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }	 
@@ -333,22 +333,24 @@ cuerpo_for : sentencia
 		   | '{' bloque_de_sentencia '}' 
 		   ;
 
-sentencia_for : FOR  '(' asignacion {controladorTercetos.apilarFor();}
-				 condicion_sin_parentesis {	Terceto terceto = new Terceto ( new TercetoSimple( (new Token( controladorTercetos.BF) ) ), new TercetoSimple(new Token( controladorTercetos.numeroTercetoString() ) ), null, controladorTercetos.getProxNumero() );
-											controladorTercetos.addTerceto (terceto);
-											controladorTercetos.apilar(); }
-				 ';' asignacion_sin_punto_coma ')' 	{ 
-											 			Token asig = (Token)$3.obj;
-														Token asigUlt = (Token)$7.obj;
-																												System.out.println(asig.getNombre());
+sentencia_for_parte1:	FOR  '(' asignacion {controladorTercetos.apilarFor();}
+				 		condicion_sin_parentesis {
+				 									TercetoFor terceto = new TercetoFor ( new TercetoSimple( (new Token( controladorTercetos.BF) ) ), new TercetoSimple(new Token( controladorTercetos.numeroTercetoString() ) ), null, controladorTercetos.getProxNumero() );
+													controladorTercetos.addTerceto (terceto);
+													controladorTercetos.apilar();
+													$$ = new ParserVal ($3.obj);
+											 }
+					;
 
-														System.out.println(asigUlt.getNombre());
-				 										//if (controladorTercetos.errorControlFOR(asig,asigUlt) )
-	 													//	analizadorCI.addError (new Error ( analizadorCI.errorVariableControlFOR,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
+sentencia_for : sentencia_for_parte1 ';' asignacion_sin_punto_coma ')' 	{ 
+											 			Token asig = (Token)$1.obj;
+														Token asigUlt = (Token)$3.obj;
+				 										if (controladorTercetos.errorControlFOR(asig,asigUlt) )
+	 														analizadorCI.addError (new Error ( analizadorCI.errorVariableControlFOR,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
 
 				 									}
 				cuerpo_for { 	
-								Terceto terceto = new Terceto ( new TercetoSimple( new Token( controladorTercetos.BI)  ), null, null, controladorTercetos.getProxNumero() );
+								TercetoFor terceto = new TercetoFor ( new TercetoSimple( new Token( controladorTercetos.BI)  ), null, null, controladorTercetos.getProxNumero() );
 								controladorTercetos.addTerceto (terceto);
 								controladorTercetos.desapilar();
 								controladorTercetos.desapilarFor();
@@ -372,14 +374,14 @@ cuerpo_else : '{' bloque_de_sentencia '}'
 
 
 
-sentecia_if_condicion : IF  condicion 	{	Terceto terceto = new Terceto ( new TercetoSimple( (new Token( controladorTercetos.BF) ) ), new TercetoSimple(new Token( controladorTercetos.numeroTercetoString() ) ), null, controladorTercetos.getProxNumero() );
+sentecia_if_condicion : IF  condicion 	{	TercetoIf terceto = new TercetoIf ( new TercetoSimple( (new Token( controladorTercetos.BF) ) ), new TercetoSimple(new Token( controladorTercetos.numeroTercetoString() ) ), null, controladorTercetos.getProxNumero() );
 											controladorTercetos.addTerceto (terceto);
 											controladorTercetos.apilar(); 
 										}
 					  ;
 
 sentencia_seleccion  : sentecia_if_condicion  cuerpo_if ELSE {	
-													Terceto terceto = new Terceto ( new TercetoSimple( new Token( controladorTercetos.BI)  ), null, null, controladorTercetos.getProxNumero() );
+													TercetoIf terceto = new TercetoIf ( new TercetoSimple( new Token( controladorTercetos.BI)  ), null, null, controladorTercetos.getProxNumero() );
 													controladorTercetos.addTerceto (terceto);
 													controladorTercetos.desapilar();
 													controladorTercetos.apilar();
@@ -395,7 +397,7 @@ sentencia_seleccion  : sentecia_if_condicion  cuerpo_if ELSE {
 
                      ;
 
-condicion_sin_parentesis : expresion operador expresion {	Terceto terceto = new Terceto ( new TercetoSimple( (Token)$2.obj ) ,new TercetoSimple( (Token)$1.obj ), new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
+condicion_sin_parentesis : expresion operador expresion {	TercetoComparacion terceto = new TercetoComparacion ( new TercetoSimple( (Token)$2.obj ) ,new TercetoSimple( (Token)$1.obj ), new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
 															controladorTercetos.addTerceto (terceto);
 															$$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ) );
 															analizadorS.addEstructura( new Error ( analizadorS.estructuraCONDICION,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ) ); 

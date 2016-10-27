@@ -16,6 +16,7 @@ import AnalizadorSintactico.AnalizadorSintactico;
 import AnalizadorSintactico.Parser;
 import CodigoIntermedio.AnalizadorCodigoIntermedio;
 import CodigoIntermedio.ControladorTercetos;
+import CodigoIntermedio.ConvertidorAssembler;
 import Window.MainWindow;
 
 public class Main {
@@ -62,6 +63,7 @@ public class Main {
     	AnalizadorSintactico analizadorSintactico = new AnalizadorSintactico( );
     	AnalizadorCodigoIntermedio analizadorCodigoIntermedio = new AnalizadorCodigoIntermedio();
     	ControladorTercetos controladorTercetos = new ControladorTercetos();
+    	ConvertidorAssembler convertidorAssembler = new ConvertidorAssembler(controladorTercetos);
 
         Parser parser;
         parser = new Parser();
@@ -81,6 +83,7 @@ public class Main {
 //        System.out.println(analizadorSintactico.getEstructuras());
         System.out.println(analizadorCodigoIntermedio.getErroresCI());
         System.out.println( controladorTercetos.imprimirTercetos() );
-  
+        System.out.println( convertidorAssembler.generarArchivo() );
+        
 	}
 }
