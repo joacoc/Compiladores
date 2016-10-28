@@ -63,8 +63,9 @@ public class TercetoExpresion extends Terceto {
 				this.setRegistro(registro);
 			}
 			else{
-				this.setRegistro(terceto2.getRegistro());
-				assembler = "MOV R2," + elementos.get(1).getToken().getNombre() + '\n';
+				String registro = controladorTercetos.getProxRegLibre();
+				this.setRegistro(registro); //verificar puedo haber flashado.
+				assembler = MOV + " " + registro + ", " + elementos.get(1).getToken().getNombre() + '\n';
 				assembler = assembler + opAssembler + " "+ terceto1.getRegistro() + ", " + terceto2.getRegistro() + '\n';//mirar desp tambien
 			}
 				

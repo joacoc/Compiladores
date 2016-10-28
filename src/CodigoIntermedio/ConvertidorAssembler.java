@@ -19,7 +19,7 @@ public class ConvertidorAssembler {
 	
 	public void generarAssembler () throws IOException{
 		arch = new File("salida.asm");
-		generarArchivo();
+		controladorTercetos.generarAssembler();
 //		PrintWriter p = new PrintWriter(new FileWriter(arch));
 		//Imprimir codigo assembler
 
@@ -34,14 +34,8 @@ public class ConvertidorAssembler {
 
 	}
 	
-
-	public String generarArchivo() {
-		ArrayList<Terceto> tercetos = controladorTercetos.getTercetos();
-		String assembler = "";
-		for ( Terceto t: tercetos ){
-			t.setControladorTercetos(controladorTercetos);
-			assembler = assembler + t.getAssembler();
-		}
-		return assembler;
+	public String generarArchivo(){
+		return controladorTercetos.generarAssembler();
 	}
+
 }
