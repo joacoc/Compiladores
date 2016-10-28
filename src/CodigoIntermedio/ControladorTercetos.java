@@ -1,5 +1,6 @@
 package CodigoIntermedio;
 
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Vector;
 
