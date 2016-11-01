@@ -64,6 +64,7 @@ public class Main {
     	AnalizadorCodigoIntermedio analizadorCodigoIntermedio = new AnalizadorCodigoIntermedio();
     	ControladorTercetos controladorTercetos = new ControladorTercetos();
     	ConvertidorAssembler convertidorAssembler = new ConvertidorAssembler(controladorTercetos);
+    	convertidorAssembler.setTablaSimb(ts);
 
         Parser parser;
         parser = new Parser();
@@ -83,7 +84,8 @@ public class Main {
 //        System.out.println(analizadorSintactico.getEstructuras());
         System.out.println(analizadorCodigoIntermedio.getErroresCI());
         System.out.println( controladorTercetos.imprimirTercetos() );
-        System.out.println( convertidorAssembler.generarArchivo() );
+        convertidorAssembler.generarAssembler();
+//        System.out.println( convertidorAssembler.generarArchivo() );
         
 	}
 }

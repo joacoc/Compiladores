@@ -3,6 +3,8 @@ package CodigoIntermedio;
 public class TercetoComparacion extends Terceto {
 	
 	public final static String CMP = "CMP";
+	public static final String etiquetaIgual = "JE";
+	public static final String etiquetaDistinto = "JNE";
 
 	public TercetoComparacion(TercetoSimple izq, TercetoSimple medio, TercetoSimple der, int numeroTerceto) {
 		super(izq, medio, der, numeroTerceto);

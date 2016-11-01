@@ -1,5 +1,6 @@
 package CodigoIntermedio;
 
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -14,6 +15,8 @@ public class ControladorTercetos {
 	private ArrayList<Terceto> tercetos ;
 	private ArrayList<Integer> pila ;
 	ArrayList<Boolean>registros; //ver el tipo
+	private ArrayList<Integer> labelPendientes; // por el tema del if
+
 	
 	
 	public ControladorTercetos() {
@@ -24,6 +27,7 @@ public class ControladorTercetos {
 		registros.add(false);
 		registros.add(false);
 		registros.add(false);
+		labelPendientes = new ArrayList<Integer>(); 
 	}
 	
 	public String imprimirTercetos() {
@@ -33,6 +37,16 @@ public class ControladorTercetos {
 		return cadena;
 	}
 	
+	public void addTerceto(int index, Terceto t){
+		tercetos.add(index, t);
+	}
+	
+	public int borrarLabelPendiente() {
+		int l = labelPendientes.get( labelPendientes.size()-1 );
+		labelPendientes.remove( labelPendientes.size()-1 );
+		return l;
+	}
+	
 	public void addTerceto(Terceto t){
 		tercetos.add(t);
 	}
@@ -40,6 +54,13 @@ public class ControladorTercetos {
 	public int getProxNumero(){
 		return tercetos.size()+1;
 	}
+	
+	public void addLabelPendiente(int labelPendiente) {
+		this.labelPendientes.add( labelPendiente );
+		System.out.println(labelPendientes.size() );
+	}
+	
+
 	
 	public String numeroTercetoString(){
 		return String.valueOf(tercetos.size());
@@ -97,9 +118,20 @@ public class ControladorTercetos {
 		for (int i =0; i< registros.size(); i++)
 			if ( !registros.get(i) ){ 
 				//esta libre y lo ocupamos		
-				if ( i == 0 ) return Terceto.reg1;
-				if ( i == 0 ) return Terceto.reg2;
-				if ( i == 0 ) return Terceto.reg3;
+				if ( registros.get(0) == false ) {
+					registros.set(i, true);
+					return Terceto.reg1;
+					}
+				else
+					if ( registros.get(1) == false ) {
+						registros.set(i, true);
+						return Terceto.reg2;
+						}
+					else
+						if ( registros.get(2) == false ){
+							registros.set(i, true);
+							return Terceto.reg3;
+							}
 				return Terceto.reg4;
 			}
 		//estan todos los registros ocupados
@@ -113,5 +145,22 @@ public class ControladorTercetos {
 		if (registro == Terceto.reg3)  index = 2;
 		if (registro == Terceto.reg4)  index = 3;
 		registros.set(index, new Boolean(false));//paso a estado libre el registro en la pos index
+	}
+	
+	
+
+	public String generarAssembler() {
+		String assembler = "";
+		int i = 1; //numero de terceto para colocar el label
+		for ( Terceto t: tercetos ){
+			t.setControladorTercetos(this);
+			assembler = assembler + t.getAssembler();
+			i++;
+			if ( (!labelPendientes.isEmpty()) && ( i == labelPendientes.get(labelPendientes.size()-1) ) ){
+				assembler = assembler + "Label" + String.valueOf(labelPendientes.get(labelPendientes.size()-1)) + '\n';
+				borrarLabelPendiente();
+			}
+		}
+		return assembler;
 	}
 }

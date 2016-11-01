@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 
 
+
 public class TablaSimbolos {
 	
+	public static final String ochoBits = "DB";
+	public static final String dieciseisBits = "WB";
 	
 	//La tabla de simbolos se almacena en una hash
 	//*
@@ -70,4 +73,27 @@ public class TablaSimbolos {
 		if (tSimb.remove(nombre)!= null)
 			System.out.println("anda" );
 	};
+	
+	public String getAssembler (){
+		ArrayList<Token> tokens = getTokens();
+		String assembler = "";
+		for (Token t: tokens){
+			String tipoAssembler = getTipoAssember(t);
+			assembler = assembler + t.getNombre()+ " " + tipoAssembler + '\n';
+				
+		}
+		return assembler;
+	}
+
+	private String getTipoAssember(Token t) {
+		String tipo = "";
+		AnalizadorLexico analizador = new AnalizadorLexico(null, null); //es para usar las constantes
+		if ( t.getTipo() == analizador.variableI )
+			tipo = ochoBits;
+		else
+			if ( t.getTipo() == analizador.variableL )
+				tipo = dieciseisBits;	
+		return tipo;
+	}
+	
 }
