@@ -46,6 +46,7 @@ public class ControladorTercetos {
 	}
 	
 	public void apilar(){
+		//TODO: J- No es +1??
 		pila.add(new Integer(tercetos.size()-1) );
 	}
 	
@@ -69,7 +70,6 @@ public class ControladorTercetos {
 		Terceto nuevo = tercetos.get(tercetos.size()-1);
 		TercetoSimple add = new TercetoSimple(new Token( String.valueOf(pila.remove(pila.size()-1)) ) );
 		nuevo.setElemento(1, add);
-	
 	}
 
 	public boolean errorControlFOR(Token t1, Token t2){
