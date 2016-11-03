@@ -361,8 +361,9 @@ cuerpo_for : sentencia
 sentencia_for_parte1:	FOR  '(' asignacion {controladorTercetos.apilarFor();}
 				 		condicion_sin_parentesis {
 				 									TercetoFor terceto = new TercetoFor ( new TercetoSimple( (new Token( controladorTercetos.BF) ) ), new TercetoSimple(new Token( controladorTercetos.numeroTercetoString() ) ), null, controladorTercetos.getProxNumero() );
-													controladorTercetos.addTerceto (terceto);
-													controladorTercetos.apilar();
+													terceto.setTipoSalto(((Token)$3.obj).getNombre);
+													controladorTercetos.addTerceto (terceto);	
+													controladorTercetos.apilar();	
 													$$ = new ParserVal ($3.obj);
 											 }
 					;
@@ -400,6 +401,7 @@ cuerpo_else : '{' bloque_de_sentencia '}'
 
 
 sentecia_if_condicion : IF  condicion 	{	TercetoIf terceto = new TercetoIf ( new TercetoSimple( (new Token( controladorTercetos.BF) ) ), new TercetoSimple(new Token( controladorTercetos.numeroTercetoString() ) ), null, controladorTercetos.getProxNumero() );
+											terceto.setTipoSalto(((Token)$2.obj).getNombre);
 											controladorTercetos.addTerceto (terceto);
 											controladorTercetos.apilar(); 
 										}
@@ -431,6 +433,7 @@ condicion_sin_parentesis : expresion operador expresion {	TercetoComparacion ter
 																tipo= "integer";
 															Token nuevo = new Token( controladorTercetos.numeroTercetoString() );
 															nuevo.setTipo(tipo);
+															nuevo.setNombre(((Token) $2.obj).getNombre());
 															$$ = new ParserVal(nuevo);
 															analizadorS.addEstructura( new Error ( analizadorS.estructuraCONDICION,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ) ); 
 														}
@@ -439,7 +442,7 @@ condicion_sin_parentesis : expresion operador expresion {	TercetoComparacion ter
                           ;
 
 
-condicion : '(' condicion_sin_parentesis ')' 
+condicion : '(' condicion_sin_parentesis ')' { $$ = $2}
           | condicion_sin_parentesis ')' { analizadorS.addError (new Error ( analizadorS.errorParentesisA,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
           | '(' condicion_sin_parentesis error { analizadorS.addError (new Error ( analizadorS.errorParentesisC,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
           ;

@@ -10,8 +10,24 @@ public class TercetoIf extends Terceto {
 	public TercetoIf(TercetoSimple izq, TercetoSimple medio, TercetoSimple der,	int numeroTerceto) {
 		super(izq, medio, der, numeroTerceto);
 		// TODO Auto-generated constructor stub
-		tipoSalto = "JLE"; //despues cambiar bien
 	}
+
+	public void setTipoSalto(String tipoSalto){
+		if(tipoSalto== "<=")
+			this.tipoSalto = "JBE";
+		else
+			if(tipoSalto.equals("="))
+				this.tipoSalto = "JE";
+			else
+				if(tipoSalto.equals(">="))
+					this.tipoSalto = "JGE";
+				else
+					if(tipoSalto.equals(">"))
+						this.tipoSalto = "JG";
+					else
+						if(tipoSalto.equals("<"))
+							this.tipoSalto = "JB";
+	};
 
 	public String getAssembler() {
 		String assembler = "";

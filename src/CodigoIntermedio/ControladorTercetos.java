@@ -67,7 +67,6 @@ public class ControladorTercetos {
 	}
 	
 	public void apilar(){
-		//TODO: J- No es +1??
 		pila.add(new Integer(tercetos.size()-1) );
 	}
 	
