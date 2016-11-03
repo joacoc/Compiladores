@@ -360,9 +360,11 @@ cuerpo_for : sentencia
 
 sentencia_for_parte1:	FOR  '(' asignacion {controladorTercetos.apilarFor();}
 				 		condicion_sin_parentesis {
+				 									// TODO: ACA DEBERIA AGREGAR EL LABEL PARA QUE VUELVA EL FOR Y CHEQUEE LA CONDICION
+				 									//****
 				 									TercetoFor terceto = new TercetoFor ( new TercetoSimple( (new Token( controladorTercetos.BF) ) ), new TercetoSimple(new Token( controladorTercetos.numeroTercetoString() ) ), null, controladorTercetos.getProxNumero() );
-													terceto.setTipoSalto(((Token)$4.obj).getNombre);
-													controladorTercetos.addTerceto (terceto);	
+													terceto.setTipoSalto(((Token)$5.obj).getNombre());
+													controladorTercetos.addTerceto(terceto);	
 													controladorTercetos.apilar();	
 													$$ = new ParserVal ($3.obj);
 											 }
@@ -401,7 +403,7 @@ cuerpo_else : '{' bloque_de_sentencia '}'
 
 
 sentecia_if_condicion : IF  condicion 	{	TercetoIf terceto = new TercetoIf ( new TercetoSimple( (new Token( controladorTercetos.BF) ) ), new TercetoSimple(new Token( controladorTercetos.numeroTercetoString() ) ), null, controladorTercetos.getProxNumero() );
-											terceto.setTipoSalto(((Token)$2.obj).getNombre);
+											terceto.setTipoSalto(((Token)$2.obj).getNombre());
 											controladorTercetos.addTerceto (terceto);
 											controladorTercetos.apilar(); 
 										}
@@ -442,7 +444,7 @@ condicion_sin_parentesis : expresion operador expresion {	TercetoComparacion ter
                           ;
 
 
-condicion : '(' condicion_sin_parentesis ')' { $$ = $2}
+condicion : '(' condicion_sin_parentesis ')' { $$ = $2;}
           | condicion_sin_parentesis ')' { analizadorS.addError (new Error ( analizadorS.errorParentesisA,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
           | '(' condicion_sin_parentesis error { analizadorS.addError (new Error ( analizadorS.errorParentesisC,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
           ;
@@ -594,8 +596,8 @@ public Token[][] getMatriz(ArrayList<ArrayList<Token>> tokens, TokenMatriz decla
 
 public boolean setTercetosMatriz(String orientacion, ArrayList<ArrayList<Token>> tokens, TokenMatriz declaracion_matriz){
 	Token matriz[][];
-
-
+	Token inicializador;
+	String tipo = declaracion_matriz.getTipo();
 	if (tokens!=null) {
 		matriz = getMatriz(tokens, declaracion_matriz);
 		if ((orientacion.equals("C"))) {
@@ -604,8 +606,13 @@ public boolean setTercetosMatriz(String orientacion, ArrayList<ArrayList<Token>>
 				for (int faux = 0; faux < declaracion_matriz.getFilas() ; faux++ ) {
 					Token t = matriz[faux][caux];
 					if (tipoCompatible(declaracion_matriz,t)) {
-						Token inicializador = new Token("_l0",analizadorL.CTEI);
-						inicializador.setValor(0);
+
+						if (tipo.equals("integer")) 
+							inicializador = new Token("_i0", analizadorL.CTEI);
+						else
+							inicializador = new Token("_l0", analizadorL.CTEL);
+						inicializador.setValor(0);			
+
 						TercetoAsignacion terceto = new TercetoAsignacion ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( inicializador ), new TercetoSimple( t ), controladorTercetos.getProxNumero() );
 						controladorTercetos.addTerceto (terceto);
 						//$$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ));
@@ -623,8 +630,13 @@ public boolean setTercetosMatriz(String orientacion, ArrayList<ArrayList<Token>>
 				for (int caux = 0; caux < declaracion_matriz.getColumnas() ; caux++ ) {
 					Token t = matriz[faux][caux];
 					if (tipoCompatible(declaracion_matriz,t)) {
-						Token inicializador = new Token("_l0",analizadorL.CTEI);
-						inicializador.setValor(0);
+
+						if (tipo.equals("integer")) 
+							inicializador = new Token("_i0", analizadorL.CTEI);
+						else
+							inicializador = new Token("_l0", analizadorL.CTEL);
+						inicializador.setValor(0);			
+
 						Terceto terceto = new TercetoAsignacion ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( inicializador ), new TercetoSimple( t ), controladorTercetos.getProxNumero() );
 						controladorTercetos.addTerceto (terceto);
 						// $$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ));
@@ -645,12 +657,16 @@ public boolean setTercetosMatriz(String orientacion, ArrayList<ArrayList<Token>>
 		for (int caux = 0; caux < declaracion_matriz.getColumnas() ; caux++ ) {
 			for (int faux = 0; faux < declaracion_matriz.getFilas() ; faux++ ) {
 				//No es necesario chequear la compatibilidad
-				Token inicializador = new Token("_l0",analizadorL.CTEI);
-				inicializador.setValor(0);
+				if (tipo.equals("integer")) 
+					inicializador = new Token("_i0", analizadorL.CTEI);
+				else
+					inicializador = new Token("_l0", analizadorL.CTEL);
+				inicializador.setValor(0);			
+
 				Token t = matriz[faux][caux];	
 				Terceto terceto = new TercetoAsignacion ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( inicializador ), new TercetoSimple( inicializador ), controladorTercetos.getProxNumero() );
 				controladorTercetos.addTerceto (terceto);
-			// $$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ));
+				// $$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ));
 				analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));
 			}
 		}

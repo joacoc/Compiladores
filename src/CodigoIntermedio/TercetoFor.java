@@ -12,19 +12,19 @@ public class TercetoFor extends Terceto {
 	
 	public void setTipoSalto(String tipoSalto){
 		if(tipoSalto== "<=")
-			this.tipoSalto = "JBE";
+			this.tipoSalto = "JG";
 		else
 			if(tipoSalto.equals("="))
-				this.tipoSalto = "JE";
+				this.tipoSalto = "JNE";
 			else
 				if(tipoSalto.equals(">="))
-					this.tipoSalto = "JGE";
+					this.tipoSalto = "JB";
 				else
 					if(tipoSalto.equals(">"))
-						this.tipoSalto = "JG";
+						this.tipoSalto = "JBE";
 					else
 						if(tipoSalto.equals("<"))
-							this.tipoSalto = "JB";
+							this.tipoSalto = "JGE";
 	};
 
 	public String getAssembler() {
@@ -34,9 +34,7 @@ public class TercetoFor extends Terceto {
 	
 		//Terceto izq. 
 		String operador = elementos.get(0).getToken().getNombre();
-		//Terceto del medio == condicion; 
 		
-		//Cuando termina el for salta
 		if (operador == controladorTercetos.BF){
 			assembler = tipoSalto + " Label" + elementos.get(2).getToken().getNombre() + '\n';
 			controladorTercetos.addLabelPendiente( Integer.parseInt(elementos.get(2).getToken().getNombre() ) );
