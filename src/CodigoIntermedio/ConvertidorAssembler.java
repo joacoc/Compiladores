@@ -16,6 +16,9 @@ import AnalizadorLexico.TablaSimbolos;
 
 public class ConvertidorAssembler {
 
+	public static final String labelDivCero = "LabelDivCero";
+	public static final String labelOverflow = "LabelOverflow";
+
 	static ControladorTercetos controladorTercetos;
 	static TablaSimbolos tablaSimb;
 	static File arch;
@@ -34,17 +37,15 @@ public class ConvertidorAssembler {
 		arch = new File("salida.asm");
 		writeFile1();
 
-//		PrintWriter p = new PrintWriter(new FileWriter(arch));
-		//Imprimir codigo assembler
+		PrintWriter p = new PrintWriter(new FileWriter(arch));
 
 //		String comc = "cmd /c .\\masm32\\bin\\ml /c /Zd /coff salida.asm ";
 //		Process ptasm32 = Runtime.getRuntime().exec(comc);
 //		InputStream is = (InputStream) ptasm32.getInputStream();
+
 		
 		String coml = "cmd /c \\masm32\\bin\\Link /SUBSYSTEM:CONSOLE salida.obj ";
 		Process ptlink32 = Runtime.getRuntime().exec(coml);
-
-
 	}
 	
 	public String generarArchivo(){
@@ -65,17 +66,34 @@ public class ConvertidorAssembler {
 				+ "include \\masm32\\include\\user32.inc" + '\n'
 				+ "includelib \\masm32\\lib\\kernel32.lib" + '\n'
 				+ "includelib \\masm32\\lib\\user32.lib" + '\n'
-				+ ".data" + '\n');	
-		
-		//Se almacenan las variables
-		String data = tablaSimb.getAssembler() + '\n' + ".code"+ "\n";
+				+ '\n' +".data" + '\n');	
+		String data = tablaSimb.getAssembler() ;
+		data = data + "DividirCero db \"Error al dividir por cero!\", 0" + '\n';
+		data = data + "Overflow db \"El resultado de la operacion se fue de rango!\", 0" + '\n';
+		data = data + '\n' + ".code"+ "\n";
+
 		bw.write( data );
 		
 		//Inicia el codigo
 		String code = "start:" + '\n' + (String) controladorTercetos.generarAssembler(); 
+
+		code = code + "invoke ExitProcess, 0" + '\n';
+
 		bw.write( code );
-		bw.write("end start");
+		String errores = getErroresRunTime();
+		bw.write( "end start" );
+
 		bw.close();
+	}
+
+	private static String getErroresRunTime() {
+		String errores = labelDivCero + '\n';
+		errores = errores + "invoke MessageBox, NULL, addr DividirCero, addr DividirCero, MB_OK" + '\n';
+		errores = errores + "invoke ExitProcess, 0" + '\n';
+		errores = errores + labelOverflow + '\n';
+		errores = errores + "invoke MessageBox, NULL, addr Overflow, addr Overflow, MB_OK" + '\n';
+		errores = errores + "invoke ExitProcess, 0" + '\n';
+		return errores;
 	}
 
 }

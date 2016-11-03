@@ -86,7 +86,7 @@ declaracion : tipo lista_variables ';' {
             | matriz { 
 							/*Chequear que la variable ya no este declarada*/
 							TokenMatriz t = (TokenMatriz)$1.obj;
-							TokenMatriz t1 = new TokenMatriz("mat@" + t.getNombre(), t.getUso() );
+							TokenMatriz t1 = new TokenMatriz("mat@" + t.getNombre(), t.getUso(), t.getFilas(), t.getColumnas() );
 							
 							if (tablaSimbolo.existe(t1.getNombre())){
 									analizadorCI.addError (new Error ( analizadorCI.errorMatrizRedeclarada,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
@@ -459,6 +459,35 @@ tipo : INTEGER {  $$ = new ParserVal(  new Token( analizadorL.variableI ) ); }
      ; 
 
 celda_matriz : ID '[' expresion ']' '[' expresion ']' { Token t1 = tablaSimbolo.getToken( "mat@" + ((Token) $1.obj).getNombre() ) ;
+														//calcular la posicion de memoria de la celda
+														String bits = "_i" + ((TokenMatriz)t1).getBits(); 
+														//cantidad de filas y columnas de la matriz
+														String filas = "_i" + String.valueOf( ( (TokenMatriz) t1).getFilas() );
+														String columnas = "_i" +String.valueOf( ((TokenMatriz) t1).getColumnas() );
+														if ( ((TokenMatriz) t1).porFilas() ){
+															Token filaBuscada = (Token) $3.obj;
+															Token colBuscada = (Token) $6.obj;
+															
+															String valor = "*";
+															TercetoExpresion tercetoMult = new TercetoExpresion ( new TercetoSimple( new Token("*",(int) valor.charAt(0) ) ),new TercetoSimple( filaBuscada ), new TercetoSimple( new Token(filas,analizadorL.CTEI) ), controladorTercetos.getProxNumero() );
+															controladorTercetos.addTerceto (tercetoMult);
+
+															valor = "+";
+															TercetoExpresion tercetoSuma = new TercetoExpresion ( new TercetoSimple( new Token("+",(int) valor.charAt(0) ) ),new TercetoSimple( (new Token( String.valueOf( controladorTercetos.getProxNumero()-1) )) ), new TercetoSimple( colBuscada ), controladorTercetos.getProxNumero() );
+															controladorTercetos.addTerceto (tercetoSuma);
+
+															valor = "*";
+															TercetoExpresion tercetoMultBits = new TercetoExpresion ( new TercetoSimple( new Token("*",(int) valor.charAt(0) ) ),new TercetoSimple( (new Token( String.valueOf( controladorTercetos.getProxNumero()-1) )) ), new TercetoSimple( new Token(bits,analizadorL.CTEI) ), controladorTercetos.getProxNumero() );
+															controladorTercetos.addTerceto (tercetoMultBits);
+
+															//suma de la base con el calculo de los bytes que tengo que saltar
+															valor = "+";
+															TercetoExpresion tercetoSumaBase = new TercetoExpresion ( new TercetoSimple( new Token("+",(int) valor.charAt(0) ) ),new TercetoSimple( (new Token( String.valueOf( controladorTercetos.getProxNumero()-1) )) ), new TercetoSimple( t1 ), controladorTercetos.getProxNumero() );
+															controladorTercetos.addTerceto (tercetoSumaBase);
+
+
+
+														}
 														$$ = new ParserVal( t1 );
 
 														if (t1 == null) {

@@ -10,6 +10,7 @@ public class TablaSimbolos {
 	public static final String ochoBits = "DB";
 	public static final String dieciseisBits = "WB";
 	public int cantPrints = 0;
+
 	//La tabla de simbolos se almacena en una hash
 	//*
 	//*
