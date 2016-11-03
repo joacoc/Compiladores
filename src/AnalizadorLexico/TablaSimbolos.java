@@ -7,8 +7,8 @@ import java.util.Hashtable;
 
 public class TablaSimbolos {
 	
-	public static final String ochoBits = "DB";
-	public static final String dieciseisBits = "WB";
+	public static final String ochoBits = "db";
+	public static final String dieciseisBits = "wb";
 	
 	//La tabla de simbolos se almacena en una hash
 	//*

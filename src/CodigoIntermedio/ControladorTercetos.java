@@ -57,7 +57,6 @@ public class ControladorTercetos {
 	
 	public void addLabelPendiente(int labelPendiente) {
 		this.labelPendientes.add( labelPendiente );
-		System.out.println(labelPendientes.size() );
 	}
 	
 
@@ -75,8 +74,8 @@ public class ControladorTercetos {
 		pila.remove(pila.size()-1);
 		Terceto nuevo = tercetos.get(tercetoMod);
 		TercetoSimple add = new TercetoSimple(new Token( String.valueOf(tercetos.size()+1) ) );
-		if (nuevo.getTerceto(1) == null){System.out.println("entra aca");
-			nuevo.setElemento(1, add);}
+		if (nuevo.getTerceto(1) == null)
+			nuevo.setElemento(1, add);
 		else
 			nuevo.setElemento(2, add);
 		tercetos.set(tercetoMod, nuevo);
@@ -95,8 +94,6 @@ public class ControladorTercetos {
 
 	public boolean errorControlFOR(Token t1, Token t2){
 		char c = t2.getNombre().charAt(0);
-		System.out.println("c:"+c);
-		System.out.println( "esto" + tercetos.size() )  ;
 		if (Character.isDigit(c)){
 			//es un terceto	
 			return  ( errorControlFOR(t1, tercetos.get(Integer.parseInt(t2.getNombre())-1).getTerceto(1).getToken() ) ) ;

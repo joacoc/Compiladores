@@ -8,8 +8,7 @@ public class TercetoPrint extends Terceto {
 	}
 
 	public String getAssembler() {
-		// TODO Auto-generated method stub
-		return null;
+		return ("invoke MessageBox, NULL, addr " + elementos.get(1).getToken().getNombre() + ", addr " + elementos.get(1).getToken().getNombre() + ", MB_OK");
 	}
 
 }

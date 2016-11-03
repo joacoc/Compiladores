@@ -1,5 +1,8 @@
 package CodigoIntermedio;
 
+import AnalizadorLexico.AnalizadorLexico;
+import AnalizadorLexico.Token;
+
 public class TercetoExpresion extends Terceto {
 	
 	public final static String MOV = "MOV";
@@ -70,7 +73,20 @@ public class TercetoExpresion extends Terceto {
 			}
 				
 		}
+		assembler = assembler + getAssemblerErrores(); //ver porque hay que reubicarlo porquen en div va antes y en suma desp
 		return assembler;
+	}
+
+	private String getAssemblerErrores() {
+		if ( elementos.get(0).getToken().getNombre() == "/" ){
+			AnalizadorLexico al = new AnalizadorLexico(null, null);
+			String igual = "=";
+			TercetoComparacion tc = new TercetoComparacion( new TercetoSimple( new Token("=", (int) igual.charAt(0) ) ) , new TercetoSimple(elementos.get(2).getToken() ), new TercetoSimple(new Token( "_i0", al.CTEI ) ), 0);
+			String assembler = tc.getAssembler() ;
+			assembler = assembler + "JE LabelDivCero" + '\n';
+			return assembler;
+		}
+		return null;
 	}
 
 }

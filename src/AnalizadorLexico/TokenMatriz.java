@@ -4,9 +4,7 @@ import java.util.ArrayList;
 
 public class TokenMatriz extends Token{
 
-	int filas = 0, columnas = 0;
-	long mat[][];
-	
+	int filas, columnas;	
 	
 	//Orientacion. False == filas. True == columnas. 
 	//Por defecto = filas.
@@ -30,7 +28,6 @@ public class TokenMatriz extends Token{
 	public void setDimensiones(int filas, int columnas){
 		this.filas = filas;
 		this.columnas = columnas;
-		mat = new long[filas][columnas];
 	}
 	
 	public void setOrientacion(String c){
@@ -39,50 +36,26 @@ public class TokenMatriz extends Token{
 		else 
 			orientacion = false;
 	}
-	
-	public void setValores(ArrayList<ArrayList<Long>> valores, String orientacion){
-		setOrientacion(orientacion);
-		
-		int caux = 0, faux = 0;
-		
-		if(valores != null){
-			//this.valorMatriz	
-			if(!this.orientacion){
-				//Orientacion por filas
-				for(ArrayList<Long> a : valores){
-					for(Long l : a){
-						mat[faux][caux] = l.longValue();
-						faux++;
-					}
-					caux++;
-				}
-			}else{
-				//Orientacion por columnas
-				for(ArrayList<Long> a : valores){
-					for(Long l : a){
-						mat[faux][caux] = l.longValue();
-						caux++;
-					}
-					faux++;
-				}
-			}
-		}
-	}
-	
-	public void setValor(long valor, int fila, int columna){
-		mat[fila][columna] = valor;
-	}
 
-	public long getValor(int fila, int columna){
-		return mat[fila][columna];
-	}
-	
 	public int getFilas(){
+		System.out.println("filas: ");		System.out.println(filas);
 		return filas;
 	}
 	
 	public int getColumnas(){
 		return columnas;
 	}
-
+	
+	public boolean porFilas(){
+		return !orientacion;
+	}
+	
+	public String getBits(){
+		AnalizadorLexico al =new AnalizadorLexico(null, null);
+		if (this.getTipo() == al.constanteI)
+			return "2"; //esta en bytes ver que onda.
+		else
+			return "4"; 
+	}
+	
 }

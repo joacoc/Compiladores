@@ -85,7 +85,7 @@ public class Main {
         System.out.println(analizadorCodigoIntermedio.getErroresCI());
         System.out.println( controladorTercetos.imprimirTercetos() );
         convertidorAssembler.generarAssembler();
-//        System.out.println( convertidorAssembler.generarArchivo() );
+        System.out.println( convertidorAssembler.generarArchivo() );
         
 	}
 }
