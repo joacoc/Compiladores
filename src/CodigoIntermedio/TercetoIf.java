@@ -6,11 +6,28 @@ public class TercetoIf extends Terceto {
 	public static final String etiquetaSaltoIncondicional = "JMP";
 
 
+	
 	public TercetoIf(TercetoSimple izq, TercetoSimple medio, TercetoSimple der,	int numeroTerceto) {
 		super(izq, medio, der, numeroTerceto);
 		// TODO Auto-generated constructor stub
-		tipoSalto = "JLE"; //despues cambiar bien
 	}
+
+	public void setTipoSalto(String tipoSalto){
+		if(tipoSalto== "<=")
+			this.tipoSalto = "JG";
+		else
+			if(tipoSalto.equals("="))
+				this.tipoSalto = "JNE";
+			else
+				if(tipoSalto.equals(">="))
+					this.tipoSalto = "JB";
+				else
+					if(tipoSalto.equals(">"))
+						this.tipoSalto = "JBE";
+					else
+						if(tipoSalto.equals("<"))
+							this.tipoSalto = "JGE";
+	};
 
 	public String getAssembler() {
 		String assembler = "";

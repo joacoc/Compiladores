@@ -82,14 +82,13 @@ public class ControladorTercetos {
 	}
 	
 	public void apilarFor(){
-		pila.add(new Integer(tercetos.size()+1) );
+		pila.add(new Integer(tercetos.size()) );
 	}
 	
 	public void desapilarFor(){
 		Terceto nuevo = tercetos.get(tercetos.size()-1);
 		TercetoSimple add = new TercetoSimple(new Token( String.valueOf(pila.remove(pila.size()-1)) ) );
 		nuevo.setElemento(1, add);
-	
 	}
 
 	public boolean errorControlFOR(Token t1, Token t2){
@@ -143,18 +142,23 @@ public class ControladorTercetos {
 		if (registro == Terceto.reg4)  index = 3;
 		registros.set(index, new Boolean(false));//paso a estado libre el registro en la pos index
 	}
-	
-	
 
 	public String generarAssembler() {
+		ArrayList<String> assembler_l = new ArrayList<>();
 		String assembler = "";
+		
 		int i = 1; //numero de terceto para colocar el label
+		
 		for ( Terceto t: tercetos ){
+			
 			t.setControladorTercetos(this);
 			assembler = assembler + t.getAssembler();
+			//assembler_l.add(t.getAssembler());
+			
 			i++;
 			if ( (!labelPendientes.isEmpty()) && ( i == labelPendientes.get(labelPendientes.size()-1) ) ){
 				assembler = assembler + "Label" + String.valueOf(labelPendientes.get(labelPendientes.size()-1)) + '\n';
+				//assembler_l.add("Label"+String.valueOf(labelPendientes.get(labelPendientes.size()-1))+"\n");
 				borrarLabelPendiente();
 			}
 		}
