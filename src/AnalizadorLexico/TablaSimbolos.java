@@ -9,7 +9,7 @@ public class TablaSimbolos {
 	
 	public static final String ochoBits = "DB";
 	public static final String dieciseisBits = "WB";
-	
+	public int cantPrints = 0;
 	//La tabla de simbolos se almacena en una hash
 	//*
 	//*
@@ -79,8 +79,13 @@ public class TablaSimbolos {
 		String assembler = "";
 		for (Token t: tokens){
 			String tipoAssembler = getTipoAssember(t);
-			assembler = assembler + t.getNombre()+ " " + tipoAssembler + '\n';
-				
+			
+			//Si es un comentario es distinto ya que se hace print1 + el assembler xq
+			// t.getNombre() retornaria "*comentario*" entre comillas y generaria un error en el ASM
+			if(t.getUso() == AnalizadorLexico.MULTI_LINEA)
+				assembler = assembler + tipoAssembler + '\n';
+			else
+				assembler = assembler + t.getNombre()+ " " + tipoAssembler + '\n';
 		}
 		return assembler;
 	}
@@ -88,11 +93,19 @@ public class TablaSimbolos {
 	private String getTipoAssember(Token t) {
 		String tipo = "";
 		AnalizadorLexico analizador = new AnalizadorLexico(null, null); //es para usar las constantes
+		
 		if ( t.getTipo() == analizador.variableI )
 			tipo = ochoBits;
 		else
 			if ( t.getTipo() == analizador.variableL )
 				tipo = dieciseisBits;	
+			else
+				if( t.getUso() == analizador.MULTI_LINEA){
+					//Se lleva una cuenta de la posicion del print para luego 
+					//coordinar con los tercetos la posicion.
+					cantPrints++;
+					tipo = "print" +String.valueOf(cantPrints) +" " +ochoBits +" " +t.nombre  +"," +" 0";
+				}
 		return tipo;
 	}
 	

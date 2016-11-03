@@ -40,10 +40,9 @@ public class ConvertidorAssembler {
 //		String comc = "cmd /c .\\masm32\\bin\\ml /c /Zd /coff salida.asm ";
 //		Process ptasm32 = Runtime.getRuntime().exec(comc);
 //		InputStream is = (InputStream) ptasm32.getInputStream();
-//
-//		String coml = "cmd /c \\masm32\\bin\\Link /SUBSYSTEM:CONSOLE salida.obj ";
-//		Process ptlink32 = Runtime.getRuntime().exec(coml);
-//		InputStream is2 = (InputStream) ptlink32.getInputStream();
+		
+		String coml = "cmd /c \\masm32\\bin\\Link /SUBSYSTEM:CONSOLE salida.obj ";
+		Process ptlink32 = Runtime.getRuntime().exec(coml);
 
 
 	}
@@ -75,7 +74,7 @@ public class ConvertidorAssembler {
 		//Inicia el codigo
 		String code = "start:" + '\n' + (String) controladorTercetos.generarAssembler(); 
 		bw.write( code );
-
+		bw.write("end start");
 		bw.close();
 	}
 

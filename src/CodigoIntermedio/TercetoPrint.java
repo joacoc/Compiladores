@@ -2,6 +2,8 @@ package CodigoIntermedio;
 
 public class TercetoPrint extends Terceto {
 
+	String print = "print";
+	
 	public TercetoPrint(TercetoSimple izq, TercetoSimple medio, TercetoSimple der, int numeroTerceto) {
 		super(izq, medio, der, numeroTerceto);
 		// TODO Auto-generated constructor stub
@@ -10,10 +12,14 @@ public class TercetoPrint extends Terceto {
 	public String getAssembler() {
 		// TODO Auto-generated method stub
 
-		String assembler = "invoke MessageBox, NULL, addr "+ this.getTerceto(1).getToken().getNombre() +", addr "+this.getTerceto(1).getToken().getNombre()+"MB_OK \n"
-				+ "invoke ExitProcess, 0";
+		String assembler = "invoke MessageBox, NULL, addr "+ print +", addr "+print+", MB_OK \n"
+				+ "invoke ExitProcess, 0\n";
 		
 		return assembler;
+	}
+	
+	public void setPrint(String aux){
+		this.print = this.print + aux;
 	}
 
 }

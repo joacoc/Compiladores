@@ -17,6 +17,7 @@ public class ControladorTercetos {
 	ArrayList<Boolean>registros; //ver el tipo
 	private ArrayList<Integer> labelPendientes; // por el tema del if
 
+	private int cantPrint = 0;
 	
 	
 	public ControladorTercetos() {
@@ -166,5 +167,12 @@ public class ControladorTercetos {
 			}
 		}
 		return assembler;
+	}
+	
+	//Informa que se agrego un terceto de print y modifica el ultimo terceto para coordinar
+	//el nombre con el .datat del ASM
+	public void addPrint(){
+		cantPrint++;
+		((TercetoPrint)tercetos.get(tercetos.size()-1)).setPrint(String.valueOf(cantPrint));
 	}
 }
