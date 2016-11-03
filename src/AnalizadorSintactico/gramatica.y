@@ -358,7 +358,11 @@ cuerpo_for : sentencia
 		   | '{' bloque_de_sentencia '}' 
 		   ;
 
-sentencia_for_parte1:	FOR  '(' asignacion {controladorTercetos.apilarFor();}
+sentencia_for_parte1:	FOR  '(' asignacion {
+				 									TercetoLabel tercetoLabel = new TercetoLabel(null,null,null,controladorTercetos.getProxNumero());
+				 									controladorTercetos.addTerceto(tercetoLabel);
+				 									controladorTercetos.apilarFor();
+				 								}
 				 		condicion_sin_parentesis {
 				 									// TODO: ACA DEBERIA AGREGAR EL LABEL PARA QUE VUELVA EL FOR Y CHEQUEE LA CONDICION
 				 									//****
@@ -375,7 +379,6 @@ sentencia_for : sentencia_for_parte1 ';' asignacion_sin_punto_coma ')' 	{
 														Token asigUlt = (Token)$3.obj;
 				 										if (controladorTercetos.errorControlFOR(asig,asigUlt) )
 	 														analizadorCI.addError (new Error ( analizadorCI.errorVariableControlFOR,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
-
 				 									}
 				cuerpo_for { 	
 								TercetoFor terceto = new TercetoFor ( new TercetoSimple( new Token( controladorTercetos.BI)  ), null, null, controladorTercetos.getProxNumero() );

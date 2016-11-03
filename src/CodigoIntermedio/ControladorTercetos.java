@@ -83,7 +83,7 @@ public class ControladorTercetos {
 	}
 	
 	public void apilarFor(){
-		pila.add(new Integer(tercetos.size()+1) );
+		pila.add(new Integer(tercetos.size()) );
 	}
 	
 	public void desapilarFor(){

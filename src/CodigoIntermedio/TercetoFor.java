@@ -42,7 +42,6 @@ public class TercetoFor extends Terceto {
 		else{
 			//BI	
 			assembler = "JUMP Label" + elementos.get(1).getToken().getNombre() + '\n';
-			assembler = assembler + "Label" + elementos.get(1).getToken().getNombre() + ":	" + '\n';
 		}
 		return assembler;
 	}
