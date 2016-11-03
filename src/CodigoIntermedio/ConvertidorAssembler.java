@@ -57,6 +57,7 @@ public class ConvertidorAssembler {
 	 
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
 		
+		
 		bw.write(".386" + '\n' 
 				+ ".model flat, stdcall" + '\n'
 				+ "option casemap :none" + '\n'
@@ -66,8 +67,12 @@ public class ConvertidorAssembler {
 				+ "includelib \\masm32\\lib\\kernel32.lib" + '\n'
 				+ "includelib \\masm32\\lib\\user32.lib" + '\n'
 				+ ".data" + '\n');	
+		
+		//Se almacenan las variables
 		String data = tablaSimb.getAssembler() + '\n' + ".code"+ "\n";
 		bw.write( data );
+		
+		//Inicia el codigo
 		String code = "start:" + '\n' + (String) controladorTercetos.generarAssembler(); 
 		bw.write( code );
 
