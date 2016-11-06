@@ -31,16 +31,16 @@ public class TercetoIf extends Terceto {
 
 	public String getAssembler() {
 		String assembler = "";
-		String operador = elementos.get(0).getToken().getNombre();
+		String operador = elementos.get(0).getNombreVar();
 		
 		if (operador == controladorTercetos.BF){
-			assembler = tipoSalto + " Label" + elementos.get(2).getToken().getNombre() + '\n';
-			controladorTercetos.addLabelPendiente( Integer.parseInt(elementos.get(2).getToken().getNombre() ) );
+			assembler = tipoSalto + " Label" + elementos.get(2).getNombreVar() + '\n';
+			controladorTercetos.addLabelPendiente( Integer.parseInt(elementos.get(2).getNombreVar() ) );
 		}
 		else{
-			assembler = etiquetaSaltoIncondicional + " Label" + elementos.get(1).getToken().getNombre() + '\n';
-			assembler = assembler + "Label" + String.valueOf( controladorTercetos.borrarLabelPendiente() ) + '\n';
-			controladorTercetos.addLabelPendiente( Integer.parseInt( elementos.get(1).getToken().getNombre() ) );
+			assembler = etiquetaSaltoIncondicional + " Label" + elementos.get(1).getNombreVar() + '\n';
+			assembler = assembler + "Label" + String.valueOf( controladorTercetos.borrarLabelPendiente() ) +":" + '\n';
+			controladorTercetos.addLabelPendiente( Integer.parseInt( elementos.get(1).getNombreVar() ) );
 		}
 		return assembler;
 	}

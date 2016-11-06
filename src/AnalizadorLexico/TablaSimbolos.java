@@ -7,8 +7,9 @@ import java.util.Hashtable;
 
 public class TablaSimbolos {
 	
-	public static final String ochoBits = "DB";
-	public static final String dieciseisBits = "WB";
+	public static final String ochoBits = "dw";
+	public static final String tipoPrint = "db";
+	public static final String dieciseisBits = "dd";
 	public int cantPrints = 0;
 
 	//La tabla de simbolos se almacena en una hash
@@ -79,14 +80,16 @@ public class TablaSimbolos {
 		ArrayList<Token> tokens = getTokens();
 		String assembler = "";
 		for (Token t: tokens){
-			String tipoAssembler = getTipoAssember(t);
-			
-			//Si es un comentario es distinto ya que se hace print1 + el assembler xq
-			// t.getNombre() retornaria "*comentario*" entre comillas y generaria un error en el ASM
-			if(t.getUso() == AnalizadorLexico.MULTI_LINEA)
-				assembler = assembler + tipoAssembler + '\n';
-			else
-				assembler = assembler + t.getNombre()+ " " + tipoAssembler + '\n';
+			if  ( (t.getUso() != AnalizadorLexico.CTEI) && (t.getUso() != AnalizadorLexico.CTEL) ){
+				String tipoAssembler = getTipoAssember(t);
+				
+				//Si es un comentario es distinto ya que se hace print1 + el assembler xq
+				// t.getNombre() retornaria "*comentario*" entre comillas y generaria un error en el ASM
+				if(t.getUso() == AnalizadorLexico.MULTI_LINEA)
+					assembler = assembler + tipoAssembler + '\n';
+				else
+					assembler = assembler + t.getNombre()+ " " + tipoAssembler + '\n';
+			}
 		}
 		return assembler;
 	}
@@ -105,9 +108,9 @@ public class TablaSimbolos {
 					//Se lleva una cuenta de la posicion del print para luego 
 					//coordinar con los tercetos la posicion.
 					cantPrints++;
-					tipo = "print" +String.valueOf(cantPrints) +" " +ochoBits +" " +t.nombre  +"," +" 0";
+					tipo = "print" +String.valueOf(cantPrints) +" " +tipoPrint +" " +t.nombre  +"," ;
 				}
-		return tipo;
+		return tipo + " 0";//inicializo en cero todas las variables
 	}
 	
 }

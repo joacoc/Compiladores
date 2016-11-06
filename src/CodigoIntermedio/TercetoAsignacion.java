@@ -1,5 +1,7 @@
 package CodigoIntermedio;
 
+import AnalizadorLexico.AnalizadorLexico;
+
 public class TercetoAsignacion extends Terceto{
 
 	public TercetoAsignacion(TercetoSimple izq, TercetoSimple medio, TercetoSimple der, int numeroTerceto) {
@@ -8,11 +10,14 @@ public class TercetoAsignacion extends Terceto{
 	
 	public String getAssembler() {
 		String assembler = "";
+		if (elementos.get(1).getToken().getTipo() == AnalizadorLexico.variableL){
+			
+		}
 		if ( elementos.get(2).esToken() ) 
-			assembler = "MOV " + elementos.get(1).getToken().getNombre() + " " + elementos.get(2).getToken().getNombre()+ '\n';
+			assembler = assembler + "MOV " + elementos.get(1).getNombreVar() + ", " + elementos.get(2).getNombreVar()+ '\n';
 		else{
 			Terceto terceto = controladorTercetos.getTerceto(elementos.get(2).getNumeroTerceto() );
-			assembler = "MOV " + elementos.get(1).getToken().getNombre() + " " + terceto.getRegistro() + '\n';
+			assembler = assembler + "MOV " + elementos.get(1).getNombreVar() + ", " + terceto.getRegistro() + '\n';
 			controladorTercetos.liberarRegistro( terceto.getRegistro() );
 			
 		}

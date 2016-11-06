@@ -2,6 +2,7 @@ package CodigoIntermedio;
 
 import java.io.ObjectInputStream.GetField;
 
+import AnalizadorLexico.AnalizadorLexico;
 import AnalizadorLexico.Token;
 
 public class TercetoSimple {
@@ -31,5 +32,12 @@ public class TercetoSimple {
 	public int getNumeroTerceto(){
 		return ( Integer.parseInt( t.getNombre() ) );
 		
+	}
+	
+	public String getNombreVar(){
+		if ( (t.getUso() == AnalizadorLexico.CTEI ) || (t.getUso() == AnalizadorLexico.CTEL ) )
+			return String.valueOf(t.getValor());
+		else
+			return t.getNombre();
 	}
 }

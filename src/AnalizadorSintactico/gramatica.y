@@ -319,7 +319,7 @@ termino : termino '*' factor	{	String valor ="*";
 								}
     | termino '/' factor		{ String valor ="/";
     									String tipo = getTipoCompatibleDivision((Token)$1.obj,(Token)$3.obj);
-										TercetoExpresion terceto = new TercetoExpresion ( new TercetoSimple( new Token("/",(int) valor.charAt(0) ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
+										TercetoExpresionDiv terceto = new TercetoExpresionDiv ( new TercetoSimple( new Token("/",(int) valor.charAt(0) ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
 										controladorTercetos.addTerceto (terceto);
 										Token nuevo = new Token( controladorTercetos.numeroTercetoString() );
 										nuevo.setTipo(tipo);
