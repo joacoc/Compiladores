@@ -12,8 +12,8 @@ public class ControladorTercetos {
 	public static final String BI = "BI";
 	public static final int cantReg = 4;
 	
-	private ArrayList<Terceto> tercetos ;
-	private ArrayList<Integer> pila ;
+	private ArrayList<Terceto> tercetos;
+	private ArrayList<Integer> pila;
 	ArrayList<Boolean>registros; //ver el tipo
 	private ArrayList<Integer> labelPendientes; // por el tema del if
 
@@ -145,7 +145,6 @@ public class ControladorTercetos {
 	}
 
 	public String generarAssembler() {
-		ArrayList<String> assembler_l = new ArrayList<>();
 		String assembler = "";
 		
 		int i = 1; //numero de terceto para colocar el label
@@ -159,7 +158,6 @@ public class ControladorTercetos {
 			i++;
 			if ( (!labelPendientes.isEmpty()) && ( i == labelPendientes.get(labelPendientes.size()-1) ) ){
 				assembler = assembler + "Label" + String.valueOf(labelPendientes.get(labelPendientes.size()-1)) + '\n';
-				//assembler_l.add("Label"+String.valueOf(labelPendientes.get(labelPendientes.size()-1))+"\n");
 				borrarLabelPendiente();
 			}
 		}

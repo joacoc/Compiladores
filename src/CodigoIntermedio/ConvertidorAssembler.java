@@ -37,15 +37,15 @@ public class ConvertidorAssembler {
 		arch = new File("salida.asm");
 		writeFile1();
 
-		PrintWriter p = new PrintWriter(new FileWriter(arch));
+//		PrintWriter p = new PrintWriter(new FileWriter(arch));
 
 //		String comc = "cmd /c .\\masm32\\bin\\ml /c /Zd /coff salida.asm ";
 //		Process ptasm32 = Runtime.getRuntime().exec(comc);
 //		InputStream is = (InputStream) ptasm32.getInputStream();
 
 		
-		String coml = "cmd /c \\masm32\\bin\\Link /SUBSYSTEM:CONSOLE salida.obj ";
-		Process ptlink32 = Runtime.getRuntime().exec(coml);
+//		String coml = "cmd /c \\masm32\\bin\\Link /SUBSYSTEM:CONSOLE salida.obj ";
+//		Process ptlink32 = Runtime.getRuntime().exec(coml);
 	}
 	
 	public String generarArchivo(){

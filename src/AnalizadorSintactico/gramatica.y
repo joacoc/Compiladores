@@ -365,8 +365,6 @@ sentencia_for_parte1:	FOR  '(' asignacion {
 				 									controladorTercetos.apilarFor();
 				 								}
 				 		condicion_sin_parentesis {
-				 									// TODO: ACA DEBERIA AGREGAR EL LABEL PARA QUE VUELVA EL FOR Y CHEQUEE LA CONDICION
-				 									//****
 				 									TercetoFor terceto = new TercetoFor ( new TercetoSimple( (new Token( controladorTercetos.BF) ) ), new TercetoSimple(new Token( controladorTercetos.numeroTercetoString() ) ), null, controladorTercetos.getProxNumero() );
 													terceto.setTipoSalto(((Token)$5.obj).getNombre());
 													controladorTercetos.addTerceto(terceto);	
