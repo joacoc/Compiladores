@@ -36,16 +36,19 @@ public class ConvertidorAssembler {
 		//controladorTercetos.generarAssembler();
 		arch = new File("salida.asm");
 		writeFile1();
-
+/*
+<<<<<<< HEAD
 //		PrintWriter p = new PrintWriter(new FileWriter(arch));
+=======
+		File arch = new File("salida.asm");
+//		PrintWriter p = new PrintWriter(new FileWriter(arch));
+		//Imprimir codigo assembler
+>>>>>>> 13b611176a32f60c504bf4667c19008a9f6c0711
 
-//		String comc = "cmd /c .\\masm32\\bin\\ml /c /Zd /coff salida.asm ";
-//		Process ptasm32 = Runtime.getRuntime().exec(comc);
-//		InputStream is = (InputStream) ptasm32.getInputStream();
-
-		
-//		String coml = "cmd /c \\masm32\\bin\\Link /SUBSYSTEM:CONSOLE salida.obj ";
-//		Process ptlink32 = Runtime.getRuntime().exec(coml);
+		String comc = "cmd /c .\\masm32\\bin\\ml /c /Zd /coff salida.asm";
+		Process ptasm32 = Runtime.getRuntime().exec(comc);
+		java.io.InputStream is =  ptasm32.getInputStream();
+		*/
 	}
 	
 	public String generarArchivo(){
@@ -81,16 +84,17 @@ public class ConvertidorAssembler {
 
 		bw.write( code );
 		String errores = getErroresRunTime();
+		bw.write(errores);
 		bw.write( "end start" );
 
 		bw.close();
 	}
 
 	private static String getErroresRunTime() {
-		String errores = labelDivCero + '\n';
+		String errores = labelDivCero + ":" + '\n';
 		errores = errores + "invoke MessageBox, NULL, addr DividirCero, addr DividirCero, MB_OK" + '\n';
 		errores = errores + "invoke ExitProcess, 0" + '\n';
-		errores = errores + labelOverflow + '\n';
+		errores = errores + labelOverflow + ":" + '\n';
 		errores = errores + "invoke MessageBox, NULL, addr Overflow, addr Overflow, MB_OK" + '\n';
 		errores = errores + "invoke ExitProcess, 0" + '\n';
 		return errores;

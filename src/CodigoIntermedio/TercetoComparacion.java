@@ -13,23 +13,23 @@ public class TercetoComparacion extends Terceto {
 
 	public String getAssembler() {
 		String assembler = "";
-		String operador = elementos.get(0).getToken().getNombre();
+		String operador = elementos.get(0).getNombreVar();
 		Terceto terceto1 = null;
 		if (!elementos.get(1).esToken())
-			terceto1 = controladorTercetos.getTerceto( Integer.parseInt( elementos.get(1).getToken().getNombre() ) );
+			terceto1 = controladorTercetos.getTerceto( Integer.parseInt( elementos.get(1).getNombreVar() ) );
 		Terceto terceto2 = null;
 		if (!elementos.get(2).esToken())
-			terceto2 = controladorTercetos.getTerceto( Integer.parseInt( elementos.get(2).getToken().getNombre() ) );
+			terceto2 = controladorTercetos.getTerceto( Integer.parseInt( elementos.get(2).getNombreVar() ) );
 		
 		
 		//caso 1: (OP, variable, variable)
 		if ( ( elementos.get(1).esToken() ) && ( elementos.get(2).esToken() ) ){
-			assembler = assembler + CMP + " " +  elementos.get(1).getToken().getNombre() + " " + elementos.get(2).getToken().getNombre()+ '\n';
+			assembler = assembler + CMP + " " +  elementos.get(1).getNombreVar() + ", " + elementos.get(2).getNombreVar()+ '\n';
 		}
 		else
 		//caso 2: (OP, registro, variable)
 		if ( ( !elementos.get(1).esToken() ) && ( elementos.get(2).esToken() ) ){
-			assembler =  CMP + " "  + terceto1.getRegistro() +", " + elementos.get(2).getToken().getNombre()+ '\n';
+			assembler =  CMP + " "  + terceto1.getRegistro() +", " + elementos.get(2).getNombreVar()+ '\n';
 			controladorTercetos.liberarRegistro(terceto1.getRegistro());
 		}
 		else
@@ -41,7 +41,7 @@ public class TercetoComparacion extends Terceto {
 		}
 		//caso 4: (OP, variable, registro)
 		if ( ( elementos.get(1).esToken() ) && ( !elementos.get(2).esToken() ) ){
-				assembler = CMP + " " + elementos.get(1).getToken().getNombre()+ " ,R1" + '\n';
+				assembler = CMP + " " + elementos.get(1).getNombreVar()+ " ,R1" + '\n'; ///cambiar R1
 				controladorTercetos.liberarRegistro(terceto2.getRegistro());
 		}
 		return assembler;

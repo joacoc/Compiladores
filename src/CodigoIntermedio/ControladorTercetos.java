@@ -4,6 +4,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import AnalizadorLexico.AnalizadorLexico;
 import AnalizadorLexico.Token;
 
 public class ControladorTercetos {
@@ -111,36 +112,51 @@ public class ControladorTercetos {
 		return tercetos.get(index-1);
 	}
 	
-	public String getProxRegLibre(){
+	public String getProxRegLibre(Token t){
 		for (int i =0; i< registros.size(); i++)
 			if ( !registros.get(i) ){ 
 				//esta libre y lo ocupamos		
 				if ( registros.get(0) == false ) {
 					registros.set(i, true);
-					return Terceto.reg1;
+					if (t.getTipo()==AnalizadorLexico.variableI)
+						return Terceto.reg1Integer;
+					else
+						return Terceto.reg1Long;
 					}
 				else
 					if ( registros.get(1) == false ) {
 						registros.set(i, true);
-						return Terceto.reg2;
+						if (t.getTipo()==AnalizadorLexico.variableI)
+							return Terceto.reg2Integer;
+						else
+							return Terceto.reg2Long;
 						}
 					else
 						if ( registros.get(2) == false ){
 							registros.set(i, true);
-							return Terceto.reg3;
+							if (t.getTipo()==AnalizadorLexico.variableI)
+								return Terceto.reg3Integer;
+							else
+								return Terceto.reg3Long;
 							}
-				return Terceto.reg4;
+				if (t.getTipo()==AnalizadorLexico.variableI)
+					return Terceto.reg4Integer;
+				else
+					return Terceto.reg4Long;
+
 			}
 		//estan todos los registros ocupados
+		System.out.println("estan todos los registros ocupados");
 		return " ";
 	}
+			
 	
 	public void liberarRegistro (String registro){
 		int index = 0;
-		if (registro == Terceto.reg1)  index = 0;
-		if (registro == Terceto.reg2)  index = 1;
-		if (registro == Terceto.reg3)  index = 2;
-		if (registro == Terceto.reg4)  index = 3;
+		if ( (registro == Terceto.reg1Integer)|| (registro == Terceto.reg1Long) )  index = 0;
+		if ( (registro == Terceto.reg2Integer)|| (registro == Terceto.reg2Long) )  index = 1;
+		if ( (registro == Terceto.reg3Integer)|| (registro == Terceto.reg3Long) )  index = 2;
+		if ( (registro == Terceto.reg4Integer)|| (registro == Terceto.reg4Long) )  index = 3;
 		registros.set(index, new Boolean(false));//paso a estado libre el registro en la pos index
 	}
 
@@ -157,7 +173,8 @@ public class ControladorTercetos {
 			
 			i++;
 			if ( (!labelPendientes.isEmpty()) && ( i == labelPendientes.get(labelPendientes.size()-1) ) ){
-				assembler = assembler + "Label" + String.valueOf(labelPendientes.get(labelPendientes.size()-1)) + '\n';
+				assembler = assembler + "Label" + String.valueOf(labelPendientes.get(labelPendientes.size()-1))+ ":" + '\n';
+				//assembler_l.add("Label"+String.valueOf(labelPendientes.get(labelPendientes.size()-1))+"\n");
 				borrarLabelPendiente();
 			}
 		}
@@ -169,5 +186,18 @@ public class ControladorTercetos {
 	public void addPrint(){
 		cantPrint++;
 		((TercetoPrint)tercetos.get(tercetos.size()-1)).setPrint(String.valueOf(cantPrint));
+	}
+
+	public void OcuparRegistro(String registro) {
+		int index = 0;
+		if ( (registro == Terceto.reg1Integer)|| (registro == Terceto.reg1Long) )  index = 0;
+		if ( (registro == Terceto.reg2Integer)|| (registro == Terceto.reg2Long) )  index = 1;
+		if ( (registro == Terceto.reg3Integer)|| (registro == Terceto.reg3Long) )  index = 2;
+		if ( (registro == Terceto.reg4Integer)|| (registro == Terceto.reg4Long) )  index = 3;
+		if (registros.get(index))
+			System.out.println("Se esta queriendo usar un registro ya ocupado");
+		registros.set(index, new Boolean(true));//paso a estado ocupado el registro en la pos index
+
+		
 	}
 }

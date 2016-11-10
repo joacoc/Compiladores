@@ -117,7 +117,7 @@ lista_variables : lista_variables ',' ID {	ArrayList<Token> lista = (ArrayList<T
 											
                 | ID	{	ArrayList<Token> lista = new ArrayList<>();
                 			lista.add((Token)$1.obj);
-                			$$ = new ParserVal(lista);}
+                			$$ = new ParserVal(lista); }
                 ;
 
 declaracion_matriz : MATRIX ID '[' CTEI ']' '[' CTEI ']' {  Token t = (Token) $2.obj ;
@@ -233,7 +233,7 @@ lado_izquierdo : ID {	//chequeo semantico variable no declarada
 								$$ = new ParserVal( (Token) $1.obj );}
                 ;
 
-operador_menos_menos : ID S_RESTA_RESTA { 	//agregando terceto
+operador_menos_menos : ID S_RESTA_RESTA { 	//Se realiza la resta
 											String valor = "-";
 											Token t1 = tablaSimbolo.getToken("var@" + ((Token) $1.obj).getNombre() ) ;
 											TercetoExpresion terceto;
@@ -242,12 +242,18 @@ operador_menos_menos : ID S_RESTA_RESTA { 	//agregando terceto
 											else
 												terceto = new TercetoExpresion ( new TercetoSimple( new Token("-",(int) valor.charAt(0) ) ) ,new TercetoSimple( t1 ), new TercetoSimple( new Token("_l1",analizadorL.CTEL) ),  controladorTercetos.getProxNumero() );
 											controladorTercetos.addTerceto (terceto);
+
+											//Se realiza la asignacion							
+											valor =":=";
+											TercetoAsignacion tercetoAsignacion = new TercetoAsignacion ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( t1 ), new TercetoSimple( new Token( controladorTercetos.numeroTercetoString() ) ), controladorTercetos.getProxNumero() );
+											controladorTercetos.addTerceto (tercetoAsignacion);
+											analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));
+											
 											$$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ) );
 											
 											//chequeo semantico variable no declarada
 							    			if (t1 == null) 
         			 							analizadorCI.addError (new Error ( analizadorCI.errorNoExisteVariable,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
-
 
 											//agregar estructuras
 											analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() )); }								
@@ -319,7 +325,7 @@ termino : termino '*' factor	{	String valor ="*";
 								}
     | termino '/' factor		{ String valor ="/";
     									String tipo = getTipoCompatibleDivision((Token)$1.obj,(Token)$3.obj);
-										TercetoExpresion terceto = new TercetoExpresion ( new TercetoSimple( new Token("/",(int) valor.charAt(0) ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
+										TercetoExpresionDiv terceto = new TercetoExpresionDiv ( new TercetoSimple( new Token("/",(int) valor.charAt(0) ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
 										controladorTercetos.addTerceto (terceto);
 										Token nuevo = new Token( controladorTercetos.numeroTercetoString() );
 										nuevo.setTipo(tipo);

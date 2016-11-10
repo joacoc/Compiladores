@@ -33,15 +33,15 @@ public class TercetoFor extends Terceto {
 		
 	
 		//Terceto izq. 
-		String operador = elementos.get(0).getToken().getNombre();
+		String operador = elementos.get(0).getNombreVar();
 		
 		if (operador == controladorTercetos.BF){
-			assembler = tipoSalto + " Label" + elementos.get(2).getToken().getNombre() + '\n';
-			controladorTercetos.addLabelPendiente( Integer.parseInt(elementos.get(2).getToken().getNombre() ) );
+			assembler = tipoSalto + " Label" + elementos.get(2).getNombreVar() + '\n';
+			controladorTercetos.addLabelPendiente( Integer.parseInt(elementos.get(2).getNombreVar() ) );
 		}
 		else{
 			//BI	
-			assembler = "JUMP Label" + elementos.get(1).getToken().getNombre() + '\n';
+			assembler = "JUMP Label" + elementos.get(1).getNombreVar() + '\n';
 		}
 		return assembler;
 	}
