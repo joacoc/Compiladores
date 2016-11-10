@@ -93,8 +93,9 @@ declaracion : tipo lista_variables ';' {
 							}
 							else{
 								//la variable no fue declarada
-								String tipo = ((Token) $1.obj).getNombre();
+								String tipo = t.getTipo();
 								t1.setTipo(tipo);
+								t1.setMatriz(t.getMatriz());
 								tablaSimbolo.addSimbolo(t1);
 								tablaSimbolo.addUso(t1.getNombre(),analizadorS.usoVariableArreglo);
 								}
@@ -237,10 +238,19 @@ operador_menos_menos : ID S_RESTA_RESTA { 	//Se realiza la resta
 											String valor = "-";
 											Token t1 = tablaSimbolo.getToken("var@" + ((Token) $1.obj).getNombre() ) ;
 											TercetoExpresion terceto;
-											if ( t1.getTipo() == analizadorL.variableI )
-												terceto = new TercetoExpresion ( new TercetoSimple( new Token("-",(int) valor.charAt(0) ) ) ,new TercetoSimple( t1 ), new TercetoSimple( new Token("_i1",analizadorL.CTEI) ),  controladorTercetos.getProxNumero() );
-											else
-												terceto = new TercetoExpresion ( new TercetoSimple( new Token("-",(int) valor.charAt(0) ) ) ,new TercetoSimple( t1 ), new TercetoSimple( new Token("_l1",analizadorL.CTEL) ),  controladorTercetos.getProxNumero() );
+
+											if ( t1.getTipo() == analizadorL.variableI ){
+												Token cteAux =  new Token("_i1",analizadorL.CTEI) ;
+												cteAux.setTipo(analizadorL.variableI);	
+												cteAux.setValor(1);
+												terceto = new TercetoExpresion ( new TercetoSimple( new Token("-",(int) valor.charAt(0) ) ) ,new TercetoSimple( t1 ), new TercetoSimple( cteAux ),  controladorTercetos.getProxNumero() );
+											}
+											else{	
+												Token cteAux =  new Token("_l1",analizadorL.CTEL) ;
+												cteAux.setTipo(analizadorL.variableL);	
+												cteAux.setValor(1);
+												terceto = new TercetoExpresion ( new TercetoSimple( new Token("-",(int) valor.charAt(0) ) ) ,new TercetoSimple( t1 ), new TercetoSimple( cteAux ),  controladorTercetos.getProxNumero() );
+											}
 											controladorTercetos.addTerceto (terceto);
 
 											//Se realiza la asignacion							
@@ -260,6 +270,7 @@ operador_menos_menos : ID S_RESTA_RESTA { 	//Se realiza la resta
 						| celda_matriz  S_RESTA_RESTA { 	
 															//agregando terceto
 															String valor = "-";
+
 															TercetoExpresion terceto = new TercetoExpresion ( new TercetoSimple( new Token("-",(int) valor.charAt(0) ) ) ,new TercetoSimple( (Token)$1.obj ), new TercetoSimple( new Token("_i1",analizadorL.CTEI) ), controladorTercetos.getProxNumero() );
 															controladorTercetos.addTerceto (terceto);
 															$$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ) );
@@ -650,8 +661,8 @@ public boolean setTercetosMatriz(String orientacion, ArrayList<ArrayList<Token>>
 							inicializador = new Token("_l0", analizadorL.CTEL);
 						inicializador.setValor(0);			
 
-						TercetoAsignacion terceto = new TercetoAsignacion ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( inicializador ), new TercetoSimple( t ), controladorTercetos.getProxNumero() );
-						controladorTercetos.addTerceto (terceto);
+						//TercetoAsignacion terceto = new TercetoAsignacion ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( inicializador ), new TercetoSimple( t ), controladorTercetos.getProxNumero() );
+						//controladorTercetos.addTerceto (terceto);
 						//$$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ));
 						analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));
 					}
@@ -674,8 +685,8 @@ public boolean setTercetosMatriz(String orientacion, ArrayList<ArrayList<Token>>
 							inicializador = new Token("_l0", analizadorL.CTEL);
 						inicializador.setValor(0);			
 
-						Terceto terceto = new TercetoAsignacion ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( inicializador ), new TercetoSimple( t ), controladorTercetos.getProxNumero() );
-						controladorTercetos.addTerceto (terceto);
+						//Terceto terceto = new TercetoAsignacion ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( inicializador ), new TercetoSimple( t ), controladorTercetos.getProxNumero() );
+						// controladorTercetos.addTerceto (terceto);
 						// $$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ));
 						analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));
 					}
@@ -701,13 +712,14 @@ public boolean setTercetosMatriz(String orientacion, ArrayList<ArrayList<Token>>
 				inicializador.setValor(0);			
 
 				Token t = matriz[faux][caux];	
-				Terceto terceto = new TercetoAsignacion ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( inicializador ), new TercetoSimple( inicializador ), controladorTercetos.getProxNumero() );
-				controladorTercetos.addTerceto (terceto);
+				// Terceto terceto = new TercetoAsignacion ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( inicializador ), new TercetoSimple( inicializador ), controladorTercetos.getProxNumero() );
+				// controladorTercetos.addTerceto (terceto);
 				// $$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ));
 				analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));
 			}
 		}
 	}
+	declaracion_matriz.setMatriz(matriz);
 	return true;
 }
 
