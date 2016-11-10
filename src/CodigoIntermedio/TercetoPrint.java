@@ -11,9 +11,7 @@ public class TercetoPrint extends Terceto {
 
 	public String getAssembler() {
 		// TODO Auto-generated method stub
-		String assembler = "invoke MessageBox, NULL, addr "+ print +", addr "+print+", MB_OK \n"
-				+ "invoke ExitProcess, 0\n";
-		
+		String assembler = "invoke MessageBox, NULL, addr "+ print +", addr "+print+", MB_OK \n";
 		return assembler;
 	}
 	

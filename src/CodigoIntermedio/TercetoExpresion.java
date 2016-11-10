@@ -73,7 +73,10 @@ public class TercetoExpresion extends Terceto {
 			}
 				
 		}
-		assembler = assembler + getAssemblerErrores(); //ver porque hay que reubicarlo porquen en div va antes y en suma desp
+		
+		if(getAssemblerErrores()!=null)
+			assembler = assembler + getAssemblerErrores(); //ver porque hay que reubicarlo porquen en div va antes y en suma desp
+		
 		return assembler;
 	}
 
