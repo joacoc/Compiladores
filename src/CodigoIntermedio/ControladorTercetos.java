@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 import AnalizadorLexico.AnalizadorLexico;
+import AnalizadorLexico.TablaSimbolos;
 import AnalizadorLexico.Token;
 
 public class ControladorTercetos {
@@ -17,6 +18,8 @@ public class ControladorTercetos {
 	private ArrayList<Integer> pila;
 	ArrayList<Boolean>registros; //ver el tipo
 	private ArrayList<Integer> labelPendientes; // por el tema del if
+	private ArrayList<Token> prints;
+	private TablaSimbolos tablaSimbolos;
 
 	private int cantPrint = 0;
 	
@@ -29,7 +32,9 @@ public class ControladorTercetos {
 		registros.add(false);
 		registros.add(false);
 		registros.add(false);
-		labelPendientes = new ArrayList<Integer>(); 
+		labelPendientes = new ArrayList<Integer>();
+		prints = new ArrayList<Token>();
+		tablaSimbolos = null;
 	}
 	
 	public String imprimirTercetos() {
@@ -183,11 +188,17 @@ public class ControladorTercetos {
 	
 	//Informa que se agrego un terceto de print y modifica el ultimo terceto para coordinar
 	//el nombre con el .datat del ASM
-	public void addPrint(){
-		cantPrint++;
-		((TercetoPrint)tercetos.get(tercetos.size()-1)).setPrint(String.valueOf(cantPrint));
+	public void addPrint(String nombre){
+		prints = tablaSimbolos.getPrints();
+		for (int i=0; i<prints.size(); i++)
+			if ( prints.get(i).getNombre() == nombre)
+				((TercetoPrint)tercetos.get(tercetos.size()-1)).setPrint(String.valueOf(i+1));
 	}
 
+	public void setTablaSimbolos(TablaSimbolos tablaSimbolos) {
+		this.tablaSimbolos = tablaSimbolos;
+	}
+	
 	public void OcuparRegistro(String registro) {
 		int index = 0;
 		if ( (registro == Terceto.reg1Integer)|| (registro == Terceto.reg1Long) )  index = 0;
@@ -196,8 +207,13 @@ public class ControladorTercetos {
 		if ( (registro == Terceto.reg4Integer)|| (registro == Terceto.reg4Long) )  index = 3;
 		if (registros.get(index))
 			System.out.println("Se esta queriendo usar un registro ya ocupado");
-		registros.set(index, new Boolean(true));//paso a estado ocupado el registro en la pos index
-
-		
+		registros.set(index, new Boolean(true));//paso a estado ocupado el registro en la pos index		
+	}
+	
+	public String getPrintsAssembler(){
+		String assembler = "";
+		for (Token t:prints)
+			assembler = assembler + tablaSimbolos.getTipoAssember(t) + '\n';
+		return assembler;
 	}
 }

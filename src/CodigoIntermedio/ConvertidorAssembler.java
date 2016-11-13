@@ -30,6 +30,7 @@ public class ConvertidorAssembler {
 	
 	public void setTablaSimb(TablaSimbolos tablaSimb) {
 		this.tablaSimb = tablaSimb;
+		controladorTercetos.setTablaSimbolos(tablaSimb);
 	}
 	
 	public void generarAssembler () throws IOException{
@@ -71,6 +72,7 @@ public class ConvertidorAssembler {
 				+ "includelib \\masm32\\lib\\user32.lib" + '\n'
 				+ '\n' +".data" + '\n');	
 		String data = tablaSimb.getAssembler() ;
+		data = data + controladorTercetos.getPrintsAssembler();
 		data = data + "DividirCero db \"Error al dividir por cero!\", 0" + '\n';
 		data = data + "Overflow db \"El resultado de la operacion se fue de rango!\", 0" + '\n';
 		data = data + '\n' + ".code"+ "\n";

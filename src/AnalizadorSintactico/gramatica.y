@@ -354,7 +354,7 @@ factor : CTEI  { Token t= (Token) $1.obj;
  
 print : PRINT '(' MULTI_LINEA ')' ';' {	TercetoPrint terceto = new TercetoPrint ( new TercetoSimple( (Token)$1.obj ),new TercetoSimple( (Token)$3.obj ), null, controladorTercetos.getProxNumero() );
 										controladorTercetos.addTerceto (terceto);
-										controladorTercetos.addPrint();
+										controladorTercetos.addPrint( ((Token)$3.obj).getNombre() );
 										analizadorS.addEstructura (new Error ( analizadorS.estructuraPrint,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
 		  | PRINT '(' error ')' ';' { analizadorS.addError (new Error ( analizadorS.errorPrint1,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }	 
 		  | PRINT '(' MULTI_LINEA ')' error{ analizadorS.addError (new Error ( analizadorS.errorPrint1,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
