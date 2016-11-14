@@ -88,10 +88,14 @@ public class TablaSimbolos {
 				
 				//Si es un comentario es distinto ya que se hace print1 + el assembler xq
 				// t.getNombre() retornaria "*comentario*" entre comillas y generaria un error en el ASM
+
 				if(t.getUso() != AnalizadorLexico.MULTI_LINEA)
-//					assembler = assembler + tipoAssembler + '\n';
-//				else
-					assembler = assembler + t.getNombre()+ " " + tipoAssembler + '\n';
+					if(t.getNombre().startsWith("mat@", 0)){
+						assembler = assembler + t.getNombre()+ " "+tipoAssembler;
+						assembler = assembler.substring(0, assembler.length()-1) + ((TokenMatriz) t).getValores();;
+					}else
+						assembler = assembler + t.getNombre()+ " " + tipoAssembler + '\n';
+
 			}
 		}
 		return assembler;
@@ -101,11 +105,13 @@ public class TablaSimbolos {
 		String tipo = "";
 		AnalizadorLexico analizador = new AnalizadorLexico(null, null); //es para usar las constantes
 		
-		if ( t.getTipo() == analizador.variableI )
+		if ( t.getTipo() == analizador.variableI ){
 			tipo = ochoBits;
+		}
 		else
-			if ( t.getTipo() == analizador.variableL )
+			if ( t.getTipo() == analizador.variableL ){
 				tipo = dieciseisBits;	
+			}
 			else
 				if( t.getUso() == analizador.MULTI_LINEA){
 					//Se lleva una cuenta de la posicion del print para luego 

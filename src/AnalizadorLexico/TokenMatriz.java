@@ -9,6 +9,7 @@ public class TokenMatriz extends Token{
 	//Orientacion. False == filas. True == columnas. 
 	//Por defecto = filas.
 	boolean orientacion = false;
+	Token[][] arregloTokens;
 	
 	public TokenMatriz(String numeroTercetoString) {
 		super(numeroTercetoString);
@@ -56,6 +57,25 @@ public class TokenMatriz extends Token{
 			return "2"; //esta en bytes ver que onda.
 		else
 			return "4"; 
+	}
+	
+	public void setMatriz(Token[][] arregloTokens){
+		this.arregloTokens = arregloTokens;
+	};
+	
+	public Token[][] getMatriz(){
+		return this.arregloTokens;
+	}
+	
+	public String getValores(){
+		StringBuilder buffer = new StringBuilder();
+		
+		for(int i = 0; i<filas; i++)
+			for(int k = 0; k<columnas; k++)
+				buffer.append(arregloTokens[i][k].getValor()+",");
+		buffer.deleteCharAt(buffer.length()-1);
+		buffer.append("\n");
+		return buffer.toString();
 	}
 	
 }
