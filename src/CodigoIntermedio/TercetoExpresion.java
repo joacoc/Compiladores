@@ -41,6 +41,7 @@ public class TercetoExpresion extends Terceto {
 		
 		//caso 1: (OP, variable, variable)
 		if ( ( elementos.get(1).esToken() ) && ( elementos.get(2).esToken() ) ){
+			System.out.println("entro aca");
 			String registro = controladorTercetos.getProxRegLibre(elementos.get(1).getToken());
 			this.setRegistro(registro);
 			assembler = MOV + " " + registro +", " + elementos.get(1).getNombreVar()  + '\n'; 
@@ -50,7 +51,8 @@ public class TercetoExpresion extends Terceto {
 		//caso 2: (OP, registro, variable)
 		if ( ( !elementos.get(1).esToken() ) && ( elementos.get(2).esToken() ) ){
 			this.setRegistro(terceto1.getRegistro());// se usa el del primer terceto.
-			assembler = opAssembler + " " + terceto1.getRegistro() + " ," + elementos.get(1).getNombreVar()+ '\n';
+			
+			assembler = opAssembler + " " + terceto1.getRegistro() + " ," + elementos.get(2).getNombreVar()+ '\n';
 		}
 		else
 		//caso 3: (OP, registro, registro)
@@ -58,7 +60,7 @@ public class TercetoExpresion extends Terceto {
 			this.setRegistro( terceto1.getRegistro() );
 			assembler = opAssembler + " " + terceto1.getRegistro() + " , " + terceto2.getRegistro() + '\n';
 		}
-		//caso 4: (OP, registro, registro)
+		//caso 4: (OP, variable, registro)
 		if ( ( elementos.get(1).esToken() ) && ( !elementos.get(2).esToken() ) ){
 			if ( esConmutativo(operador) ){
 				String registro = controladorTercetos.getProxRegLibre(elementos.get(1).getToken());

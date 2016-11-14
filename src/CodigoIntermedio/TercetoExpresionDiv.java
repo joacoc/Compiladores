@@ -48,12 +48,20 @@ public class TercetoExpresionDiv extends TercetoExpresion{
 
 				assembler = assembler + MOV + " " + registroAX +", " + elementos.get(1).getNombreVar()  + '\n';
 				assembler = assembler + MOV + " " + registroDX +", " + "0"  + '\n';
-//				assembler = assembler + "CWD" + '\n';
+				assembler = assembler + "CWD" + '\n';
 				
 				String registro = controladorTercetos.getProxRegLibre(elementos.get(1).getToken());
 				assembler = assembler + MOV + " " + registro +", " + elementos.get(2).getNombreVar()  + '\n';
 				this.setRegistro(registro);
+				
+				//chequeamos que no sea cero el divisor
+				if (elementos.get(2).getToken().getTipo() == AnalizadorLexico.constanteI)
+					assembler = assembler + getAssemblerErrorDivCero(registro, true); 
+				else
+					assembler = assembler + getAssemblerErrorDivCero(registro, false); 
+				
 				assembler = assembler + opAssembler + " " + registro + '\n';
+				assembler = assembler + MOV + " " + this.getRegistro() +", " + registroAX  + '\n';
 				controladorTercetos.liberarRegistro(registroAX);
 				controladorTercetos.liberarRegistro(registroDX);
 			}
@@ -87,49 +95,36 @@ public class TercetoExpresionDiv extends TercetoExpresion{
 					assembler =assembler + MOV + " " + registroDX +", " + "0"  + '\n';					
 					assembler =assembler + MOV + " " + registroAX +", " + terceto1.getRegistro()  + '\n';
 					controladorTercetos.liberarRegistro(terceto1.getRegistro());
-//					assembler = assembler + "CWD" + '\n';
+					assembler = assembler + "CWD" + '\n';
 					
 					String registro = controladorTercetos.getProxRegLibre(elementos.get(2).getToken());
+					assembler =assembler + MOV + " " + registro +", " + elementos.get(2).getNombreVar()  + '\n';
 					this.setRegistro(registro);
+			
+					//chequeamos que no sea cero el divisor
+					if (elementos.get(2).getToken().getTipo() == AnalizadorLexico.constanteI)
+						assembler = assembler + getAssemblerErrorDivCero(registro, true); 
+					else
+						assembler = assembler + getAssemblerErrorDivCero(registro, false); 
 					assembler = assembler + opAssembler + " " + registro + '\n';
+					assembler = assembler + MOV + " " + this.getRegistro() +", " + registroAX  + '\n';
 					controladorTercetos.liberarRegistro(registroAX);
 					controladorTercetos.liberarRegistro(registroDX);
 				}
-//			else
-//			//caso 3: (OP, registro, registro)
-//			if ( ( !elementos.get(1).esToken() ) && ( !elementos.get(2).esToken() ) ){
-//				this.setRegistro( terceto1.getRegistro() );
-//				assembler = opAssembler + " " + terceto1.getRegistro() + " , " + terceto2.getRegistro() + '\n';
-//			}
-//			//caso 4: (OP, registro, registro)
-//			if ( ( elementos.get(1).esToken() ) && ( !elementos.get(2).esToken() ) ){
-//				if ( esConmutativo(operador) ){
-//					String registro = controladorTercetos.getProxRegLibre();
-//					assembler = opAssembler + " " +  registro + ", " + elementos.get(1).getNombreVar()+ '\n'; // lo mismo, ver si es r1
-//					this.setRegistro(registro);
-//				}
-//				else{
-//					String registro = controladorTercetos.getProxRegLibre();
-//					this.setRegistro(registro); //verificar puedo haber flashado.
-//					assembler = MOV + " " + registro + ", " + elementos.get(1).getNombreVar() + '\n';
-//					assembler = assembler + opAssembler + " "+ terceto1.getRegistro() + ", " + terceto2.getRegistro() + '\n';//mirar desp tambien
-//				}
-//					
-//			}
-//			assembler = assembler + getAssemblerErrorDivCero(); //ver porque hay que reubicarlo porquen en div va antes y en suma desp
+
 			return assembler;
 		}
 
-		private String getAssemblerErrorDivCero() {
-			if ( elementos.get(0).getNombreVar() == "/" ){
-				AnalizadorLexico al = new AnalizadorLexico(null, null);
-				String igual = "=";
-				TercetoComparacion tc = new TercetoComparacion( new TercetoSimple( new Token("=", (int) igual.charAt(0) ) ) , new TercetoSimple(elementos.get(2).getToken() ), new TercetoSimple(new Token( "_i0", al.CTEI ) ), 0);
-				String assembler = tc.getAssembler() ;
-				assembler = assembler + "JE LabelDivCero" + '\n';
-				return assembler;
-			}
-			return null;
+		private String getAssemblerErrorDivCero(String registro, boolean integer) {
+			String registroCero = "";
+			if (integer)
+				registroCero = controladorTercetos.getProxRegLibre(new Token("_i0",AnalizadorLexico.CTEI));
+			else
+				registroCero = controladorTercetos.getProxRegLibre(new Token("_l0",AnalizadorLexico.CTEL));
+			String assembler = "CMP " + registro + ", 0" + '\n';
+			assembler = assembler + "JE LabelDivCero" + '\n';
+			controladorTercetos.liberarRegistro(registroCero);
+			return assembler;
 		}
 
 }

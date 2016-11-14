@@ -26,7 +26,7 @@ public class TercetoSimple {
 	
 	public boolean esToken(){
 		char c = t.getNombre().charAt(0);
-		return (!Character.isDigit(c));
+		return (!Character.isDigit(c) || c=='_' );
 	}
 	
 	public int getNumeroTerceto(){
@@ -35,8 +35,10 @@ public class TercetoSimple {
 	}
 	
 	public String getNombreVar(){
-		if ( (t.getUso() == AnalizadorLexico.CTEI ) || (t.getUso() == AnalizadorLexico.CTEL ) )
-			return String.valueOf(t.getValor());
+		if ( (t.getUso() == AnalizadorLexico.CTEI ) || (t.getUso() == AnalizadorLexico.CTEL ) ){
+			String valor = t.getNombre().substring(2);
+			return String.valueOf(valor);
+		}
 		else
 			return t.getNombre();
 	}

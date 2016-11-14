@@ -126,7 +126,7 @@ public class TablaSimbolos {
 	
 	private boolean estaPrint(Token token){
 		for (Token t:prints)
-			if ( t.getNombre() == token.getNombre() )
+			if ( t.getNombre().equals( token.getNombre() ) )
 				return true;
 		return false;
 	}
