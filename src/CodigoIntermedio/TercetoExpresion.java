@@ -8,7 +8,7 @@ public class TercetoExpresion extends Terceto {
 	public final static String MOV = "MOV";
 	public final static String ADD = "ADD";
 	public final static String SUB = "SUB";
-	public final static String MULT = "MULT";
+	public final static String MULT = "MUL";
 	public final static String DIV = "DIV";
 	
 	
@@ -25,7 +25,7 @@ public class TercetoExpresion extends Terceto {
 		if (op == "+") return "ADD";
 		if (op == "-") return "SUB";
 		if (op == "/") return "DIV";
-		return "MULT";
+		return "MUL";
 	}
 	
 	public String getAssembler() {
