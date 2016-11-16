@@ -32,4 +32,8 @@ public class AnalizadorCodigoIntermedio {
 		else
 			return aux;
 	}
+	
+	public boolean hayErrores() {
+		return (!erroresCodigoIntermedio.isEmpty());	
+	}
 }

@@ -303,4 +303,9 @@ public class AnalizadorLexico {
 		return cadena;
 		
 	}
+	
+	public boolean hayErrores() {
+		return (!erroresComp.isEmpty());
+		
+	}
 }

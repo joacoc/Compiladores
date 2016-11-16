@@ -20,10 +20,10 @@ public class TercetoIf extends Terceto {
 				this.tipoSalto = "JNE";
 			else
 				if(tipoSalto.equals(">="))
-					this.tipoSalto = "JB";
+					this.tipoSalto = "JL";
 				else
 					if(tipoSalto.equals(">"))
-						this.tipoSalto = "JBE";
+						this.tipoSalto = "JLE";
 					else
 						if(tipoSalto.equals("<"))
 							this.tipoSalto = "JGE";

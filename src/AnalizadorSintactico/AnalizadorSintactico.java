@@ -90,4 +90,8 @@ public class AnalizadorSintactico {
 		else
 			return aux;
 	}
+	
+	public boolean hayErrores() {
+		return (!erroresSint.isEmpty());
+	}
 }

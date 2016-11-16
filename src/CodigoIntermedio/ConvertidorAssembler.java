@@ -17,7 +17,7 @@ import AnalizadorLexico.TablaSimbolos;
 public class ConvertidorAssembler {
 
 	public static final String labelDivCero = "LabelDivCero";
-	public static final String labelOverflow = "LabelOverflow";
+	public static final String labelPerdida = "LabelERRORPERDIDA:";
 
 	static ControladorTercetos controladorTercetos;
 	static TablaSimbolos tablaSimb;
@@ -74,7 +74,7 @@ public class ConvertidorAssembler {
 		String data = tablaSimb.getAssembler() ;
 		data = data + controladorTercetos.getPrintsAssembler();
 		data = data + "DividirCero db \"Error al dividir por cero!\", 0" + '\n';
-		data = data + "Overflow db \"El resultado de la operacion se fue de rango!\", 0" + '\n';
+		data = data + "errorPerdida db \"Hay perdida de informacion a la hora de realizar una asignacion\", 0" + '\n';
 		data = data + '\n' + ".code"+ "\n";
 
 		bw.write( data );
@@ -96,8 +96,8 @@ public class ConvertidorAssembler {
 		String errores = labelDivCero + ":" + '\n';
 		errores = errores + "invoke MessageBox, NULL, addr DividirCero, addr DividirCero, MB_OK" + '\n';
 		errores = errores + "invoke ExitProcess, 0" + '\n';
-		errores = errores + labelOverflow + ":" + '\n';
-		errores = errores + "invoke MessageBox, NULL, addr Overflow, addr Overflow, MB_OK" + '\n';
+		errores = errores + labelPerdida + ":" + '\n';
+		errores = errores + "invoke MessageBox, NULL, addr errorPerdida, addr errorPerdida, MB_OK" + '\n';
 		errores = errores + "invoke ExitProcess, 0" + '\n';
 		return errores;
 	}

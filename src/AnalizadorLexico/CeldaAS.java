@@ -6,8 +6,8 @@ public class CeldaAS extends CeldaAbs {
 	static final String identificador = "I";
 	static final String constanteL = "CL";
 	
-	static final long maximo = 32767;
-	static final long minimo = -32768;
+	public static final long maximo = 32767;
+	public static final long minimo = -32768;
 	static final long maximoL = 2147483647;
 	static final long minimoL = -2147483648;
 	

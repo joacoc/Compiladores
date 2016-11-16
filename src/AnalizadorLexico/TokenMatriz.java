@@ -10,6 +10,7 @@ public class TokenMatriz extends Token{
 	//Por defecto = filas.
 	boolean orientacion = false;
 	Token[][] arregloTokens;
+	int distancia;
 	
 	public TokenMatriz(String numeroTercetoString) {
 		super(numeroTercetoString);
@@ -39,7 +40,6 @@ public class TokenMatriz extends Token{
 	}
 
 	public int getFilas(){
-		System.out.println("filas: ");		System.out.println(filas);
 		return filas;
 	}
 	
@@ -52,8 +52,7 @@ public class TokenMatriz extends Token{
 	}
 	
 	public String getBits(){
-		AnalizadorLexico al =new AnalizadorLexico(null, null);
-		if (this.getTipo() == al.constanteI)
+		if (this.getTipo() == AnalizadorLexico.variableI)
 			return "2"; //esta en bytes ver que onda.
 		else
 			return "4"; 
@@ -76,6 +75,11 @@ public class TokenMatriz extends Token{
 		buffer.deleteCharAt(buffer.length()-1);
 		buffer.append("\n");
 		return buffer.toString();
+	}
+	
+	public String getNombre() {
+		String cadena = super.getNombre() + "[" + String.valueOf(distancia) + "]";
+		return super.getNombre();
 	}
 	
 }

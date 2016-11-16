@@ -216,4 +216,12 @@ public class ControladorTercetos {
 			assembler = assembler + tablaSimbolos.getTipoAssember(t) + '\n';
 		return assembler;
 	}
+
+	public String getRegistroInteger(String registro) {
+		if (registro == Terceto.reg1Long) return Terceto.reg1Integer;
+		if (registro == Terceto.reg2Long) return Terceto.reg2Integer;
+		if (registro == Terceto.reg3Long) return Terceto.reg3Integer;
+		if (registro == Terceto.reg4Long) return Terceto.reg4Integer;
+		return registro;
+	}
 }

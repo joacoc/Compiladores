@@ -124,7 +124,8 @@ lista_variables : lista_variables ',' ID {	ArrayList<Token> lista = (ArrayList<T
 declaracion_matriz : MATRIX ID '[' CTEI ']' '[' CTEI ']' {  Token t = (Token) $2.obj ;
 															TokenMatriz tm = new TokenMatriz(t.getNombre(), t.getUso(), ((Token)$4.obj).getValor(), ((Token)$7.obj).getValor());
 															$$ = new ParserVal( tm );
-															analizadorS.addEstructura (new Error ( analizadorS.estructuraDECLARACION,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
+															analizadorS.addEstructura (new Error ( analizadorS.estructuraDECLARACION,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); 
+														 }
 				   | MATRIX error '[' CTEI ']' '[' CTEI ']' { analizadorS.addError (new Error ( analizadorS.errorDeclaracionMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
 				   | MATRIX ID '[' error ']' '[' CTEI ']' { analizadorS.addError (new Error ( analizadorS.errorDeclaracionMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
 				   | MATRIX ID '[' CTEI ']' '[' error ']'	{ analizadorS.addError (new Error ( analizadorS.errorDeclaracionMatriz,"ERROR SINTACTICO", controladorArchivo.getLinea() )); }
@@ -285,22 +286,26 @@ operador_menos_menos : ID S_RESTA_RESTA { 	//Se realiza la resta
 													}	
 						;
 
-asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion { String valor =":=";																	analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));
+asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion { 
+																	analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));
+																	
+																	String valor =":=";	
 																	Token t1 = (Token) $1.obj;
 																	Token t2 = (Token) $3.obj;
-																	if ((t1 != null) && (t2 != null))
+																	if ( (t1 != null) && (t2 != null) ){
 																		if(!tipoCompatible(t1,t2))
 																			analizadorCI.addError (new Error ( analizadorCI.errorFaltaAllow,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
-																	
 																	}
-																	if ((t1 != null) && (t2 != null)){
-																		if ((t1.getTipo().equals("longint")) && (t2.getTipo().equals("integer"))){
-																			t2.setTipo("longint");
-																			TercetoAsignacion terceto = new TercetoAsignacion ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( t2 ), controladorTercetos.getProxNumero() );
-																	TercetoAsignacion terceto = new TercetoAsignacion ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
-																	controladorTercetos.addTerceto (terceto);
+																	
+																	//if ( (t1 != null) && (t2 != null) )
+																	//	if ((t1.getTipo().equals("longint")) && (t2.getTipo().equals("integer")))
+																	//		t2.setTipo("longint");
+
+																	TercetoAsignacion terceto = new TercetoAsignacion ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( t2 ), controladorTercetos.getProxNumero() );
+																	controladorTercetos.addTerceto (terceto);								
 
 																	$$ = new ParserVal((Token)$1.obj);
+																	}
 																	
                            | operador_menos_menos { analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
                            | lado_izquierdo S_ASIGNACION error { analizadorS.addError (new Error ( analizadorS.errorAsignacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }      

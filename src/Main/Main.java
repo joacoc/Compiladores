@@ -77,15 +77,19 @@ public class Main {
         parser.run();
 
 //        System.out.println( analizadorLexico.mostrarTokens() );
-          System.out.println( analizadorLexico.mostrarTs() );
+//          System.out.println( analizadorLexico.mostrarTs() );
 //        System.out.println(analizadorLexico.mostrarWarning());
 //        System.out.println(analizadorLexico.mostrarErrorComp());
-//        System.out.println(analizadorSintactico.getErroresSint());
+        System.out.println(analizadorSintactico.getErroresSint());
 //        System.out.println(analizadorSintactico.getEstructuras());
         System.out.println(analizadorCodigoIntermedio.getErroresCI());
-        System.out.println( controladorTercetos.imprimirTercetos() );
-        convertidorAssembler.generarAssembler();
-        System.out.println( convertidorAssembler.generarArchivo() );
+        if ( analizadorCodigoIntermedio.hayErrores() || analizadorLexico.hayErrores() || analizadorSintactico.hayErrores() )
+        	System.out.println( "No se genera codigo intermedio por errores en el codigo" );
+        else{
+	        System.out.println( controladorTercetos.imprimirTercetos() );
+	        convertidorAssembler.generarAssembler();
+	        System.out.println( convertidorAssembler.generarArchivo() );
+        }
         
 	}
 }

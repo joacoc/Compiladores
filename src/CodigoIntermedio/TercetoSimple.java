@@ -8,6 +8,7 @@ import AnalizadorLexico.Token;
 public class TercetoSimple {
 	Token t;
 	
+	
 	public TercetoSimple(Token t) {
 		this.t= t;
 	}
