@@ -10,15 +10,20 @@ public class TokenMatriz extends Token{
 	//Por defecto = filas.
 	boolean orientacion = false;
 	Token[][] arregloTokens;
+	int pos;
 	
 	public TokenMatriz(String numeroTercetoString) {
 		super(numeroTercetoString);
 		// TODO Auto-generated constructor stub
 	}
 	
-
 	public TokenMatriz(String nombre, int uso) {
 		super(nombre,uso);
+	}
+	
+	public TokenMatriz(Token t, long filas, long columnas){
+		super(t.getNombre(),t.getUso());
+		setDimensiones((int)filas, (int) columnas);
 	}
 	
 	public TokenMatriz(String nombre, int uso, long filas, long columnas) {
@@ -76,6 +81,14 @@ public class TokenMatriz extends Token{
 		buffer.deleteCharAt(buffer.length()-1);
 		buffer.append("\n");
 		return buffer.toString();
+	}
+	
+	public void setPos(int pos){
+		this.pos = pos;
+	}
+	
+	public int getPos(){
+		return pos;
 	}
 	
 }

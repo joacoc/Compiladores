@@ -17,10 +17,8 @@ public abstract class Terceto {
 	protected int numeroTerceto;
 	protected ControladorTercetos controladorTercetos;
 	String registro;
-	
+	int posicion;
 
-
-	
 	public Terceto(TercetoSimple izq, TercetoSimple medio, TercetoSimple der, int numeroTerceto) {
 		elementos = new ArrayList<TercetoSimple>();
 		elementos.add(izq);
@@ -28,6 +26,14 @@ public abstract class Terceto {
 		elementos.add(der);
 		this.numeroTerceto = numeroTerceto;
 		
+	}
+	
+	public void setPosicionTerceto(int pos){
+		posicion = pos;
+	}
+	
+	public int getPosicionTerceto(){
+		return posicion;
 	}
 	
 	public String imprimirTerceto(){

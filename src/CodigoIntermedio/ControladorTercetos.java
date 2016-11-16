@@ -14,6 +14,7 @@ public class ControladorTercetos {
 	public static final String BI = "BI";
 	public static final int cantReg = 4;
 	
+	
 	private ArrayList<Terceto> tercetos;
 	private ArrayList<Integer> pila;
 	ArrayList<Boolean>registros; //ver el tipo
@@ -22,8 +23,10 @@ public class ControladorTercetos {
 	private TablaSimbolos tablaSimbolos;
 
 	private int cantPrint = 0;
+	private int num_terceto_actual = 0;
 	
-	
+	private String ultimoRegistro = null; 
+			
 	public ControladorTercetos() {
 		tercetos = new ArrayList<Terceto>();
 		pila = new ArrayList<Integer>();
@@ -65,8 +68,6 @@ public class ControladorTercetos {
 	public void addLabelPendiente(int labelPendiente) {
 		this.labelPendientes.add( labelPendiente );
 	}
-	
-
 	
 	public String numeroTercetoString(){
 		return String.valueOf(tercetos.size());
@@ -123,31 +124,47 @@ public class ControladorTercetos {
 				//esta libre y lo ocupamos		
 				if ( registros.get(0) == false ) {
 					registros.set(i, true);
-					if (t.getTipo()==AnalizadorLexico.variableI)
+					if (t.getTipo()==AnalizadorLexico.variableI){
+						ultimoRegistro = Terceto.reg1Integer;
 						return Terceto.reg1Integer;
-					else
+					}
+					else{
+						ultimoRegistro = Terceto.reg1Long;
 						return Terceto.reg1Long;
+					}
 					}
 				else
 					if ( registros.get(1) == false ) {
 						registros.set(i, true);
-						if (t.getTipo()==AnalizadorLexico.variableI)
+						if (t.getTipo()==AnalizadorLexico.variableI){
+							ultimoRegistro = Terceto.reg2Integer;
 							return Terceto.reg2Integer;
-						else
+						}
+						else{
+							ultimoRegistro = Terceto.reg2Long;
 							return Terceto.reg2Long;
+						}
 						}
 					else
 						if ( registros.get(2) == false ){
 							registros.set(i, true);
-							if (t.getTipo()==AnalizadorLexico.variableI)
+							if (t.getTipo()==AnalizadorLexico.variableI){
+								ultimoRegistro = Terceto.reg3Integer;
 								return Terceto.reg3Integer;
-							else
+							}
+							else{
+								ultimoRegistro = Terceto.reg3Long;
 								return Terceto.reg3Long;
 							}
-				if (t.getTipo()==AnalizadorLexico.variableI)
+							}
+				if (t.getTipo()==AnalizadorLexico.variableI){
+					ultimoRegistro = Terceto.reg4Integer;
 					return Terceto.reg4Integer;
-				else
+				}
+				else{
+					ultimoRegistro = Terceto.reg4Long;
 					return Terceto.reg4Long;
+				}
 
 			}
 		//estan todos los registros ocupados
@@ -155,7 +172,9 @@ public class ControladorTercetos {
 		return " ";
 	}
 			
-	
+	public String getUltimoRegistro(){
+		return ultimoRegistro;
+	}
 	public void liberarRegistro (String registro){
 		int index = 0;
 		if ( (registro == Terceto.reg1Integer)|| (registro == Terceto.reg1Long) )  index = 0;
@@ -168,7 +187,7 @@ public class ControladorTercetos {
 	public String generarAssembler() {
 		String assembler = "";
 		
-		int i = 1; //numero de terceto para colocar el label
+		num_terceto_actual = 1; //numero de terceto para colocar el label
 		
 		for ( Terceto t: tercetos ){
 			
@@ -176,14 +195,18 @@ public class ControladorTercetos {
 			assembler = assembler + t.getAssembler();
 			//assembler_l.add(t.getAssembler());
 			
-			i++;
-			if ( (!labelPendientes.isEmpty()) && ( i == labelPendientes.get(labelPendientes.size()-1) ) ){
+			num_terceto_actual++;
+			if ( (!labelPendientes.isEmpty()) && ( num_terceto_actual == labelPendientes.get(labelPendientes.size()-1) ) ){
 				assembler = assembler + "Label" + String.valueOf(labelPendientes.get(labelPendientes.size()-1))+ ":" + '\n';
 				//assembler_l.add("Label"+String.valueOf(labelPendientes.get(labelPendientes.size()-1))+"\n");
 				borrarLabelPendiente();
 			}
 		}
 		return assembler;
+	}
+	
+	public int getNumTercetoActual(){
+		return num_terceto_actual;
 	}
 	
 	//Informa que se agrego un terceto de print y modifica el ultimo terceto para coordinar
