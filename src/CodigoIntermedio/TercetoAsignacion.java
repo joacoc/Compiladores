@@ -18,7 +18,7 @@ public class TercetoAsignacion extends Terceto{
 		
 		//tire aca arriba lo de la matriz
 		//tendria que ser todo codigo de matrices, sino le erre al sol el conflicto
-		if ( elementos.get(2).esToken() ) { //creo que no chequea el rango cuando una asignacion tiene una expresion del lado derecho
+		
 			//Si es una matriz tengo que hacer el chequeo de rango
 			if(elementos.get(1).getNombreVar().startsWith("mat")){
 				if(elementos.get(2).getNombreVar().startsWith("mat")){
@@ -43,7 +43,7 @@ public class TercetoAsignacion extends Terceto{
 				}
 			}else
 				assembler = assembler + "MOV " + elementos.get(1).getNombreVar() + ", " + elementos.get(2).getNombreVar()+ '\n';
-			}	
+		
 //creo que esto no va no estoy seguro
 //		else{
 //			Terceto terceto = controladorTercetos.getTerceto(elementos.get(2).getNumeroTerceto() );

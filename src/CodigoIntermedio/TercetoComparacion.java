@@ -29,6 +29,7 @@ public class TercetoComparacion extends Terceto {
 		
 		//caso 1: (OP, variable, variable)
 		if ( ( elementos.get(1).esToken() ) && ( elementos.get(2).esToken() ) ){
+			System.out.println("var - var");
 			String registro1 = controladorTercetos.getProxRegLibre( elementos.get(1).getToken() );
 			String registro2 = controladorTercetos.getProxRegLibre( elementos.get(2).getToken() );
 			
@@ -52,6 +53,7 @@ public class TercetoComparacion extends Terceto {
 		else
 			//caso 2: (OP, registro, variable)
 			if ( ( !elementos.get(1).esToken() ) && ( elementos.get(2).esToken() ) ){
+				System.out.println("reg - var");
 				String registro2 = controladorTercetos.getProxRegLibre( elementos.get(2).getToken() );
 				assembler = assembler + "MOV" + " " +  registro2 + ", " + elementos.get(2).getNombreVar()+ '\n';
 				
