@@ -98,6 +98,7 @@ declaracion : tipo lista_variables ';' {
 								t1.setMatriz(t.getMatriz());
 								tablaSimbolo.addSimbolo(t1);
 								tablaSimbolo.addUso(t1.getNombre(),analizadorS.usoVariableArreglo);
+								System.out.println(t1.getNombre());
 								}
 
 							
@@ -229,7 +230,8 @@ lado_izquierdo : ID {	//chequeo semantico variable no declarada
 						$$ = new ParserVal( t1 );}
     
             	| celda_matriz {//chequeo semantico variable no declarada
-						Token t1 = tablaSimbolo.getToken( "mat@" + (  (Token) val_peek(0).obj).getNombre() ) ;
+						Token t1 = tablaSimbolo.getToken(((Token) $1.obj).getNombre()) ;
+						System.out.println(t1.getNombre());
 				    			if (t1 == null) 
 		 							analizadorCI.addError (new Error ( analizadorCI.errorNoExisteVariable,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
 								$$ = new ParserVal( (Token) $1.obj );}
@@ -515,11 +517,23 @@ celda_matriz : ID '[' expresion ']' '[' expresion ']' { Token t1 = tablaSimbolo.
 																controladorTercetos.addTerceto (tercetoSuma);
 															}
 
-
 															valor = "*";
 															TercetoExpresion tercetoMultBits = new TercetoExpresion ( new TercetoSimple( new Token("*",(int) valor.charAt(0) ) ),new TercetoSimple( (new Token( String.valueOf( controladorTercetos.getProxNumero()-1) )) ), new TercetoSimple( new Token(bits,analizadorL.CTEI) ), controladorTercetos.getProxNumero() );
 															//tercetoMultBits.setPosicion(Integer.parseInt(controladorTercetos.numeroTercetoString()));
 															controladorTercetos.addTerceto (tercetoMultBits);
+
+															// //Se realiza la asignacion							
+															// valor =":=";
+															// TercetoAsignacion tercetoAsignacion = new TercetoAsignacion ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( t1 ), new TercetoSimple( new Token( controladorTercetos.numeroTercetoString() ) ), controladorTercetos.getProxNumero() );
+															// controladorTercetos.addTerceto (tercetoAsignacion);
+															// analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));
+											
+														 	TercetoAsignacion tercetoAsig = new TercetoAsignacion( new TercetoSimple( new Token(":=",(int) valor.charAt(0) ) ),new TercetoSimple( (new Token( String.valueOf( controladorTercetos.getProxNumero()-1) )) ), new TercetoSimple( t1 ), controladorTercetos.getProxNumero() );	
+															controladorTercetos.addTerceto(tercetoAsig);
+															TokenMatriz ret = new TokenMatriz( controladorTercetos.numeroTercetoString() );
+															ret.setNombre(t1.getNombre());
+															ret.setTipo(t1.getTipo());
+															$$ = new ParserVal(ret);
 
 															//suma de la base con el calculo de los bytes que tengo que saltar
 															//valor = "+";
@@ -530,7 +544,7 @@ celda_matriz : ID '[' expresion ']' '[' expresion ']' { Token t1 = tablaSimbolo.
 
 
 														}
-														$$ = new ParserVal( t1 );
+														//$$ = new ParserVal( t1 );
 
 														if (t1 == null) {
 														 	analizadorCI.addError (new Error ( analizadorCI.errorNoExisteMatriz,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
