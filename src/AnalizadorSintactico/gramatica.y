@@ -22,6 +22,7 @@
 %token TO
 %token INTEGER
 %token LONGINT
+%token S_DISTINTO
 %%
 
 %{
@@ -229,7 +230,7 @@ lado_izquierdo : ID {	//chequeo semantico variable no declarada
 						$$ = new ParserVal( t1 );}
     
             	| celda_matriz {//chequeo semantico variable no declarada
-						Token t1 = tablaSimbolo.getToken( "mat@" + (  (Token) val_peek(0).obj).getNombre() ) ;
+						Token t1 = tablaSimbolo.getToken((  (Token) $1.obj).getNombre() ) ;
 				    			if (t1 == null) 
 		 							analizadorCI.addError (new Error ( analizadorCI.errorNoExisteVariable,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
 								$$ = new ParserVal( (Token) $1.obj );}
@@ -551,6 +552,8 @@ operador : '<' 				{ String valor = "<";
 		 | S_MENOR_IGUAL 	{ $$ = new ParserVal(  new Token("<=", analizadorL.S_MENOR_IGUAL ) ); }
 		 | '='				{ String valor = "=";
 		 					  $$ = new ParserVal(  new Token("=",(int) valor.charAt(0) ) ); }
+		 | S_DISTINTO		{ String valor = "!=";
+		 					  $$ = new ParserVal(  new Token("!=",analizadorL.S_DISTINTO ); }
 		 ;
 
 

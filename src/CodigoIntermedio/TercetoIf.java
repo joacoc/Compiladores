@@ -27,6 +27,9 @@ public class TercetoIf extends Terceto {
 					else
 						if(tipoSalto.equals("<"))
 							this.tipoSalto = "JGE";
+						else
+							if(tipoSalto.equals("!="))
+								this.tipoSalto = "JE";
 	};
 
 	public String getAssembler() {
