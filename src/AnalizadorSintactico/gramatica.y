@@ -22,6 +22,7 @@
 %token TO
 %token INTEGER
 %token LONGINT
+%token S_DISTINTO
 %%
 
 %{
@@ -566,6 +567,8 @@ operador : '<' 				{ String valor = "<";
 		 | S_MENOR_IGUAL 	{ $$ = new ParserVal(  new Token("<=", analizadorL.S_MENOR_IGUAL ) ); }
 		 | '='				{ String valor = "=";
 		 					  $$ = new ParserVal(  new Token("=",(int) valor.charAt(0) ) ); }
+		 | S_DISTINTO		{ String valor = "!=";
+		 					  $$ = new ParserVal(  new Token("!=",analizadorL.S_DISTINTO ); }
 		 ;
 
 

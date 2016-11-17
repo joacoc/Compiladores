@@ -46,6 +46,7 @@ public class AnalizadorLexico {
 	static final int TO = 277;
 	static final int INTEGER = 278;
 	static final int LONGINT = 279;
+	static final int S_DISTINTO = 280;
 
 
 	

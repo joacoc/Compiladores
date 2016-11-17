@@ -45,6 +45,7 @@ public class TercetoAsignacion extends Terceto{
 					assembler = assembler + "MOV " + elementos.get(1).getNombreVar() + "[EBX]" +"," +elementos.get(2).getNombreVar()+"\n";
 					assembler = assembler + "MOV " +"EBX" +"," +"matrix\n";
 				}
+
 			}if(elementos.get(2).getNombreVar().startsWith("mat")){
 				agregado = true;
 				assembler = assembler + verificarMatriz((TokenMatriz) elementos.get(2).getToken());
@@ -63,7 +64,6 @@ public class TercetoAsignacion extends Terceto{
 //			Terceto terceto = controladorTercetos.getTerceto(elementos.get(2).getNumeroTerceto() );
 //			assembler = assembler + "MOV " + elementos.get(1).getNombreVar() + ", " + terceto.getRegistro() + '\n';
 //			controladorTercetos.liberarRegistro( terceto.getRegistro() );
-					
 		if (agregado!=true){
 			if ( elementos.get(2).esToken() ) {
 				//caso 1: (ASIG, variable, variable){
@@ -117,17 +117,18 @@ public class TercetoAsignacion extends Terceto{
 		controladorTercetos.OcuparRegistro("EAX");
 		registroAux=reg;
 		assembler = assembler + "CMP " + reg + ", 0"  + '\n';
-		assembler = assembler + "JL LabelNEG" + '\n';
+		assembler = assembler + "JL LabelNEG" + controladorTercetos.getNumTercetoActual() + '\n';
 		//es positivo el valor
 		String maximo = controladorTercetos.getProxRegLibre(elementos.get(2).getToken());
 		assembler = assembler + "MOV " + maximo + ", " + CeldaAS.maximo + '\n';
 		assembler = assembler + "SUB EAX, " + maximo + '\n';
 		assembler = assembler + "CMP EAX, 0" + '\n';
 		assembler = assembler + "JG LabelERRORPERDIDA" + '\n';
+		assembler = assembler + "JMP labelSIGUE" + controladorTercetos.getNumTercetoActual() + '\n';
 		controladorTercetos.liberarRegistro(maximo);		
 		
 		//es negativo el valor
-		assembler = assembler + "LabelNEG:" + '\n';
+		assembler = assembler + "LabelNEG" + controladorTercetos.getNumTercetoActual() +":" + '\n';
 		String minimo = controladorTercetos.getProxRegLibre(elementos.get(2).getToken());
 		assembler = assembler + "MOV " + minimo + ", " + CeldaAS.minimo + '\n';
 		assembler = assembler + "SUB EAX, " + minimo + '\n';
@@ -135,6 +136,7 @@ public class TercetoAsignacion extends Terceto{
 		assembler = assembler + "JL LabelERRORPERDIDA" + '\n';
 		controladorTercetos.liberarRegistro(minimo);
 		controladorTercetos.liberarRegistro("EAX");
+		assembler = assembler + "labelSIGUE" + controladorTercetos.getNumTercetoActual() + ":" + '\n';
 		return assembler;
 		
 	}
