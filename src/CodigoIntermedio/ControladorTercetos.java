@@ -178,7 +178,7 @@ public class ControladorTercetos {
 			}
 		//estan todos los registros ocupados
 		System.out.println("estan todos los registros ocupados");
-		return " ";
+		return " estan todos ocupados ";
 	}
 			
 	public String getUltimoRegistro(){
@@ -261,4 +261,31 @@ public class ControladorTercetos {
 		if (registro == Terceto.reg4Long) return Terceto.reg4Integer;
 		return registro;
 	}
+
+	public String getReg4(Token token) {
+		if (registros.get(3))
+			System.out.println("Se esta queriendo usar un registro ya ocupado");
+		else{
+			registros.set(3, new Boolean(true));//paso a estado ocupado el registro en la pos index)
+			if (token.getTipo() == AnalizadorLexico.variableI)
+				return Terceto.reg4Integer;
+			else
+				return Terceto.reg4Long;
+		}
+		return "Registro ocupado";
+	}
+	
+	public String getReg3(Token token) {
+		if (registros.get(2))
+			System.out.println("Se esta queriendo usar un registro ya ocupado");
+		else{
+			registros.set(2, new Boolean(true));//paso a estado ocupado el registro en la pos index)
+			if (token.getTipo() == AnalizadorLexico.variableI)
+				return Terceto.reg3Integer;
+			else
+				return Terceto.reg3Long;
+		}
+		return "Registro ocupado";
+	}
+
 }

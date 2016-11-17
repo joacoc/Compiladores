@@ -339,7 +339,7 @@ expresion : expresion '+' termino	{ 	String valor ="+";
 
 
 termino : termino '*' factor	{	String valor ="*";
-										TercetoExpresion terceto = new TercetoExpresion ( new TercetoSimple( new Token("*",(int) valor.charAt(0) ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
+										TercetoExpresionMult terceto = new TercetoExpresionMult ( new TercetoSimple( new Token("*",(int) valor.charAt(0) ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
 										controladorTercetos.addTerceto (terceto);
 										Token nuevo = new Token( controladorTercetos.numeroTercetoString() );
 										nuevo.setTipo("longint");
@@ -494,6 +494,7 @@ celda_matriz : ID '[' expresion ']' '[' expresion ']' { Token t1 = tablaSimbolo.
 															Token filaBuscada = (Token) $3.obj;
 															Token colBuscada = (Token) $6.obj;
 															String valor;
+															
 															if (filaBuscada.getNombre().startsWith("mat@")) {
 																//La fila se accede accediendo a una posicion de una matriz
 																valor = "*";
@@ -502,7 +503,7 @@ celda_matriz : ID '[' expresion ']' '[' expresion ']' { Token t1 = tablaSimbolo.
 															
 															}else{
 																valor = "*";
-																TercetoExpresion tercetoMult = new TercetoExpresion ( new TercetoSimple( new Token("*",(int) valor.charAt(0) ) ),new TercetoSimple( filaBuscada ), new TercetoSimple( new Token(filas,analizadorL.CTEI) ), controladorTercetos.getProxNumero() );
+																TercetoExpresionMult tercetoMult = new TercetoExpresionMult ( new TercetoSimple( new Token("*",(int) valor.charAt(0) ) ),new TercetoSimple( filaBuscada ), new TercetoSimple( new Token(filas,analizadorL.CTEI) ), controladorTercetos.getProxNumero() );
 																controladorTercetos.addTerceto (tercetoMult);
 															}
 
@@ -528,8 +529,8 @@ celda_matriz : ID '[' expresion ']' '[' expresion ']' { Token t1 = tablaSimbolo.
 															// controladorTercetos.addTerceto (tercetoAsignacion);
 															// analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));
 											
-														 	TercetoAsignacion tercetoAsig = new TercetoAsignacion( new TercetoSimple( new Token(":=",(int) valor.charAt(0) ) ),new TercetoSimple( (new Token( String.valueOf( controladorTercetos.getProxNumero()-1) )) ), new TercetoSimple( t1 ), controladorTercetos.getProxNumero() );	
-															controladorTercetos.addTerceto(tercetoAsig);
+														 	// TercetoAsignacion tercetoAsig = new TercetoAsignacion( new TercetoSimple( new Token(":=",(int) valor.charAt(0) ) ),new TercetoSimple( (new Token( String.valueOf( controladorTercetos.getProxNumero()-1) )) ), new TercetoSimple( t1 ), controladorTercetos.getProxNumero() );	
+															// controladorTercetos.addTerceto(tercetoAsig);
 															TokenMatriz ret = new TokenMatriz( controladorTercetos.numeroTercetoString() );
 															ret.setNombre(t1.getNombre());
 															ret.setTipo(t1.getTipo());

@@ -19,14 +19,15 @@ public class TercetoAsignacion extends Terceto{
 		
 		//tire aca arriba lo de la matriz
 		//tendria que ser todo codigo de matrices, sino le erre al sol el conflicto
-		//if ( elementos.get(2).esToken() ) { //creo que no chequea el rango cuando una asignacion tiene una expresion del lado derecho
+
 			//Si es una matriz tengo que hacer el chequeo de rango
 			if(elementos.get(1).getNombreVar().startsWith("mat")){
 				if(elementos.get(2).getNombreVar().startsWith("mat")){
-					agregado = true;
 					//Ambos son matrices;
-					assembler = assembler + "CMP " + controladorTercetos.getUltimoRegistro() + "," +((TokenMatriz)elementos.get(1).getToken()).getColumnas()*((TokenMatriz)elementos.get(1).getToken()).getFilas()*4 + "\n";
-					assembler = assembler + "JG " + ConvertidorAssembler.labelFueraRango +"\n" ;
+
+					assembler = assembler + verificarMatriz((TokenMatriz) elementos.get(1).getToken());
+					assembler = assembler + verificarMatriz((TokenMatriz) elementos.get(2).getToken());
+					
 					//Solo se puede acceder a la matriz utilizando BX
 					//Por lo tanto primero se usa una variable auxilia 'matrix' para almancenar el valor
 					
@@ -38,9 +39,7 @@ public class TercetoAsignacion extends Terceto{
 					assembler = assembler + "MOV " +"EBX" +"," +"matrix\n";
 				}
 				else{
-					agregado = true;
-					assembler = assembler + "CMP " + controladorTercetos.getUltimoRegistro() + "," +((TokenMatriz)elementos.get(1).getToken()).getColumnas()*((TokenMatriz)elementos.get(1).getToken()).getFilas()*4 + "\n";
-					assembler = assembler + "JG " + ConvertidorAssembler.labelFueraRango +"\n" ;
+					assembler = assembler + verificarMatriz((TokenMatriz) elementos.get(1).getToken());
 					assembler = assembler + "MOV " +"matrix" +"," +"EBX\n";
 					assembler = assembler + "MOV " +"EBX" +"," +controladorTercetos.getUltimoRegistro()+"\n"; 
 					assembler = assembler + "MOV " + elementos.get(1).getNombreVar() + "[EBX]" +"," +elementos.get(2).getNombreVar()+"\n";
@@ -48,8 +47,7 @@ public class TercetoAsignacion extends Terceto{
 				}
 			}if(elementos.get(2).getNombreVar().startsWith("mat")){
 				agregado = true;
-				assembler = assembler + "CMP " + controladorTercetos.getUltimoRegistro() + "," +((TokenMatriz)elementos.get(2).getToken()).getColumnas()*((TokenMatriz)elementos.get(2).getToken()).getFilas()*4 + "\n";
-				assembler = assembler + "JG " + ConvertidorAssembler.labelFueraRango +"\n" ;
+				assembler = assembler + verificarMatriz((TokenMatriz) elementos.get(2).getToken());
 				assembler = assembler + "MOV " +"matrix" +"," +"EBX\n";
 				assembler = assembler + "MOV " +"EBX" +"," +controladorTercetos.getUltimoRegistro()+"\n"; 
 				assembler = assembler + "MOV " + elementos.get(1).getNombreVar()+"," +elementos.get(2).getNombreVar()+ "[EBX]" +"\n";
@@ -103,6 +101,13 @@ public class TercetoAsignacion extends Terceto{
 		registroAux = registro;
 		assembler = assembler + "MOV"  + " " + registro + ", " + "EAX" + '\n';
 		elementos.get(2).getToken().setTipo(AnalizadorLexico.variableI);
+		return assembler;
+	}
+	
+	public String verificarMatriz(TokenMatriz tokenMatriz){
+		String assembler = "";
+		assembler = assembler + "CMP " + controladorTercetos.getUltimoRegistro() + "," +(tokenMatriz.getColumnas()*tokenMatriz.getFilas()*4) + "\n";
+		assembler = assembler + "JG " + ConvertidorAssembler.labelFueraRango +"\n" ;
 		return assembler;
 	}
 	
