@@ -50,9 +50,10 @@ public class Main {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		
-		String direccion = new String("C:\\Users\\Joaking\\Desktop\\test2.txt");
-		InputStream is = new ByteArrayInputStream(direccion.getBytes());
+
+//		String direccion = new String("C:\\Users\\Joaking\\Desktop\\test2.txt");
+//		InputStream is = new ByteArrayInputStream(direccion.getBytes());
+		InputStream is = new ByteArrayInputStream(args[0].getBytes());
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
 		
 		StringBuilder codigo = null;
@@ -77,9 +78,9 @@ public class Main {
         parser.run();
 
 //        System.out.println( analizadorLexico.mostrarTokens() );
-//          System.out.println( analizadorLexico.mostrarTs() );
-//        System.out.println(analizadorLexico.mostrarWarning());
-//        System.out.println(analizadorLexico.mostrarErrorComp());
+        System.out.println( analizadorLexico.mostrarTs() );
+        System.out.println(analizadorLexico.mostrarWarning());
+        System.out.println(analizadorLexico.mostrarErrorComp());
         System.out.println(analizadorSintactico.getErroresSint());
 //        System.out.println(analizadorSintactico.getEstructuras());
         System.out.println(analizadorCodigoIntermedio.getErroresCI());
