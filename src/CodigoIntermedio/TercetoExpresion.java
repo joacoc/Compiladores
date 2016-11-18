@@ -48,7 +48,7 @@ public class TercetoExpresion extends Terceto {
 			this.setRegistro(registro1);
 			assembler += MOV + " " + registro1 +", " + elementos.get(1).getNombreVar()  + '\n';
 			assembler += MOV + " " + registro2 +", " + elementos.get(2).getNombreVar()  + '\n';
-			//assembler += hacerConversiones(registro1, registro2);
+			assembler += hacerConversiones(registro1, registro2);
 			registro1 = registroAux1;
 			registro2 = registroAux2;
 			assembler = assembler + opAssembler + " " + registro1 + ", " + registro2 + '\n';
@@ -62,7 +62,7 @@ public class TercetoExpresion extends Terceto {
 			String registro2 = controladorTercetos.getProxRegLibre(elementos.get(2).getToken() );
 			
 			assembler = MOV + " " + registro2 +", " + elementos.get(2).getNombreVar()  + '\n';
-			//assembler += hacerConversiones(registro1, registro2);
+			assembler += hacerConversiones(registro1, registro2);
 			registro1 = registroAux1;
 			registro2 = registroAux2;
 			assembler = assembler + opAssembler + " " + registro1 + ", " + registro2 + '\n';
@@ -75,7 +75,7 @@ public class TercetoExpresion extends Terceto {
 			String registro2 = terceto2.getRegistro();
 			this.setRegistro(registro1);// se usa el del primer terceto.
 			
-			//assembler += hacerConversiones(registro1, registro2);
+			assembler += hacerConversiones(registro1, registro2);
 			registro1 = registroAux1;
 			registro2 = registroAux2;
 			assembler = assembler + opAssembler + " " + registro1 + ", " + registro2 + '\n';
@@ -88,7 +88,7 @@ public class TercetoExpresion extends Terceto {
 			this.setRegistro(registro1);// se usa el del primer terceto.
 			
 			assembler = MOV + " " + registro1 +", " + elementos.get(1).getNombreVar()  + '\n';
-			//assembler += hacerConversiones(registro1, registro2);
+			assembler += hacerConversiones(registro1, registro2);
 			registro1 = registroAux1;
 			registro2 = registroAux2;
 			assembler = assembler + opAssembler + " " + registro1 + ", " + registro2 + '\n';
@@ -107,7 +107,7 @@ public class TercetoExpresion extends Terceto {
 		registroAux2 = registro2;
 		String assembler = "";
 
-		if ( (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableI) ) && (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableL)) ){
+		if ( (elementos.get(1).getToken().getTipo()!=null && elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableI) ) && (elementos.get(2).getToken().getTipo()!= null && elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableL)) ){
 			assembler = assembler + "MOV"  + " " + "AX" + ", " + registro1 + '\n';
 			assembler = assembler + "CWDE" + '\n';
 			controladorTercetos.liberarRegistro(registro1);
@@ -119,7 +119,7 @@ public class TercetoExpresion extends Terceto {
 			return assembler;
 		}
 		else
-			if ( (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableL) ) && (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableI)) ){
+			if ( (elementos.get(1).getToken().getTipo()!=null && elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableL) ) && (elementos.get(2).getToken().getTipo()!=null && elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableI)) ){
 				assembler = assembler + "MOV"  + " " + "AX" + ", " + registro2 + '\n';
 				assembler = assembler + "CWDE" + '\n';
 				controladorTercetos.liberarRegistro(registro2);

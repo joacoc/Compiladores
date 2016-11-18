@@ -52,6 +52,7 @@ public class TercetoExpresionMult extends TercetoExpresion {
 			controladorTercetos.liberarRegistro(registroAX);
 			controladorTercetos.liberarRegistro(registroDX);
 		}
+		
 //		else
 //			//caso 2: (OP, registro, variable)
 //			if ( ( !elementos.get(1).esToken() ) && ( elementos.get(2).esToken() ) ){

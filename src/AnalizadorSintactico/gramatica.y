@@ -501,7 +501,6 @@ celda_matriz : ID '[' expresion ']' '[' expresion ']' { Token t1 = tablaSimbolo.
 																valor = "*";
 																TercetoExpresion tercetoMult = new TercetoExpresion ( new TercetoSimple( new Token("*",(int) valor.charAt(0) ) ),new TercetoSimple( (new Token( String.valueOf( controladorTercetos.getProxNumero()-1) )) ), new TercetoSimple( new Token(filas,analizadorL.CTEI) ), controladorTercetos.getProxNumero() );
 																controladorTercetos.addTerceto (tercetoMult);
-															
 															}else{
 																valor = "*";
 																TercetoExpresionMult tercetoMult = new TercetoExpresionMult ( new TercetoSimple( new Token("*",(int) valor.charAt(0) ) ),new TercetoSimple( filaBuscada ), new TercetoSimple( new Token(filas,analizadorL.CTEI) ), controladorTercetos.getProxNumero() );
@@ -530,11 +529,12 @@ celda_matriz : ID '[' expresion ']' '[' expresion ']' { Token t1 = tablaSimbolo.
 															// controladorTercetos.addTerceto (tercetoAsignacion);
 															// analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));
 											
-														 	// TercetoAsignacion tercetoAsig = new TercetoAsignacion( new TercetoSimple( new Token(":=",(int) valor.charAt(0) ) ),new TercetoSimple( (new Token( String.valueOf( controladorTercetos.getProxNumero()-1) )) ), new TercetoSimple( t1 ), controladorTercetos.getProxNumero() );	
-															// controladorTercetos.addTerceto(tercetoAsig);
-															TokenMatriz ret = new TokenMatriz( controladorTercetos.numeroTercetoString() );
+														 	//TercetoAsignacion tercetoAsig = new TercetoAsignacion( new TercetoSimple( new Token(":=",(int) valor.charAt(0) ) ),new TercetoSimple( (new Token( String.valueOf( controladorTercetos.getProxNumero()-1) )) ), new TercetoSimple( t1 ), controladorTercetos.getProxNumero() );	
+															//controladorTercetos.addTerceto(tercetoAsig);
+															TokenMatriz ret = new TokenMatriz( new Token(controladorTercetos.numeroTercetoString()), (( (TokenMatriz) t1).getFilas() ), (( (TokenMatriz) t1).getColumnas() ) );
 															ret.setNombre(t1.getNombre());
 															ret.setTipo(t1.getTipo());
+
 															$$ = new ParserVal(ret);
 
 															//suma de la base con el calculo de los bytes que tengo que saltar
@@ -568,7 +568,7 @@ operador : '<' 				{ String valor = "<";
 		 | '='				{ String valor = "=";
 		 					  $$ = new ParserVal(  new Token("=",(int) valor.charAt(0) ) ); }
 		 | S_DISTINTO		{ String valor = "!=";
-		 					  $$ = new ParserVal(  new Token("!=",analizadorL.S_DISTINTO ); }
+		 					  $$ = new ParserVal(  new Token("!=",analizadorL.S_DISTINTO )); }
 		 ;
 
 

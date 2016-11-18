@@ -7,6 +7,7 @@ import AnalizadorLexico.Token;
 
 public class TercetoSimple {
 	Token t;
+	boolean esToken;
 	
 	
 	public TercetoSimple(Token t) {
