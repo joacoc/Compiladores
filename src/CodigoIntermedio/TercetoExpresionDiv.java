@@ -130,7 +130,9 @@ public class TercetoExpresionDiv extends TercetoExpresion{
 					}
 					assembler = assembler + "CWD" + '\n';
 					
+//					if ( (elementos.get(0).getToken().getTipo()== AnalizadorLexico.variableL) && (elementos.get(0).getToken().getTipo()== AnalizadorLexico.variableI) ){
 					String registro = controladorTercetos.getProxRegLibre(elementos.get(0).getToken());
+					
 					assembler =assembler + MOV + " " + registro +", " + elementos.get(2).getNombreVar()  + '\n';
 					this.setRegistro(registro);
 			
