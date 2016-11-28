@@ -13,6 +13,7 @@ public class TokenMatriz extends Token{
 	int distancia;
 	int pos;
 	
+	
 	public TokenMatriz(String numeroTercetoString) {
 		super(numeroTercetoString);
 		// TODO Auto-generated constructor stub

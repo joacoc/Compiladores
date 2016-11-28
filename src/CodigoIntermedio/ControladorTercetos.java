@@ -26,6 +26,7 @@ public class ControladorTercetos {
 	private int num_terceto_actual = 0;
 	
 	private String ultimoRegistro = null; 
+	private String anteUltimoRegistro = null;
 			
 	public ControladorTercetos() {
 		tercetos = new ArrayList<Terceto>();
@@ -125,10 +126,12 @@ public class ControladorTercetos {
 				if ( registros.get(0) == false ) {
 					registros.set(i, true);
 					if (t.getTipo()==AnalizadorLexico.variableI){
+						anteUltimoRegistro = ultimoRegistro;
 						ultimoRegistro = Terceto.reg1Integer;
 						return Terceto.reg1Integer;
 					}
 					else{
+						anteUltimoRegistro = ultimoRegistro;
 						ultimoRegistro = Terceto.reg1Long;
 						return Terceto.reg1Long;
 					}
@@ -137,10 +140,12 @@ public class ControladorTercetos {
 					if ( registros.get(1) == false ) {
 						registros.set(i, true);
 						if (t.getTipo()==AnalizadorLexico.variableI){
+							anteUltimoRegistro = ultimoRegistro;
 							ultimoRegistro = Terceto.reg2Integer;
 							return Terceto.reg2Integer;
 						}
 						else{
+							anteUltimoRegistro = ultimoRegistro;
 							ultimoRegistro = Terceto.reg2Long;
 							return Terceto.reg2Long;
 						}
@@ -149,19 +154,23 @@ public class ControladorTercetos {
 						if ( registros.get(2) == false ){
 							registros.set(i, true);
 							if (t.getTipo()==AnalizadorLexico.variableI){
+								anteUltimoRegistro = ultimoRegistro;
 								ultimoRegistro = Terceto.reg3Integer;
 								return Terceto.reg3Integer;
 							}
 							else{
+								anteUltimoRegistro = ultimoRegistro;
 								ultimoRegistro = Terceto.reg3Long;
 								return Terceto.reg3Long;
 							}
 							}
 				if (t.getTipo()==AnalizadorLexico.variableI){
+					anteUltimoRegistro = ultimoRegistro;
 					ultimoRegistro = Terceto.reg4Integer;
 					return Terceto.reg4Integer;
 				}
 				else{
+					anteUltimoRegistro = ultimoRegistro;
 					ultimoRegistro = Terceto.reg4Long;
 					return Terceto.reg4Long;
 				}
@@ -175,6 +184,11 @@ public class ControladorTercetos {
 	public String getUltimoRegistro(){
 		return ultimoRegistro;
 	}
+	
+	public String getAnteUltimoRegistro(){
+		return anteUltimoRegistro;
+	}
+	
 	public void liberarRegistro (String registro){
 		int index = 0;
 		if ( (registro == Terceto.reg1Integer)|| (registro == Terceto.reg1Long) )  index = 0;

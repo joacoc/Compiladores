@@ -11,7 +11,7 @@ public class Token{
 	long valorLong;
 	
 	//integer, longint
-	String tipo;
+	String tipo="";
 	
 	//ID, CTE
 	String lexema;
@@ -25,7 +25,7 @@ public class Token{
 	public Token (String nombre, int uso){
 		this.nombre = nombre;
 		this.uso = uso;
-		
+					
 		if ( (uso>=analizador.IF) && (uso<=analizador.LONGINT) )
 			lexema = "Palabra reservada";
 		else

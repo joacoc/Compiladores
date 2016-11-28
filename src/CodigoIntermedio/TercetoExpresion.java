@@ -107,7 +107,7 @@ public class TercetoExpresion extends Terceto {
 		registroAux2 = registro2;
 		String assembler = "";
 
-		if ( (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableI) ) && (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableL)) ){
+		if ( (elementos.get(1).getToken().getTipo()!=null && elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableI) ) && (elementos.get(2).getToken().getTipo()!= null && elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableL)) ){
 			assembler = assembler + "MOV"  + " " + "AX" + ", " + registro1 + '\n';
 			assembler = assembler + "CWDE" + '\n';
 			controladorTercetos.liberarRegistro(registro1);
@@ -119,7 +119,7 @@ public class TercetoExpresion extends Terceto {
 			return assembler;
 		}
 		else
-			if ( (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableL) ) && (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableI)) ){
+			if ( (elementos.get(1).getToken().getTipo()!=null && elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableL) ) && (elementos.get(2).getToken().getTipo()!=null && elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableI)) ){
 				assembler = assembler + "MOV"  + " " + "AX" + ", " + registro2 + '\n';
 				assembler = assembler + "CWDE" + '\n';
 				controladorTercetos.liberarRegistro(registro2);

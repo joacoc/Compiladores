@@ -51,9 +51,15 @@ public class Main {
 	}
 	
 	public static void main(String[] args) throws IOException {
+
 		String direccion = new String("C:\\Users\\juan\\Desktop\\Casos de pruba\\HelloWorld.txt");
  		InputStream is = new ByteArrayInputStream(direccion.getBytes());
-		BufferedReader br = new BufferedReader(new InputStreamReader(is));
+
+//		String direccion = new String("C:\\Users\\Joaking\\Desktop\\test2.txt");
+//		InputStream is = new ByteArrayInputStream(direccion.getBytes());
+//		InputStream is = new ByteArrayInputStream(args[0].getBytes());
+
+ 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
 		
  		StringBuilder codigo = null;
 		codigo = new StringBuilder( getCodigo( br ) );
