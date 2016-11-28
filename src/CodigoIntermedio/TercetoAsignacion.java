@@ -108,7 +108,7 @@ public class TercetoAsignacion extends Terceto{
 		String minimo = controladorTercetos.getProxRegLibre(elementos.get(2).getToken());
 		assembler = assembler + "MOV " + minimo + ", " + CeldaAS.minimo + '\n';
 		assembler = assembler + "SUB EAX, " + minimo + '\n';
-		assembler = assembler + "CMP EAX, 0" + '\n';
+		assembler = assembler + "CMP EAX, " +  "0" + '\n';
 		assembler = assembler + "JL LabelERRORPERDIDA" + '\n';
 		controladorTercetos.liberarRegistro(minimo);
 		controladorTercetos.liberarRegistro("EAX");
