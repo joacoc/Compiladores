@@ -70,12 +70,13 @@ public class TercetoAsignacion extends Terceto{
 			if ( elementos.get(2).esToken() ) {
 				//caso 1: (ASIG, variable, variable){
 				registro2 = controladorTercetos.getProxRegLibre( elementos.get(2).getToken() );
-				assembler = assembler + "MOV" + " "  + registro2 + ", " +  elementos.get(2).getNombreVar() + '\n';
+				assembler = assembler + "MOV" + " " +  elementos.get(1).getNombreVar() + ", " + elementos.get(2).getNombreVar() + '\n';
 			}
-			else
+			else{
 				//caso 2: (ASIG, variable, registro)
 				registro2 = controladorTercetos.getTerceto(elementos.get(2).getNumeroTerceto() ).getRegistro();
 			
+				
 			if ( (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableI) ) && (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableL)) ){
 				assembler = assembler + "MOV " + "EAX" + ", " + elementos.get(2).getNombreVar() + '\n';
 				assembler = assembler + verificarConversionAsig(registro2);
@@ -87,11 +88,13 @@ public class TercetoAsignacion extends Terceto{
 					registro2 = registroAux;
 				}
 	
-		//	assembler = assembler + "MOV" + " " +  elementos.get(1).getNombreVar() + ", " + registro2 + '\n';
+			assembler = assembler + "MOV" + " " +  elementos.get(1).getNombreVar() + ", " + registro2 + '\n';
+			controladorTercetos.liberarRegistro(registro2);
+			controladorTercetos.liberarRegistro(registro2);			
 		}
-		controladorTercetos.liberarRegistro(registro2);			
-		return assembler;
 	}
+		return assembler;
+}
 		
 	private String crearAssemblerConversionVar(String registro){
 		String assembler = "";
