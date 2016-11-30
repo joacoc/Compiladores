@@ -29,7 +29,6 @@ public class TercetoComparacion extends Terceto {
 		
 		//caso 1: (OP, variable, variable)
 		if ( ( elementos.get(1).esToken() ) && ( elementos.get(2).esToken() ) ){
-			System.out.println("var - var");
 			String registro1 = controladorTercetos.getProxRegLibre( elementos.get(1).getToken() );
 			String registro2 = controladorTercetos.getProxRegLibre( elementos.get(2).getToken() );
 			
@@ -37,12 +36,12 @@ public class TercetoComparacion extends Terceto {
 			assembler = assembler + "MOV" + " " +  registro2 + ", " + elementos.get(2).getNombreVar()+ '\n';
 			
 			if ( (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableI) ) && (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableL)) ){
-				assembler = assembler + crearAssemblerConversionVar(registro1);
+				assembler = assembler + crearAssemblerConversionVar(registro1,1);
 				registro1=registroAux;
 			}
 			else
 				if ( (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableL) ) && (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableI)) ){
-					assembler = assembler + crearAssemblerConversionVar(registro2);
+					assembler = assembler + crearAssemblerConversionVar(registro2,2);
 					registro2=registroAux;
 				}
 
@@ -58,11 +57,11 @@ public class TercetoComparacion extends Terceto {
 				assembler = assembler + "MOV" + " " +  registro2 + ", " + elementos.get(2).getNombreVar()+ '\n';
 				
 				if ( (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableI) ) && (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableL)) ){
-					assembler = assembler + crearAssemblerConversion(terceto1);
+					assembler = assembler + crearAssemblerConversion(terceto1,1);
 				}
 				else
 					if ( (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableL) ) && (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableI)) ){
-						assembler = assembler + crearAssemblerConversionVar(registro2);
+						assembler = assembler + crearAssemblerConversionVar(registro2,2);
 						registro2=registroAux;
 					}
 	
@@ -74,10 +73,10 @@ public class TercetoComparacion extends Terceto {
 				//caso 3: (OP, registro, registro)
 				if ( ( !elementos.get(1).esToken() ) && ( !elementos.get(2).esToken() ) ){
 					if ( (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableI) ) && (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableL)) )
-						assembler = assembler + crearAssemblerConversion(terceto1);
+						assembler = assembler + crearAssemblerConversion(terceto1,1);
 					else
 						if ( (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableL) ) && (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableI)) )
-							assembler = assembler + crearAssemblerConversion(terceto2);
+							assembler = assembler + crearAssemblerConversion(terceto2,2);
 					assembler = assembler + CMP  + " " + terceto1.getRegistro() + ", " + terceto2.getRegistro() + '\n';
 					controladorTercetos.liberarRegistro(terceto1.getRegistro());
 					controladorTercetos.liberarRegistro(terceto2.getRegistro());
@@ -89,12 +88,12 @@ public class TercetoComparacion extends Terceto {
 						assembler = assembler + "MOV" + " " +  registro1 + ", " + elementos.get(1).getNombreVar()+ '\n';
 						
 						if ( (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableI) ) && (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableL)) ){
-							assembler = assembler + crearAssemblerConversionVar(registro1);
+							assembler = assembler + crearAssemblerConversionVar(registro1,1);
 							registro1=registroAux;
 						}
 						else
 							if ( (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableL) ) && (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableI)) )
-								assembler = assembler + crearAssemblerConversion(terceto2);
+								assembler = assembler + crearAssemblerConversion(terceto2,2);
 						
 						assembler =assembler + CMP + " " + registro1 + ", " + terceto2.getRegistro() + '\n'; 
 						controladorTercetos.liberarRegistro(registro1);
@@ -103,29 +102,29 @@ public class TercetoComparacion extends Terceto {
 		return assembler;
 	}
 	
-	private String crearAssemblerConversion(Terceto terceto){
+	private String crearAssemblerConversion(Terceto terceto,int pos){
 		String assembler = "";
 		assembler = assembler + "MOV"  + " " + "AX" + ", " + terceto.getRegistro() + '\n';
 		assembler = assembler + "CWDE" + '\n';
 		controladorTercetos.liberarRegistro(terceto.getRegistro());
-		elementos.get(1).getToken().setTipo(AnalizadorLexico.variableL);
+		elementos.get(pos).getToken().setTipo(AnalizadorLexico.variableL);
 		String registro = controladorTercetos.getProxRegLibre(elementos.get(1).getToken());
 		terceto.setRegistro(registro);
 		assembler = assembler + "MOV"  + " " + terceto.getRegistro() + ", " + "EAX" + '\n';
-		elementos.get(1).getToken().setTipo(AnalizadorLexico.variableI);
+		elementos.get(pos).getToken().setTipo(AnalizadorLexico.variableI);
 		return assembler;
 	}
 	
-	private String crearAssemblerConversionVar(String registro){
+	private String crearAssemblerConversionVar(String registro, int pos){
 		String assembler = "";
 		assembler = assembler + "MOV"  + " " + "AX" + ", " + registro + '\n';
 		assembler = assembler + "CWDE" + '\n';
 		controladorTercetos.liberarRegistro(registro);
-		elementos.get(1).getToken().setTipo(AnalizadorLexico.variableL);
+		elementos.get(pos).getToken().setTipo(AnalizadorLexico.variableL);
 		registro = controladorTercetos.getProxRegLibre(elementos.get(1).getToken());
 		registroAux = registro;
 		assembler = assembler + "MOV"  + " " + registro + ", " + "EAX" + '\n';
-		elementos.get(1).getToken().setTipo(AnalizadorLexico.variableI);
+		elementos.get(pos).getToken().setTipo(AnalizadorLexico.variableI);
 		return assembler;
 	}
 	

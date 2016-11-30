@@ -50,24 +50,26 @@ public class TercetoExpresionDiv extends TercetoExpresion{
 		controladorTercetos.OcuparRegistro(reg4Integer);
 		controladorTercetos.OcuparRegistro(reg3Integer);
 
-		if (elementos.get(1).getToken().getTipo() == AnalizadorLexico.variableI){	
+		if (elementos.get(1).getToken().getTipo().equals(AnalizadorLexico.variableI) ){	
 			//divisor en AX
 			registroDX = this.reg4Integer;
 			//movemos el valor del registro a AX
 			registroAX = this.reg3Integer;
-			assembler = assembler + MOV + " " + registroAX + ", " + this.getRegistro()  + '\n';
-			controladorTercetos.liberarRegistro(this.getRegistro());
-			this.setRegistro(registroAX);
+			String registroABorrar = controladorTercetos.getTerceto(elementos.get(1).getNumeroTerceto() ).getRegistro();
+			assembler = assembler + MOV + " " + registroAX + ", " + registroABorrar  + '\n';
+			controladorTercetos.liberarRegistro(registroABorrar);
+			this.setRegistro(registroABorrar);
 			registro = controladorTercetos.getProxRegLibre(elementos.get(2).getToken());
 		}
 		else{
 			//divisor en EAX
 			registroDX = this.reg4Long;
 			registroAX = this.reg3Long;
-			assembler = assembler + MOV + " " + registroAX + ", " + this.getRegistro()  + '\n';
-			controladorTercetos.liberarRegistro(this.getRegistro());
+			String registroABorrar = controladorTercetos.getTerceto(elementos.get(1).getNumeroTerceto() ).getRegistro();
+			assembler = assembler + MOV + " " + registroAX + ", " + registroABorrar  + '\n';
+			controladorTercetos.liberarRegistro(registroABorrar);
 			this.setRegistro(registroAX);
-			if (elementos.get(2).getToken().getTipo() == AnalizadorLexico.variableI){
+			if (elementos.get(2).getToken().getTipo().equals( AnalizadorLexico.variableI) ){
 				elementos.get(2).getToken().setTipo(AnalizadorLexico.variableL);
 				registro = controladorTercetos.getProxRegLibre(elementos.get(2).getToken());
 				elementos.get(2).getToken().setTipo(AnalizadorLexico.variableI);
@@ -75,11 +77,11 @@ public class TercetoExpresionDiv extends TercetoExpresion{
 			else
 				registro = controladorTercetos.getProxRegLibre(elementos.get(2).getToken());
 		}
-		if ( (elementos.get(1).getToken().getTipo() == AnalizadorLexico.variableI) && (elementos.get(2).getToken().getTipo() == AnalizadorLexico.variableL) ){
+		if ( (elementos.get(1).getToken().getTipo().equals(AnalizadorLexico.variableI) ) && (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableL) ) ){
 			assembler = assembler + "CWDE"  + '\n';
 			registroAX = "EAX";
 		}
-		assembler = assembler + MOV + " " + registroAX +", " + elementos.get(1).getNombreVar()  + '\n';
+//		assembler = assembler + MOV + " " + registroAX +", " + elementos.get(1).getNombreVar()  + '\n';
 		if (registroAX == "EAX")
 			assembler = assembler + "CDQ" + '\n';
 		else
@@ -89,11 +91,11 @@ public class TercetoExpresionDiv extends TercetoExpresion{
 		this.setRegistro(registro);
 		
 		//chequeamos que no sea cero el divisor
-		if (elementos.get(2).getToken().getTipo() == AnalizadorLexico.constanteI)
+		if (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.constanteI) )
 			assembler = assembler + getAssemblerErrorDivCero(registro, true); 
 		else{
 			assembler = assembler + getAssemblerErrorDivCero(registro, false);
-			if (elementos.get(1).getToken().getTipo() == AnalizadorLexico.variableL){
+			if (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableL) ){
 				assembler = assembler + "CWD" + '\n';
 				registroAX = "EAX";
 			}
@@ -122,14 +124,14 @@ public class TercetoExpresionDiv extends TercetoExpresion{
 		String registroAX = "";
 		String registro= "";
 		String assembler = "";
-		if (elementos.get(1).getToken().getTipo() == AnalizadorLexico.variableI){	
+		if (elementos.get(1).getToken().getTipo().equals(AnalizadorLexico.variableI)){	
 			//dividendo en DX
 			registroDX = this.reg4Integer;
 			//divisor en AX
 			registroAX = this.reg3Integer;
 			this.setRegistro(registroAX);
 			registro = controladorTercetos.getProxRegLibre(elementos.get(2).getToken());
-			if (elementos.get(2).getToken().getTipo() == AnalizadorLexico.variableL)
+			if (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableL) )
 				registroAX = "EAX";					
 		}
 		else{
@@ -147,7 +149,7 @@ public class TercetoExpresionDiv extends TercetoExpresion{
 			else
 				registro = controladorTercetos.getProxRegLibre(elementos.get(2).getToken());
 		}
-		if ( (elementos.get(1).getToken().getTipo() == AnalizadorLexico.variableI) && (elementos.get(2).getToken().getTipo() == AnalizadorLexico.variableL) ){
+		if ( (elementos.get(1).getToken().getTipo().equals(AnalizadorLexico.variableI) ) && (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableL) ) ){
 			assembler = assembler + MOV + " " + "AX" +", " + elementos.get(1).getNombreVar()  + '\n';
 			assembler = assembler + "CWDE"  + '\n';
 			registroAX = "EAX";
@@ -155,7 +157,7 @@ public class TercetoExpresionDiv extends TercetoExpresion{
 		else
 			assembler = assembler + MOV + " " + registroAX +", " + elementos.get(1).getNombreVar()  + '\n';
 		assembler = assembler + MOV + " " + registroDX +", " + "0"  + '\n';
-		if (registroAX == "EAX")
+		if (registroAX.equals("EAX") )
 			assembler = assembler + "CDQ" + '\n';
 		else
 			assembler = assembler + "CWD" + '\n';
@@ -164,11 +166,11 @@ public class TercetoExpresionDiv extends TercetoExpresion{
 		this.setRegistro(registro);
 		
 		//chequeamos que no sea cero el divisor
-		if (elementos.get(2).getToken().getTipo() == AnalizadorLexico.constanteI)
+		if (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.constanteI) )
 			assembler = assembler + getAssemblerErrorDivCero(registro, true); 
 		else{
 			assembler = assembler + getAssemblerErrorDivCero(registro, false);
-			if (elementos.get(1).getToken().getTipo() == AnalizadorLexico.variableL){
+			if (elementos.get(1).getToken().getTipo().equals(AnalizadorLexico.variableL) ){
 				assembler = assembler + "CWD" + '\n';
 				registroAX = "EAX";
 			}
@@ -176,7 +178,7 @@ public class TercetoExpresionDiv extends TercetoExpresion{
 		} 
 		
 		assembler = assembler + "IDIV" + " " + registro + '\n';
-		if (elementos.get(1).getToken().getTipo() == AnalizadorLexico.variableI){
+		if (elementos.get(1).getToken().getTipo().equals(AnalizadorLexico.variableI) ){
 			registro = controladorTercetos.getRegistroInteger(registro);
 			registroAX = "AX";
 			this.setRegistro(registro);
@@ -185,49 +187,14 @@ public class TercetoExpresionDiv extends TercetoExpresion{
 		assembler = assembler + MOV + " " + this.getRegistro() +", " + registroAX  + '\n';
 		controladorTercetos.liberarRegistro(registroAX);
 		controladorTercetos.liberarRegistro(registroDX);
+
 		return assembler;
 	}
 	
 	private String getAssemblerErrorDivCero(String registro, boolean integer) {
-		String registroCero = "";
-		if (integer)
-			registroCero = controladorTercetos.getProxRegLibre(new Token("_i0",AnalizadorLexico.CTEI));
-		else
-			registroCero = controladorTercetos.getProxRegLibre(new Token("_l0",AnalizadorLexico.CTEL));
 		String assembler = "CMP " + registro + ", 0" + '\n';
 		assembler = assembler + "JE LabelDivCero" + '\n';
 		return assembler;
 	}
-	
-	private String verificarPerdida(String registro2){
-		String assembler = "";
-		String reg = "EAX";
-		controladorTercetos.OcuparRegistro("EAX");
-		registroAux=reg;
-		assembler = assembler + "CMP " + reg + ", 0"  + '\n';
-		assembler = assembler + "JL LabelNEG" + controladorTercetos.getNumTercetoActual() + '\n';
-		//es positivo el valor
-		String maximo = controladorTercetos.getProxRegLibre(elementos.get(2).getToken());
-		assembler = assembler + "MOV " + maximo + ", " + CeldaAS.maximo + '\n';
-		assembler = assembler + "SUB EAX, " + maximo + '\n';
-		assembler = assembler + "CMP EAX, 0" + '\n';
-		assembler = assembler + "JG LabelERRORPERDIDA" + '\n';
-		assembler = assembler + "JMP labelSIGUE" + controladorTercetos.getNumTercetoActual() + '\n';
-		controladorTercetos.liberarRegistro(maximo);		
 		
-		//es negativo el valor
-		assembler = assembler + "LabelNEG" + controladorTercetos.getNumTercetoActual() +":" + '\n';
-		String minimo = controladorTercetos.getProxRegLibre(elementos.get(2).getToken());
-		assembler = assembler + "MOV " + minimo + ", " + CeldaAS.minimo + '\n';
-		assembler = assembler + "SUB EAX, " + minimo + '\n';
-		assembler = assembler + "CMP EAX, 0" + '\n';
-		assembler = assembler + "JL LabelERRORPERDIDA" + '\n';
-		controladorTercetos.liberarRegistro(minimo);
-		controladorTercetos.liberarRegistro("EAX");
-		assembler = assembler + "labelSIGUE" + controladorTercetos.getNumTercetoActual() + ":" + '\n';
-		controladorTercetos.liberarRegistro("EAX");
-		return assembler;
-				
-			}
-	
-	}
+}
