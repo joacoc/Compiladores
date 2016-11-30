@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream.GetField;
+import java.io.Reader;
 
 import AnalizadorLexico.AnalizadorLexico;
 import AnalizadorLexico.ControladorArchivo;
@@ -51,17 +52,19 @@ public class Main {
 	
 	public static void main(String[] args) throws IOException {
 
+		String direccion = new String("C:\\Users\\Joaking\\Desktop\\test2.txt");
+ 		InputStream is = new ByteArrayInputStream(direccion.getBytes());
+
 //		String direccion = new String("C:\\Users\\Joaking\\Desktop\\test2.txt");
 //		InputStream is = new ByteArrayInputStream(direccion.getBytes());
-		
 		System.out.println("COMPILADORG17\n");
 		
-		InputStream is = new ByteArrayInputStream(args[0].getBytes());
+	//	InputStream is = new ByteArrayInputStream(args[0].getBytes());
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
 		
-		StringBuilder codigo = null;
-		codigo= new StringBuilder( getCodigo( br ) );
+ 		StringBuilder codigo = null;
+		codigo = new StringBuilder( getCodigo( br ) );
 		ControladorArchivo archivo =new ControladorArchivo( codigo );
 		TablaSimbolos ts = new TablaSimbolos();
     	AnalizadorLexico analizadorLexico = new AnalizadorLexico(archivo,ts);
@@ -92,7 +95,7 @@ public class Main {
         	System.out.println( "No se genera codigo intermedio por errores en el codigo" );
         else{
 	        System.out.println( controladorTercetos.imprimirTercetos() );
-	        convertidorAssembler.generarAssembler();
+//	        convertidorAssembler.generarAssembler();
 	        System.out.println( convertidorAssembler.generarArchivo() );
         }
         

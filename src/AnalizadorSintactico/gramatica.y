@@ -487,23 +487,25 @@ tipo : INTEGER {  $$ = new ParserVal(  new Token( analizadorL.variableI ) ); }
 
 celda_matriz : ID '[' expresion ']' '[' expresion ']' { Token t1 = tablaSimbolo.getToken( "mat@" + ((Token) $1.obj).getNombre() ) ;
 														//calcular la posicion de memoria de la celda
-														String bits = "_i" + ((TokenMatriz)t1).getBits(); 
+														String bits = "_l" + ((TokenMatriz)t1).getBits(); 
 														//cantidad de filas y columnas de la matriz
-														String filas = "_i" + String.valueOf( ( (TokenMatriz) t1).getFilas() );
-														String columnas = "_i" +String.valueOf( ((TokenMatriz) t1).getColumnas() );
+														String filas = "_l" + String.valueOf( ( (TokenMatriz) t1).getFilas() );
+														String columnas = "_l" +String.valueOf( ((TokenMatriz) t1).getColumnas() );
 														if ( ((TokenMatriz) t1).porFilas() ){
 															Token filaBuscada = (Token) $3.obj;
 															Token colBuscada = (Token) $6.obj;
+															filaBuscada.setTipo(analizadorL.variableL);
+															colBuscada.setTipo(analizadorL.variableL);
 															String valor;
 															
 															if (filaBuscada.getNombre().startsWith("mat@")) {
 																//La fila se accede accediendo a una posicion de una matriz
 																valor = "*";
-																TercetoExpresion tercetoMult = new TercetoExpresion ( new TercetoSimple( new Token("*",(int) valor.charAt(0) ) ),new TercetoSimple( (new Token( String.valueOf( controladorTercetos.getProxNumero()-1) )) ), new TercetoSimple( new Token(filas,analizadorL.CTEI) ), controladorTercetos.getProxNumero() );
+																TercetoExpresion tercetoMult = new TercetoExpresion ( new TercetoSimple( new Token("*",(int) valor.charAt(0) ) ),new TercetoSimple( (new Token( String.valueOf( controladorTercetos.getProxNumero()-1) )) ), new TercetoSimple( new Token(filas,analizadorL.CTEL) ), controladorTercetos.getProxNumero() );
 																controladorTercetos.addTerceto (tercetoMult);
 															}else{
 																valor = "*";
-																TercetoExpresionMult tercetoMult = new TercetoExpresionMult ( new TercetoSimple( new Token("*",(int) valor.charAt(0) ) ),new TercetoSimple( filaBuscada ), new TercetoSimple( new Token(filas,analizadorL.CTEI) ), controladorTercetos.getProxNumero() );
+																TercetoExpresionMult tercetoMult = new TercetoExpresionMult ( new TercetoSimple( new Token("*",(int) valor.charAt(0) ) ),new TercetoSimple( filaBuscada ), new TercetoSimple( new Token(filas,analizadorL.CTEL) ), controladorTercetos.getProxNumero() );
 																controladorTercetos.addTerceto (tercetoMult);
 															}
 
@@ -519,9 +521,15 @@ celda_matriz : ID '[' expresion ']' '[' expresion ']' { Token t1 = tablaSimbolo.
 															}
 
 															valor = "*";
-															TercetoExpresion tercetoMultBits = new TercetoExpresion ( new TercetoSimple( new Token("*",(int) valor.charAt(0) ) ),new TercetoSimple( (new Token( String.valueOf( controladorTercetos.getProxNumero()-1) )) ), new TercetoSimple( new Token(bits,analizadorL.CTEI) ), controladorTercetos.getProxNumero() );
+
+															TercetoControl tercetoControl = new TercetoControl (  new TercetoSimple( new Token("*",(int) valor.charAt(0) ) ),new TercetoSimple( (new Token( String.valueOf( controladorTercetos.getProxNumero()-1) )) ), new TercetoSimple( new Token(bits,analizadorL.CTEL) ), (TokenMatriz) t1,controladorTercetos.getProxNumero() );
+																
+															//TercetoExpresion tercetoMultBits = new TercetoExpresion ( new TercetoSimple( new Token("*",(int) valor.charAt(0) ) ),new TercetoSimple( (new Token( String.valueOf( controladorTercetos.getProxNumero()-1) )) ), new TercetoSimple( new Token(bits,analizadorL.CTEL) ), controladorTercetos.getProxNumero() );
+															
 															//tercetoMultBits.setPosicion(Integer.parseInt(controladorTercetos.numeroTercetoString()));
-															controladorTercetos.addTerceto (tercetoMultBits);
+															controladorTercetos.addTerceto (tercetoControl);
+
+															// TercetoControl TercetoContro = new TercetoControl(new TercetoSimple(new Token(":=",(int) (:=) ) ),new TercetoSimple( (new Token( String.valueOf( controladorTercetos.getProxNumero()-2) )) ),new TercetoSimple( (new Token( String.valueOf( controladorTercetos.getProxNumero()-1) )) ), controladorTercetos.getProxNumero() );
 
 															// //Se realiza la asignacion							
 															// valor =":=";

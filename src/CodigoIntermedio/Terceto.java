@@ -1,4 +1,4 @@
-package CodigoIntermedio;
+ package CodigoIntermedio;
 
 import java.util.ArrayList;
 
@@ -17,6 +17,7 @@ public abstract class Terceto {
 	protected int numeroTerceto;
 	protected ControladorTercetos controladorTercetos;
 	String registro;
+	String registro_usado;
 	int posicion;
 
 	public Terceto(TercetoSimple izq, TercetoSimple medio, TercetoSimple der, int numeroTerceto) {
@@ -68,6 +69,7 @@ public abstract class Terceto {
 	
 	public void setRegistro(String registro) {
 		this.registro = registro;
+		this.registro_usado = registro;
 	}
 	
 	public void setControladorTercetos(ControladorTercetos controladorTercetos) {
