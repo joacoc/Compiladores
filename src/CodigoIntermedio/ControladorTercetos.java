@@ -17,7 +17,7 @@ public class ControladorTercetos {
 	
 	private ArrayList<Terceto> tercetos;
 	private ArrayList<Integer> pila;
-	ArrayList<Boolean>registros; //ver el tipo
+	ArrayList<Boolean>registros; //ver el tipo. FALSO libre TRUE ocupado
 	private ArrayList<Integer> labelPendientes; // por el tema del if
 	private ArrayList<Token> prints;
 	private TablaSimbolos tablaSimbolos;
@@ -27,6 +27,9 @@ public class ControladorTercetos {
 	
 	private String ultimoRegistro = null; 
 	private String anteUltimoRegistro = null;
+	
+	private String regMatriz = null;
+	private String regMatrizAux = null;
 			
 	public ControladorTercetos() {
 		tercetos = new ArrayList<Terceto>();
@@ -76,6 +79,27 @@ public class ControladorTercetos {
 	
 	public void apilar(){
 		pila.add(new Integer(tercetos.size()-1) );
+	}
+	
+	public void setRegMatriz(String regMatriz){
+		if(this.regMatriz == null)
+			this.regMatriz = regMatriz;
+		else
+			this.regMatrizAux = regMatriz;
+	}
+	
+	public String getRegMatriz(int i){
+		String aux;
+		if(i==1){
+			aux = this.regMatriz;
+			this.regMatriz = null;
+			return aux;
+		}
+			else{
+				aux = this.regMatrizAux;
+				this.regMatrizAux = null;
+				return aux;
+			}
 	}
 	
 	public void desapilar(){
@@ -286,6 +310,15 @@ public class ControladorTercetos {
 				return Terceto.reg3Long;
 		}
 		return "Registro ocupado";
+	}
+
+	public int getCantRegistros() {
+		int cant =0;
+		for (int i=0; i<registros.size(); i++)
+			if (!registros.get(i)){
+				cant++;
+			}
+		return cant;
 	}
 
 }

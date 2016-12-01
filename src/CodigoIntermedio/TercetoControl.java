@@ -18,6 +18,10 @@ public class TercetoControl extends TercetoExpresion {
 		String assembler = super.getAssembler();
 		boolean agregado = false;
 
+		int num_actual = controladorTercetos.getNumTercetoActual();
+		num_actual -= 1;
+		
+		controladorTercetos.setRegMatriz(controladorTercetos.getTerceto(num_actual).getRegistro());
 		assembler = assembler + "CMP " + controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro() +", " +(t1.getColumnas()*t1.getFilas()*4) +"\n";
 		assembler = assembler + "JG " + ConvertidorAssembler.labelFueraRango +"\n" ;
 		

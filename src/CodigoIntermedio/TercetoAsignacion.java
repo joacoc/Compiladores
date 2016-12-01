@@ -64,34 +64,38 @@ public class TercetoAsignacion extends Terceto{
 			if ( elementos.get(2).esToken() ) {
 				//caso 1: (ASIG, variable, variable){
 				registro2 = controladorTercetos.getProxRegLibre( elementos.get(2).getToken() );
-				assembler = assembler + "MOV" + " "  + registro2 + ", " +  elementos.get(2).getNombreVar() + '\n';
+				
+				if (elementos.get(2).getNombreVar().startsWith("mat"))
+					assembler = assembler + "MOV " +registro2 +  ", " + elementos.get(2).getNombreVar() +"[EBX]" + '\n';
+				else
+					assembler = assembler + "MOV " +registro2  + ", " + elementos.get(2).getNombreVar() + '\n';
 			}
-			else
+			else{
 				//caso 2: (ASIG, variable, registro)
 				registro2 = controladorTercetos.getTerceto(elementos.get(2).getNumeroTerceto() ).getRegistro();
 			
-			if ( (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableI) ) && (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableL)) ){
-				assembler = assembler + "MOV " + "EAX" + ", " + elementos.get(2).getNombreVar() + '\n';
-				assembler = assembler + verificarConversionAsig(registro2);
-				registro2 = controladorTercetos.getRegistroInteger(registro2);
-			}
-			else
-				if ( (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableL) ) && (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableI)) ){
-					assembler = assembler + crearAssemblerConversionVar(registro2);
-					registro2 = registroAux;
+				if ( (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableI) ) && (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableL)) ){
+					assembler = assembler + "MOV " + "EAX" + ", " + elementos.get(2).getNombreVar() + '\n';
+					assembler = assembler + verificarConversionAsig(registro2);
+					registro2 = controladorTercetos.getRegistroInteger(registro2);
 				}
-	
+				else
+					if ( (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableL) ) && (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableI)) ){
+						assembler = assembler + crearAssemblerConversionVar(registro2);
+						registro2 = registroAux;
+					}
 			//TODO:
-			// Hay que hacer seguimiento de registro, no tiene que ser [EBX]
-			
+			// Hay que hacer seguimiento de registro, no tiene que ser [EBX]		
+			}
+
 		if(elementos.get(1).getNombreVar().startsWith("mat"))
 			assembler = assembler + "MOV" + " " +  elementos.get(1).getNombreVar() + "[EBX]," + registro2 + '\n';
 		else
 			assembler = assembler + "MOV" + " " +  elementos.get(1).getNombreVar() + ", " + registro2 + '\n';
 		
-		controladorTercetos.liberarRegistro(registro2);			
+		controladorTercetos.liberarRegistro(registro2);	
 		return assembler;
-	}
+}
 		
 	private String crearAssemblerConversionVar(String registro){
 		String assembler = "";

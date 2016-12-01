@@ -295,6 +295,7 @@ asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion {
 																	String valor =":=";	
 																	Token t1 = (Token) $1.obj;
 																	Token t2 = (Token) $3.obj;
+																	
 																	if ( (t1 != null) && (t2 != null) ){
 																		if(!tipoCompatible(t1,t2))
 																			analizadorCI.addError (new Error ( analizadorCI.errorFaltaAllow,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
@@ -303,8 +304,9 @@ asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion {
 																	//if ( (t1 != null) && (t2 != null) )
 																	//	if ((t1.getTipo().equals("longint")) && (t2.getTipo().equals("integer")))
 																	//		t2.setTipo("longint");
-
-																	TercetoAsignacion terceto = new TercetoAsignacion ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( t2 ), controladorTercetos.getProxNumero() );
+																	TercetoAsignacion terceto;
+																	terceto = new TercetoAsignacion ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( t2 ), controladorTercetos.getProxNumero() );
+																	
 																	controladorTercetos.addTerceto (terceto);								
 
 																	$$ = new ParserVal((Token)$1.obj);
@@ -318,7 +320,8 @@ asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion {
 asignacion :  asignacion_sin_punto_coma ';' 
 		;
 
-expresion : expresion '+' termino	{ 	String valor ="+";
+expresion : expresion '+' termino	{ 	
+										String valor ="+";
 										String tipo = getTipoCompatibleSuma((Token)$1.obj,(Token)$3.obj);
 										TercetoExpresion terceto = new TercetoExpresion ( new TercetoSimple( new Token("+",(int) valor.charAt(0) ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
 										controladorTercetos.addTerceto (terceto);
@@ -333,7 +336,6 @@ expresion : expresion '+' termino	{ 	String valor ="+";
 										Token nuevo = new Token( controladorTercetos.numeroTercetoString() ) ;
 										nuevo.setTipo(tipo);
 										$$ = new ParserVal(nuevo);
-
 									}
       | termino						
 ;
