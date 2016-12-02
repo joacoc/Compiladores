@@ -46,7 +46,7 @@ public class TercetoExpresion extends Terceto {
 		//caso 1: (OP, variable, variable)
 		if ( ( elementos.get(1).esToken() ) && ( elementos.get(2).esToken() ) ){
 			String registro1 = controladorTercetos.getProxRegLibre(elementos.get(1).getToken());
-			String registro2 = controladorTercetos.getProxRegLibre(elementos.get(2).getToken() );
+			String registro2 = controladorTercetos.getProxRegLibre(elementos.get(2).getToken());
 			this.setRegistro(registro1);
 			
 
