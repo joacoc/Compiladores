@@ -107,10 +107,10 @@ declaracion : tipo lista_variables ';' {
 
             | error matriz { analizadorS.addError (new Error ( analizadorS.errorTipo,"ERROR SINTACTICO", controladorArchivo.getLinea() )); } 
            
-            | ALLOW tipo TO tipo ';' { allow = true;
+            | ALLOW LONGINT TO INTEGER ';' { allow = true;
             							analizadorS.addEstructura (new Error ( analizadorS.estructuraALLOW,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
-            | ALLOW error TO tipo ';'{ analizadorS.addError(new Error ( analizadorS.errorTipo,"ERROR SINTACTICO", controladorArchivo.getLinea() )); } 
-            | ALLOW tipo TO error ';'{ analizadorS.addError(new Error ( analizadorS.errorTipo,"ERROR SINTACTICO", controladorArchivo.getLinea() )); } 
+            | ALLOW error TO INTEGER ';'{ analizadorS.addError(new Error ( analizadorS.errorTipo,"ERROR SINTACTICO", controladorArchivo.getLinea() )); } 
+            | ALLOW LONGINT TO error ';'{ analizadorS.addError(new Error ( analizadorS.errorTipo,"ERROR SINTACTICO", controladorArchivo.getLinea() )); } 
             ;
 
 lista_variables : lista_variables ',' ID {	ArrayList<Token> lista = (ArrayList<Token>) $1.obj;

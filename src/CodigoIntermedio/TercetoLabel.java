@@ -9,7 +9,7 @@ public class TercetoLabel extends Terceto {
 
 	@Override
 	public String getAssembler() {
-		return "Label"+numeroTerceto+"\n";
+		return "Label"+numeroTerceto + ":"+"\n";
 	}
 
 }

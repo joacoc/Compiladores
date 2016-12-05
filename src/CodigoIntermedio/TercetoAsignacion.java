@@ -72,12 +72,14 @@ public class TercetoAsignacion extends Terceto{
 				registro2 = controladorTercetos.getProxRegLibre(elementos.get(2).getToken());
 				if ( (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableI) ) && (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableL)) ){
 					//puede que la primer instruccion no vaya
+					assembler = assembler + "MOV " + registro2 + ", " + elementos.get(2).getNombreVar() + '\n';
 					assembler = assembler + "MOV " + "EAX" + ", " + registro2 + '\n';
 					assembler = assembler + verificarConversionAsig(registro2);
 					registro2 = controladorTercetos.getRegistroInteger(registro2);
 				}
 				else
 					if ( (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableL) ) && (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableI)) ){
+						assembler = assembler + "MOV " + registro2 + ", " + elementos.get(2).getNombreVar() + '\n';
 						assembler = assembler + crearAssemblerConversionVar(registro2);
 						registro2 = registroAux;
 					}

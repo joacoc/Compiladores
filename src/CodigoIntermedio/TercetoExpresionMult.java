@@ -14,6 +14,9 @@ public class TercetoExpresionMult extends TercetoExpresion {
 	}
 	
 	public String getAssembler() {
+		System.out.print("registros libres entra:");
+		System.out.println(controladorTercetos.getCantRegistros());
+
 		String assembler = "";
 		Terceto terceto1 = null;
 		if (!elementos.get(1).esToken())
@@ -55,10 +58,11 @@ public class TercetoExpresionMult extends TercetoExpresion {
 		else
 //			//caso 2: (OP, registro, variable)
 			if ( ( !elementos.get(1).esToken() ) && ( elementos.get(2).esToken() ) ){
-//				
+
 				String registroDX = controladorTercetos.getReg4(elementos.get(1).getToken());
 				String registroAX = controladorTercetos.getReg3(elementos.get(1).getToken() );
 				assembler += MOV + " " + registroAX +", " + terceto1.getRegistro()  + '\n';
+				controladorTercetos.liberarRegistro(terceto1.getRegistro());
 				String registro = controladorTercetos.getProxRegLibre(elementos.get(2).getToken());
 				assembler = assembler + MOV + " " + registro +", " + elementos.get(2).getNombreVar()  + '\n';
 				this.setRegistro(registro);
@@ -78,7 +82,6 @@ public class TercetoExpresionMult extends TercetoExpresion {
 				controladorTercetos.liberarRegistro(registroAX);
 				controladorTercetos.liberarRegistro(registroDX);
 			}
-//
 		return assembler;
 	}
 
@@ -106,7 +109,6 @@ public class TercetoExpresionMult extends TercetoExpresion {
 			registroAux1 = "EAX";
 			registroAux2 = "EDX";
 		}
-		
 		return assembler;
 	}
 

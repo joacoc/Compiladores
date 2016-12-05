@@ -36,12 +36,12 @@ public class TercetoFor extends Terceto {
 		String operador = elementos.get(0).getNombreVar();
 		
 		if (operador == controladorTercetos.BF){
-			assembler = tipoSalto + " Label" + elementos.get(2).getNombreVar() + '\n';
+			assembler = assembler + tipoSalto + " Label" + elementos.get(2).getNombreVar() + '\n';
 			controladorTercetos.addLabelPendiente( Integer.parseInt(elementos.get(2).getNombreVar() ) );
 		}
 		else{
 			//BI	
-			assembler = "JUMP Label" + elementos.get(1).getNombreVar() + '\n';
+			assembler = "JMP Label" + elementos.get(1).getNombreVar() + '\n';
 		}
 		return assembler;
 	}
