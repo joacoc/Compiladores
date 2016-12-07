@@ -253,7 +253,6 @@ public class ControladorTercetos {
 		String assembler = "";
 		
 		num_terceto_actual = 1; //numero de terceto para colocar el label
-		
 		for ( Terceto t: tercetos ){
 			
 			t.setControladorTercetos(this);

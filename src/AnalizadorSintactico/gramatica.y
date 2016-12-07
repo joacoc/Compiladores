@@ -346,7 +346,7 @@ expresion : expresion '+' termino	{
 										nuevo.setTipo(tipo);
 										$$ = new ParserVal(nuevo);
 									}
-      | termino						
+      | termino						{ $$ = new ParserVal((Token)$1.obj); }
 ;
 
 
@@ -365,7 +365,7 @@ termino : termino '*' factor	{	String valor ="*";
 										nuevo.setTipo(tipo);
 										$$ = new ParserVal(nuevo);
     							}
-    | factor					
+    | factor					{ $$ = new ParserVal((Token)$1.obj); }
 ;
 
 factor : CTEI  { Token t= (Token) $1.obj;

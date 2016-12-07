@@ -46,7 +46,6 @@ public class TercetoExpresion extends Terceto {
 		//caso 1: (OP, variable, variable)
 		if ( ( elementos.get(1).esToken() ) && ( elementos.get(2).esToken() ) ){
 			String registro1 = controladorTercetos.getProxRegLibre(elementos.get(1).getToken());
-			String registro2 = controladorTercetos.getProxRegLibre(elementos.get(2).getToken());
 			this.setRegistro(registro1);
 			
 
@@ -57,6 +56,9 @@ public class TercetoExpresion extends Terceto {
 			}else
 				assembler = MOV + " " + registro1 +", " + elementos.get(1).getNombreVar()  +'\n';
 			
+			System.out.print("cantidad libres:");
+			System.out.println(controladorTercetos.getCantRegistros());
+			String registro2 = controladorTercetos.getProxRegLibre(elementos.get(2).getToken());
 
 			if(elementos.get(2).getNombreVar().startsWith("mat")){
 //				assembler += verificarMatriz((TokenMatriz)elementos.get(2).t,controladorTercetos);
