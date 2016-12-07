@@ -51,7 +51,7 @@ public class TercetoExpresion extends Terceto {
 			
 
 			if(elementos.get(1).getNombreVar().startsWith("mat")){
-				assembler = verificarMatriz((TokenMatriz)elementos.get(1).t,controladorTercetos);
+//				assembler = verificarMatriz((TokenMatriz)elementos.get(1).t,controladorTercetos);
 				assembler = MOV + " " + registro1 +", " + elementos.get(1).getNombreVar()  + "["+controladorTercetos.getRegMatriz(1)+"]\n";
 				
 			}else
@@ -59,7 +59,7 @@ public class TercetoExpresion extends Terceto {
 			
 
 			if(elementos.get(2).getNombreVar().startsWith("mat")){
-				assembler += verificarMatriz((TokenMatriz)elementos.get(2).t,controladorTercetos);
+//				assembler += verificarMatriz((TokenMatriz)elementos.get(2).t,controladorTercetos);
 				assembler += MOV + " " + registro2 +", " + elementos.get(2).getNombreVar() + "["+controladorTercetos.getRegMatriz(2)+"]\n";;
 			}else
 				assembler += MOV + " " + registro2 +", " + elementos.get(2).getNombreVar()  + '\n';
@@ -78,7 +78,7 @@ public class TercetoExpresion extends Terceto {
 			String registro2 = controladorTercetos.getProxRegLibre(elementos.get(2).getToken() );
 			
 			if(elementos.get(2).getNombreVar().startsWith("mat")){
-				assembler = verificarMatriz((TokenMatriz)elementos.get(2).t,controladorTercetos);
+//				assembler = verificarMatriz((TokenMatriz)elementos.get(2).t,controladorTercetos);
 				assembler = MOV + " " + registro2 +", " + elementos.get(2).getNombreVar()  + "[" +controladorTercetos.getRegMatriz(1) +"]\n";
 			}else
 				assembler = MOV + " " + registro2 +", " + elementos.get(2).getNombreVar()  + '\n';
@@ -103,16 +103,14 @@ public class TercetoExpresion extends Terceto {
 			assembler = assembler + opAssembler + " " + registro1 + ", " + registro2 + '\n';
 			controladorTercetos.liberarRegistro(registro2);
 		}
-		//caso 4: (OP, variable, registro)
+		
 		if ( ( elementos.get(1).esToken() ) && ( !elementos.get(2).esToken() ) ){
 	
 			String registro1 = controladorTercetos.getProxRegLibre(elementos.get(1).getToken());
 			String registro2 = terceto2.getRegistro();
 			this.setRegistro(registro1);// se usa el del primer terceto.
-			
 
 			if(elementos.get(1).getNombreVar().startsWith("mat")){
-				assembler = verificarMatriz((TokenMatriz)elementos.get(1).t,controladorTercetos);
 				assembler = MOV + " " + registro1 +", " + elementos.get(1).getNombreVar()  +"[EBX]\n";
 			}else
 				assembler = MOV + " " + registro1 +", " + elementos.get(1).getNombreVar()  + '\n';

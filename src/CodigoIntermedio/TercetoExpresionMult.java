@@ -33,7 +33,7 @@ public class TercetoExpresionMult extends TercetoExpresion {
 			
 
 			if(elementos.get(1).getNombreVar().startsWith("mat")){
-				verificarMatriz((TokenMatriz)elementos.get(1).t, controladorTercetos);
+//				verificarMatriz((TokenMatriz)elementos.get(1).t, controladorTercetos);
 				assembler = assembler + "MOV " + registroAX + ", " + elementos.get(1).getNombreVar() + "[EBX]\n";
 			}else
 				assembler = assembler + "MOV " + registroAX + ", " + elementos.get(1).getNombreVar() + '\n';
@@ -41,7 +41,7 @@ public class TercetoExpresionMult extends TercetoExpresion {
 			String registro = controladorTercetos.getProxRegLibre(elementos.get(2).getToken());
 
 			if(elementos.get(2).getNombreVar().startsWith("mat")){
-				verificarMatriz((TokenMatriz)elementos.get(2).t, controladorTercetos);
+//				verificarMatriz((TokenMatriz)elementos.get(2).t, controladorTercetos);
 				assembler = assembler + "MOV " + registro + ", " + elementos.get(2).getNombreVar() + "[EBX]\n";
 			}else
 				assembler = assembler + "MOV " + registro + ", " + elementos.get(2).getNombreVar() + '\n';
@@ -77,7 +77,7 @@ public class TercetoExpresionMult extends TercetoExpresion {
 				
 
 				if(elementos.get(2).getNombreVar().startsWith("mat")){
-					verificarMatriz((TokenMatriz)elementos.get(2).t, controladorTercetos);
+//					verificarMatriz((TokenMatriz)elementos.get(2).t, controladorTercetos);
 					assembler = assembler + "MOV " + registro + ", " + elementos.get(2).getNombreVar() + "[EBX]\n";
 				}else
 					assembler = assembler + "MOV " + registro + ", " + elementos.get(2).getNombreVar() + '\n';
@@ -120,6 +120,7 @@ public class TercetoExpresionMult extends TercetoExpresion {
 			elementos.get(2).getToken().setTipo(AnalizadorLexico.variableI);
 			assembler = assembler + "MOV " + registroAux3 + ", " + registroAux1 + '\n';
 			assembler = assembler + "MOV " + registroAX + ", " + registroDX + '\n';
+
 		}
 
 		if (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableI) ){ 
@@ -127,7 +128,6 @@ public class TercetoExpresionMult extends TercetoExpresion {
 			registroAux1 = "EAX";
 			registroAux2 = "EDX";
 		}
-		
 		return assembler;
 	}
 

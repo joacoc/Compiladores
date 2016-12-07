@@ -231,8 +231,7 @@ lado_izquierdo : ID {	//chequeo semantico variable no declarada
 						$$ = new ParserVal( t1 );}
     
             	| celda_matriz {//chequeo semantico variable no declarada
-						Token t1 = tablaSimbolo.getToken(((Token) $1.obj).getNombre()) ;
-						System.out.println(t1.getNombre());
+								Token t1 = tablaSimbolo.getToken(((Token) $1.obj).getNombre()) ;
 				    			if (t1 == null) 
 		 							analizadorCI.addError (new Error ( analizadorCI.errorNoExisteVariable,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
 								$$ = new ParserVal( (Token) $1.obj );}
@@ -289,29 +288,45 @@ operador_menos_menos : ID S_RESTA_RESTA { 	//Se realiza la resta
 													}	
 						;
 
-asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion { 
-																	analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));
-																	
-																	String valor =":=";	
-																	Token t1 = (Token) $1.obj;
-																	Token t2 = (Token) $3.obj;
-																	
-																	if ( (t1 != null) && (t2 != null) ){
-																		if(!tipoCompatible(t1,t2))
-																			analizadorCI.addError (new Error ( analizadorCI.errorFaltaAllow,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
-																	}
-																	
-																	//if ( (t1 != null) && (t2 != null) )
-																	//	if ((t1.getTipo().equals("longint")) && (t2.getTipo().equals("integer")))
-																	//		t2.setTipo("longint");
-																	TercetoAsignacion terceto;
-																	terceto = new TercetoAsignacion ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( t2 ), controladorTercetos.getProxNumero() );
-																	
-																	controladorTercetos.addTerceto (terceto);								
+asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION {
+												//Obtengo el ultimo terceto
+												
 
-																	$$ = new ParserVal((Token)$1.obj);
-																	}
-																	
+												 Token tAux = (Token) $1.obj;
+												 if (tAux.getNombre().startsWith("mat")) {	
+												 	Terceto terceto = controladorTercetos.getTerceto ( controladorTercetos.getCantTercetos());
+												 	controladorTercetos.setTercetoAux( terceto );
+													}
+												 //TODO: Liberar los registros
+
+											} expresion { 
+														analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));
+														
+														String valor =":=";	
+														Token t1 = (Token) $1.obj;
+														Token t2 = (Token) $3.obj;
+														
+														if ( (t1 != null) && (t2 != null) ){
+															if(!tipoCompatible(t1,t2))
+																analizadorCI.addError (new Error ( analizadorCI.errorFaltaAllow,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
+														}
+
+														TercetoAsignacion terceto;
+														 if (t1.getNombre().startsWith("mat")) {
+														// 		Token taux = t1;
+														// 		taux.setNombre("varAux");
+														 	   	TercetoControl tercetoAux = (TercetoControl) controladorTercetos.getTercetoAux();
+														 	 	tercetoAux.setAct();
+														// 	 // tercetoAux.setPosicionTerceto(controladorTercetos.getProxNumero());
+														// 	 // controladorTercetos.addTerceto (tercetoAux);
+														// 	terceto = new TercetoAsignacion ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ), new TercetoSimple( (Token)$1.obj ), new TercetoSimple( t2 ), controladorTercetos.getProxNumero() );
+														 }//else
+														terceto = new TercetoAsignacion ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( (Token)$1.obj ),  new TercetoSimple( new Token( controladorTercetos.numeroTercetoString() ) ), controladorTercetos.getProxNumero() );
+														
+														controladorTercetos.addTerceto (terceto);								
+														$$ = new ParserVal((Token)$1.obj);
+													}
+															
                            | operador_menos_menos { analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
                            | lado_izquierdo S_ASIGNACION error { analizadorS.addError (new Error ( analizadorS.errorAsignacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }      
                            | error S_ASIGNACION expresion { analizadorS.addError (new Error ( analizadorS.errorAsignacion,"ERROR SINTACTICO", controladorArchivo.getLinea()  )); }
@@ -531,32 +546,13 @@ celda_matriz : ID '[' expresion ']' '[' expresion ']' { Token t1 = tablaSimbolo.
 															//tercetoMultBits.setPosicion(Integer.parseInt(controladorTercetos.numeroTercetoString()));
 															controladorTercetos.addTerceto (tercetoControl);
 
-															// TercetoControl TercetoContro = new TercetoControl(new TercetoSimple(new Token(":=",(int) (:=) ) ),new TercetoSimple( (new Token( String.valueOf( controladorTercetos.getProxNumero()-2) )) ),new TercetoSimple( (new Token( String.valueOf( controladorTercetos.getProxNumero()-1) )) ), controladorTercetos.getProxNumero() );
-
-															// //Se realiza la asignacion							
-															// valor =":=";
-															// TercetoAsignacion tercetoAsignacion = new TercetoAsignacion ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( t1 ), new TercetoSimple( new Token( controladorTercetos.numeroTercetoString() ) ), controladorTercetos.getProxNumero() );
-															// controladorTercetos.addTerceto (tercetoAsignacion);
-															// analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));
-											
-														 	//TercetoAsignacion tercetoAsig = new TercetoAsignacion( new TercetoSimple( new Token(":=",(int) valor.charAt(0) ) ),new TercetoSimple( (new Token( String.valueOf( controladorTercetos.getProxNumero()-1) )) ), new TercetoSimple( t1 ), controladorTercetos.getProxNumero() );	
-															//controladorTercetos.addTerceto(tercetoAsig);
 															TokenMatriz ret = new TokenMatriz( new Token(controladorTercetos.numeroTercetoString()), (( (TokenMatriz) t1).getFilas() ), (( (TokenMatriz) t1).getColumnas() ) );
 															ret.setNombre(t1.getNombre());
 															ret.setTipo(t1.getTipo());
 
 															$$ = new ParserVal(ret);
 
-															//suma de la base con el calculo de los bytes que tengo que saltar
-															//valor = "+";
-															//TercetoExpresion tercetoSumaBase = new TercetoExpresion ( new TercetoSimple( new Token("+",(int) valor.charAt(0) ) ),new TercetoSimple( (new Token( String.valueOf( controladorTercetos.getProxNumero()-1) )) ), new TercetoSimple( t1 ), controladorTercetos.getProxNumero() );
-															//controladorTercetos.addTerceto (tercetoSumaBase);
-															//TercetoAsignacion tercetoAsig = new TercetoAsignacion( new TercetoSimple( new Token("+",(int) valor.charAt(0) ) ),new TercetoSimple( (new Token( String.valueOf( controladorTercetos.getProxNumero()-1) )) ), new TercetoSimple( t1 ), controladorTercetos.getProxNumero() );
-															//controladorTercetos.addTerceto(tercetoAsig);
-
-
 														}
-														//$$ = new ParserVal( t1 );
 
 														if (t1 == null) {
 														 	analizadorCI.addError (new Error ( analizadorCI.errorNoExisteMatriz,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
