@@ -69,7 +69,6 @@ public class TercetoExpresion extends Terceto {
 			registro1 = registroAux1;
 			registro2 = registroAux2;
 			assembler = assembler + opAssembler + " " + registro1 + ", " + registro2 + '\n';
-			controladorTercetos.liberarRegistro(registro1);
 			controladorTercetos.liberarRegistro(registro2);
 		}
 		else

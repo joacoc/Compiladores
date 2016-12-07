@@ -88,7 +88,10 @@ public class TercetoAsignacion extends Terceto{
 							registro2 = registroAux;
 						}
 			
-					assembler = assembler + "MOV " +  elementos.get(1).getNombreVar() + ", " + registro2 + '\n';
+					if(elementos.get(1).getNombreVar().substring(4).startsWith("mat"))
+						assembler = assembler + "MOV " +  elementos.get(1).getNombreVar() +"[" +elementos.get(1).getNombreVar().substring(4) +"], " + registro2 + '\n';	
+					else
+						assembler = assembler + "MOV " +  elementos.get(1).getNombreVar() + ", " + registro2 + '\n';
 					controladorTercetos.liberarRegistro(registro2);			
 				}
 				controladorTercetos.liberarRegistro(registro2);			
