@@ -3,6 +3,7 @@ package CodigoIntermedio;
 import AnalizadorLexico.AnalizadorLexico;
 import AnalizadorLexico.CeldaAS;
 import AnalizadorLexico.Token;
+import AnalizadorLexico.TokenMatriz;
 
 public class TercetoExpresionDiv extends TercetoExpresion{
 
@@ -40,6 +41,7 @@ public class TercetoExpresionDiv extends TercetoExpresion{
 		String registroAX = "";
 		String assembler = "";
 		Terceto terceto1 = null;
+		
 		if (!elementos.get(1).esToken())
 			terceto1 = controladorTercetos.getTerceto( Integer.parseInt( elementos.get(1).getNombreVar() ) );
 		Terceto terceto2 = null;
@@ -99,7 +101,6 @@ public class TercetoExpresionDiv extends TercetoExpresion{
 				assembler = assembler + "CWD" + '\n';
 				registroAX = "EAX";
 			}
-			
 		} 
 		
 		assembler = assembler + "IDIV" + " " + registro + '\n';
@@ -116,8 +117,6 @@ public class TercetoExpresionDiv extends TercetoExpresion{
 }
 	
 	private String getAssemblerVarVar() {
-		System.out.println(controladorTercetos.getCantRegistros());
-
 		controladorTercetos.OcuparRegistro(reg4Integer);
 		controladorTercetos.OcuparRegistro(reg3Integer);
 		String registroDX = "";
@@ -191,10 +190,35 @@ public class TercetoExpresionDiv extends TercetoExpresion{
 		return assembler;
 	}
 	
+
+	public static String verificarMatriz(TokenMatriz tokenMatriz, ControladorTercetos controladorTercetos){
+		String assembler = "";
+		assembler = assembler + "CMP " + controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro()+ "," +(tokenMatriz.getColumnas()*tokenMatriz.getFilas()*4) + "\n";
+		assembler = assembler + "JG " + ConvertidorAssembler.labelFueraRango +"\n" ;
+		return assembler;
+	}
+	
 	private String getAssemblerErrorDivCero(String registro, boolean integer) {
 		String assembler = "CMP " + registro + ", 0" + '\n';
 		assembler = assembler + "JE LabelDivCero" + '\n';
 		return assembler;
 	}
 		
+//TODO: Despues del pull me aparecio esto aca:
+	/*
+		//es negativo el valor
+		assembler = assembler + "LabelNEG" + controladorTercetos.getNumTercetoActual() +":" + '\n';
+		String minimo = controladorTercetos.getProxRegLibre(elementos.get(2).getToken());
+		assembler = assembler + "MOV " + minimo + ", " + CeldaAS.minimo + '\n';
+		assembler = assembler + "SUB EAX, " + minimo + '\n';
+		assembler = assembler + "CMP EAX, 0" + '\n';
+		assembler = assembler + "JL LabelERRORPERDIDA" + '\n';
+		controladorTercetos.liberarRegistro(minimo);
+		controladorTercetos.liberarRegistro("EAX");
+		assembler = assembler + "labelSIGUE" + controladorTercetos.getNumTercetoActual() + ":" + '\n';
+		controladorTercetos.liberarRegistro("EAX");
+		return assembler;
+		
+	}
+	*/
 }

@@ -2,13 +2,14 @@ package CodigoIntermedio;
 
 import AnalizadorLexico.AnalizadorLexico;
 import AnalizadorLexico.Token;
+import AnalizadorLexico.TokenMatriz;
 
 public class TercetoExpresion extends Terceto {
 	
 	public final static String MOV = "MOV";
 	public final static String ADD = "ADD";
 	public final static String SUB = "SUB";
-	public final static String MULT = "MUL";
+	public final static String MULT = "IMUL";
 	public final static String DIV = "DIV";
 	private String registroAux1;
 	private String registroAux2;
@@ -27,7 +28,7 @@ public class TercetoExpresion extends Terceto {
 		if (op == "+") return "ADD";
 		if (op == "-") return "SUB";
 		if (op == "/") return "DIV";
-		return "MUL";
+		return "IMUL";
 	}
 	
 	public String getAssembler() {
@@ -41,13 +42,29 @@ public class TercetoExpresion extends Terceto {
 			terceto2 = controladorTercetos.getTerceto( Integer.parseInt( elementos.get(2).getNombreVar() ) );
 		String opAssembler = convertirOperador(operador);
 		
+
 		//caso 1: (OP, variable, variable)
 		if ( ( elementos.get(1).esToken() ) && ( elementos.get(2).esToken() ) ){
 			String registro1 = controladorTercetos.getProxRegLibre(elementos.get(1).getToken());
-			String registro2 = controladorTercetos.getProxRegLibre(elementos.get(2).getToken() );
+			String registro2 = controladorTercetos.getProxRegLibre(elementos.get(2).getToken());
 			this.setRegistro(registro1);
-			assembler += MOV + " " + registro1 +", " + elementos.get(1).getNombreVar()  + '\n';
-			assembler += MOV + " " + registro2 +", " + elementos.get(2).getNombreVar()  + '\n';
+			
+
+			if(elementos.get(1).getNombreVar().startsWith("mat")){
+//				assembler = verificarMatriz((TokenMatriz)elementos.get(1).t,controladorTercetos);
+				assembler = MOV + " " + registro1 +", " + elementos.get(1).getNombreVar()  + "["+controladorTercetos.getRegMatriz(1)+"]\n";
+				controladorTercetos.liberarRegistro(controladorTercetos.getRegMatriz(1));
+			}else
+				assembler = MOV + " " + registro1 +", " + elementos.get(1).getNombreVar()  +'\n';
+			
+
+			if(elementos.get(2).getNombreVar().startsWith("mat")){
+//				assembler += verificarMatriz((TokenMatriz)elementos.get(2).t,controladorTercetos);
+				assembler += MOV + " " + registro2 +", " + elementos.get(2).getNombreVar() + "["+controladorTercetos.getRegMatriz(2)+"]\n";;
+				controladorTercetos.liberarRegistro(controladorTercetos.getRegMatriz(2));
+			}else
+				assembler += MOV + " " + registro2 +", " + elementos.get(2).getNombreVar()  + '\n';
+			
 			assembler += hacerConversiones(registro1, registro2);
 			registro1 = registroAux1;
 			registro2 = registroAux2;
@@ -61,7 +78,13 @@ public class TercetoExpresion extends Terceto {
 			String registro1 = terceto1.getRegistro();
 			String registro2 = controladorTercetos.getProxRegLibre(elementos.get(2).getToken() );
 			
-			assembler = MOV + " " + registro2 +", " + elementos.get(2).getNombreVar()  + '\n';
+			if(elementos.get(2).getNombreVar().startsWith("mat")){
+//				assembler = verificarMatriz((TokenMatriz)elementos.get(2).t,controladorTercetos);
+				assembler = MOV + " " + registro2 +", " + elementos.get(2).getNombreVar()  + "[" +controladorTercetos.getRegMatriz(1) +"]\n";
+			}else
+				assembler = MOV + " " + registro2 +", " + elementos.get(2).getNombreVar()  + '\n';
+			
+			
 			assembler += hacerConversiones(registro1, registro2);
 			registro1 = registroAux1;
 			registro2 = registroAux2;
@@ -81,23 +104,30 @@ public class TercetoExpresion extends Terceto {
 			assembler = assembler + opAssembler + " " + registro1 + ", " + registro2 + '\n';
 			controladorTercetos.liberarRegistro(registro2);
 		}
-		//caso 4: (OP, variable, registro)
+		
 		if ( ( elementos.get(1).esToken() ) && ( !elementos.get(2).esToken() ) ){
+	
 			String registro1 = controladorTercetos.getProxRegLibre(elementos.get(1).getToken());
 			String registro2 = terceto2.getRegistro();
 			this.setRegistro(registro1);// se usa el del primer terceto.
-			
-			assembler = MOV + " " + registro1 +", " + elementos.get(1).getNombreVar()  + '\n';
+
+			if(elementos.get(1).getNombreVar().startsWith("mat")){
+				assembler = MOV + " " + registro1 +", " + elementos.get(1).getNombreVar()  +"[EBX]\n";
+			}else
+				assembler = MOV + " " + registro1 +", " + elementos.get(1).getNombreVar()  + '\n';
+
 			assembler += hacerConversiones(registro1, registro2);
 			registro1 = registroAux1;
 			registro2 = registroAux2;
 			assembler = assembler + opAssembler + " " + registro1 + ", " + registro2 + '\n';
+			
 			controladorTercetos.liberarRegistro(registro2);
 				
 		}
 		
 		if(getAssemblerErrores()!=null)
-			assembler = assembler + getAssemblerErrores(); //ver porque hay que reubicarlo porquen en div va antes y en suma desp
+			//ver porque hay que reubicarlo porquen en div va antes y en suma desp
+			assembler = assembler + getAssemblerErrores(); 
 		
 		return assembler;
 	}
@@ -130,6 +160,13 @@ public class TercetoExpresion extends Terceto {
 				elementos.get(2).getToken().setTipo(AnalizadorLexico.variableI);
 				return assembler;
 			}
+		return assembler;
+	}
+
+	public static String verificarMatriz(TokenMatriz tokenMatriz, ControladorTercetos controladorTercetos){
+		String assembler = "";
+		assembler = assembler + "CMP " + controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro()+ "," +(tokenMatriz.getColumnas()*tokenMatriz.getFilas()*4) + "\n";
+		assembler = assembler + "JG " + ConvertidorAssembler.labelFueraRango +"\n" ;
 		return assembler;
 	}
 

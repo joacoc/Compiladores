@@ -27,6 +27,11 @@ public class ControladorTercetos {
 	
 	private String ultimoRegistro = null; 
 	private String anteUltimoRegistro = null;
+	
+	private String regMatriz = null;
+	private String regMatrizAux = null;
+	
+	private Terceto tercetoAux;
 			
 	public ControladorTercetos() {
 		tercetos = new ArrayList<Terceto>();
@@ -62,10 +67,28 @@ public class ControladorTercetos {
 		tercetos.add(t);
 	}
 	
+	public void setTercetoAux(Terceto tercetoAux){
+		this.tercetoAux = tercetoAux;
+		this.liberarRegistro(tercetoAux.getRegistro());
+	}
+	
+	public void removeTerceto(){
+		tercetos.remove(tercetos.size());
+		num_terceto_actual--;
+	}
+	
+	public Terceto getTercetoAux(){
+		return this.tercetoAux;
+	}
+	
 	public int getProxNumero(){
 		return tercetos.size()+1;
 	}
 	
+	public int getCantTercetos(){
+		return tercetos.size();
+	}
+
 	public void addLabelPendiente(int labelPendiente) {
 		this.labelPendientes.add( labelPendiente );
 	}
@@ -76,6 +99,27 @@ public class ControladorTercetos {
 	
 	public void apilar(){
 		pila.add(new Integer(tercetos.size()-1) );
+	}
+	
+	public void setRegMatriz(String regMatriz){
+		if(this.regMatriz == null)
+			this.regMatriz = regMatriz;
+		else
+			this.regMatrizAux = regMatriz;
+	}
+	
+	public String getRegMatriz(int i){
+		String aux;
+		if(i==1){
+			aux = this.regMatriz;
+			this.regMatriz = null;
+			return aux;
+		}
+			else{
+				aux = this.regMatrizAux;
+				this.regMatrizAux = null;
+				return aux;
+			}
 	}
 	
 	public void desapilar(){

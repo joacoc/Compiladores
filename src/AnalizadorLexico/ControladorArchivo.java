@@ -4,6 +4,7 @@ public class ControladorArchivo {
 	
 	static final char saltoLinea = '\n';
 	static final char finArchivo = '$';
+	
 	//numero de linea actual
 	private int linea;
 	private char actual;
