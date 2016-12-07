@@ -41,9 +41,7 @@ public class TercetoAsignacion extends Terceto{
 //							assembler = assembler + verificarMatriz((TokenMatriz) elementos.get(2).getToken());
 						}
 						else{
-							System.out.print("registros libres a la matri:");
-							System.out.println(controladorTercetos.getCantRegistros());
-//							assembler = assembler + verificarMatriz((TokenMatriz) elementos.get(1).getToken());
+							assembler = assembler + verificarMatriz((TokenMatriz) elementos.get(1).getToken());
 							assembler = assembler + "MOV " +"EBX" +"," +controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro()+"\n"; 
 							assembler = assembler + "MOV " + elementos.get(1).getNombreVar() + "[EBX]" +"," +elementos.get(2).getNombreVar()+"\n";
 							controladorTercetos.liberarRegistro(controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro());
