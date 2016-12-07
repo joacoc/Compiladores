@@ -628,13 +628,6 @@ if(t1.getTipo()!=null && t2.getTipo()!=null){
 				}
 		}else{
 			if(t1.getTipo().equals("longint")){
-				if(t2.getTipo().equals("integer"))
-					if(allow)
-						return true;
-					else
-						return false;
-				else
-					if(t2.getTipo().equals("longint"))
 						return true;
 			}
 		}
