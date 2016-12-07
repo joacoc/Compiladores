@@ -236,7 +236,6 @@ lado_izquierdo : ID {	//chequeo semantico variable no declarada
 		 							analizadorCI.addError (new Error ( analizadorCI.errorNoExisteVariable,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
 				
 								//Obtengo el ultimo terceto				
-
 								 Token tAux = (Token) $1.obj;
 								 if (tAux.getNombre().startsWith("mat")) {	
 								 	TercetoControl terceto = (TercetoControl) controladorTercetos.getTerceto ( controladorTercetos.getCantTercetos());
@@ -311,12 +310,12 @@ asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion {
 														}
 
 														TercetoAsignacion terceto;
-														 if (t1.getNombre().startsWith("mat")) {
-														 	   	TercetoControl tercetoAux = (TercetoControl) controladorTercetos.getTercetoAux();
+														 // if (t1.getNombre().startsWith("mat")) {
+														 	   	// TercetoControl tercetoAux = (TercetoControl) controladorTercetos.getTercetoAux();
 														 	 	//tercetoAux.setAct();
-																terceto = new TercetoAsignacion ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( (Token)$1.obj ),  new TercetoSimple( new Token( controladorTercetos.numeroTercetoString() ) ), controladorTercetos.getProxNumero() );
-														}else
-															terceto = new TercetoAsignacion ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( (Token)$1.obj ),  new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
+																// terceto = new TercetoAsignacion ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( (Token)$1.obj ),  new TercetoSimple( new Token( controladorTercetos.numeroTercetoString() ) ), controladorTercetos.getProxNumero() );
+														// }else
+														terceto = new TercetoAsignacion ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( (Token)$1.obj ),  new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
 														
 														controladorTercetos.addTerceto (terceto);								
 														$$ = new ParserVal((Token)$1.obj);
