@@ -57,6 +57,13 @@ public class ControladorTercetos {
 		tercetos.add(index, t);
 	}
 	
+	public void liberarRegistros(){
+		for (int i = 0; i < registros.size(); i++) {
+			Boolean b = registros.get(i);
+			b = false;
+		}
+	}
+	
 	public int borrarLabelPendiente() {
 		int l = labelPendientes.get( labelPendientes.size()-1 );
 		labelPendientes.remove( labelPendientes.size()-1 );
