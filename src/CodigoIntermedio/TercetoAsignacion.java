@@ -20,7 +20,7 @@ public class TercetoAsignacion extends Terceto{
 	public String getAssembler() {
 		String assembler = "";
 		String registro2 = "";
-		
+
 		//tire aca arriba lo de la matriz
 		//tendria que ser todo codigo de matrices, sino le erre al sol el conflicto
 			//Si es una matriz tengo que hacer el chequeo de rango
@@ -35,10 +35,15 @@ public class TercetoAsignacion extends Terceto{
 							assembler = assembler + "MOV " +"EBX" +"," +controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro()+"\n"; 
 							assembler = assembler + "MOV " + elementos.get(1).getNombreVar() + "[" + elementos.get(1).getNombreVar().substring(4, elementos.get(1).getNombreVar().length())  +"]" +", " +elementos.get(2).getNombreVar()+"[EBX]" +"\n";
 							controladorTercetos.liberarRegistro(controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro());
+
 						}
 						else{
-							assembler = assembler + "MOV " +"EBX" +"," +controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro()+"\n"; 
-							assembler = assembler + "MOV " + elementos.get(1).getNombreVar() + "[EBX]" +"," +elementos.get(2).getNombreVar()+"\n";
+							//La primer variable es matriz
+							
+							System.out.print("registros libres a la matri:");
+							System.out.println(controladorTercetos.getCantRegistros());
+							
+							assembler = assembler + "MOV " + elementos.get(1).getNombreVar() + "[" + ((TercetoControl)controladorTercetos.getTercetoAux()).getTokenMatriz().getNombre().substring(4) +"]" +"," +elementos.get(2).getNombreVar()+"\n";
 							controladorTercetos.liberarRegistro(controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro());
 						}
 					}else 
@@ -65,6 +70,7 @@ public class TercetoAsignacion extends Terceto{
 									assembler = assembler + "MOV " + registro2 + ", " + elementos.get(2).getNombreVar() + '\n';
 							
 							assembler = assembler +   "MOV" + " " +  elementos.get(1).getNombreVar() + ", " + registro2 + '\n';
+							controladorTercetos.liberarRegistro(registro2);
 						}
 				}
 				else{
@@ -81,10 +87,11 @@ public class TercetoAsignacion extends Terceto{
 							assembler = assembler + crearAssemblerConversionVar(registro2);
 							registro2 = registroAux;
 						}
-					
+			
 					assembler = assembler + "MOV " +  elementos.get(1).getNombreVar() + ", " + registro2 + '\n';
 					controladorTercetos.liberarRegistro(registro2);			
 				}
+				controladorTercetos.liberarRegistro(registro2);			
 			return assembler;
 	}
 		

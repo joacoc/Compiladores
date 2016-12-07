@@ -17,6 +17,10 @@ public class TercetoControl extends TercetoExpresion {
 		this.act = true;
 	}
 	
+	public TokenMatriz getTokenMatriz(){
+		return t1;
+	}
+	
 	@Override
 	public String getAssembler() {
 		// TODO Auto-generated method stub
@@ -32,6 +36,7 @@ public class TercetoControl extends TercetoExpresion {
 		
 		if(act){
 			assembler = assembler +"MOV " + t1.getNombre().substring(4, t1.getNombre().length()) +", " +controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro() + "\n";
+			controladorTercetos.liberarRegistros();
 		}
 		return assembler;
 	}

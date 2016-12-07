@@ -107,10 +107,10 @@ declaracion : tipo lista_variables ';' {
 
             | error matriz { analizadorS.addError (new Error ( analizadorS.errorTipo,"ERROR SINTACTICO", controladorArchivo.getLinea() )); } 
            
-            | ALLOW tipo TO tipo ';' { allow = true;
+            | ALLOW LONGINT TO INTEGER ';' { allow = true;
             							analizadorS.addEstructura (new Error ( analizadorS.estructuraALLOW,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea()  )); }
-            | ALLOW error TO tipo ';'{ analizadorS.addError(new Error ( analizadorS.errorTipo,"ERROR SINTACTICO", controladorArchivo.getLinea() )); } 
-            | ALLOW tipo TO error ';'{ analizadorS.addError(new Error ( analizadorS.errorTipo,"ERROR SINTACTICO", controladorArchivo.getLinea() )); } 
+            | ALLOW error TO INTEGER ';'{ analizadorS.addError(new Error ( analizadorS.errorTipo,"ERROR SINTACTICO", controladorArchivo.getLinea() )); } 
+            | ALLOW LONGINT TO error ';'{ analizadorS.addError(new Error ( analizadorS.errorTipo,"ERROR SINTACTICO", controladorArchivo.getLinea() )); } 
             ;
 
 lista_variables : lista_variables ',' ID {	ArrayList<Token> lista = (ArrayList<Token>) $1.obj;
@@ -234,6 +234,16 @@ lado_izquierdo : ID {	//chequeo semantico variable no declarada
 								Token t1 = tablaSimbolo.getToken(((Token) $1.obj).getNombre()) ;
 				    			if (t1 == null) 
 		 							analizadorCI.addError (new Error ( analizadorCI.errorNoExisteVariable,"ERROR DE GENERACION DE CODIGO INTERMEDIO", controladorArchivo.getLinea()  ));
+				
+								//Obtengo el ultimo terceto				
+
+								 Token tAux = (Token) $1.obj;
+								 if (tAux.getNombre().startsWith("mat")) {	
+								 	TercetoControl terceto = (TercetoControl) controladorTercetos.getTerceto ( controladorTercetos.getCantTercetos());
+								 	controladorTercetos.setTercetoAux( terceto );
+								 	terceto.setAct();
+									}
+
 								$$ = new ParserVal( (Token) $1.obj );}
                 ;
 
@@ -288,18 +298,7 @@ operador_menos_menos : ID S_RESTA_RESTA { 	//Se realiza la resta
 													}	
 						;
 
-asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION {
-												//Obtengo el ultimo terceto
-												
-
-												 Token tAux = (Token) $1.obj;
-												 if (tAux.getNombre().startsWith("mat")) {	
-												 	Terceto terceto = controladorTercetos.getTerceto ( controladorTercetos.getCantTercetos());
-												 	controladorTercetos.setTercetoAux( terceto );
-													}
-												 //TODO: Liberar los registros
-
-											} expresion { 
+asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION expresion { 
 														analizadorS.addEstructura (new Error ( analizadorS.estructuraASIG,"ESTRUCTURA SINTACTICA", controladorArchivo.getLinea() ));
 														
 														String valor =":=";	
@@ -314,7 +313,7 @@ asignacion_sin_punto_coma : lado_izquierdo S_ASIGNACION {
 														TercetoAsignacion terceto;
 														 if (t1.getNombre().startsWith("mat")) {
 														 	   	TercetoControl tercetoAux = (TercetoControl) controladorTercetos.getTercetoAux();
-														 	 	tercetoAux.setAct();
+														 	 	//tercetoAux.setAct();
 																terceto = new TercetoAsignacion ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( (Token)$1.obj ),  new TercetoSimple( new Token( controladorTercetos.numeroTercetoString() ) ), controladorTercetos.getProxNumero() );
 														}else
 															terceto = new TercetoAsignacion ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( (Token)$1.obj ),  new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
@@ -630,13 +629,6 @@ if(t1.getTipo()!=null && t2.getTipo()!=null){
 				}
 		}else{
 			if(t1.getTipo().equals("longint")){
-				if(t2.getTipo().equals("integer"))
-					if(allow)
-						return true;
-					else
-						return false;
-				else
-					if(t2.getTipo().equals("longint"))
 						return true;
 			}
 		}

@@ -52,11 +52,11 @@ public class Main {
 	
 	public static void main(String[] args) throws IOException {
 
-		String direccion = new String("C:\\Users\\Joaking\\Desktop\\test2.txt");
- 		InputStream is = new ByteArrayInputStream(direccion.getBytes());
+//		String direccion = new String("C:\\Users\\juan\\Desktop\\Casos de pruba\\HelloWorld.txt");
+// 		InputStream is = new ByteArrayInputStream(direccion.getBytes());
 
-//		String direccion = new String("C:\\Users\\Joaking\\Desktop\\test2.txt");
-//		InputStream is = new ByteArrayInputStream(direccion.getBytes());
+		String direccion = new String("C:\\Users\\Joaking\\Desktop\\test2.txt");
+		InputStream is = new ByteArrayInputStream(direccion.getBytes());
 		System.out.println("COMPILADORG17\n");
 		
 	//	InputStream is = new ByteArrayInputStream(args[0].getBytes());
