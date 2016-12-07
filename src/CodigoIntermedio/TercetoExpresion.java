@@ -53,14 +53,15 @@ public class TercetoExpresion extends Terceto {
 			if(elementos.get(1).getNombreVar().startsWith("mat")){
 //				assembler = verificarMatriz((TokenMatriz)elementos.get(1).t,controladorTercetos);
 				assembler = MOV + " " + registro1 +", " + elementos.get(1).getNombreVar()  + "["+controladorTercetos.getRegMatriz(1)+"]\n";
-				
+				controladorTercetos.liberarRegistro(controladorTercetos.getRegMatriz(1));
 			}else
 				assembler = MOV + " " + registro1 +", " + elementos.get(1).getNombreVar()  +'\n';
 			
 
 			if(elementos.get(2).getNombreVar().startsWith("mat")){
 //				assembler += verificarMatriz((TokenMatriz)elementos.get(2).t,controladorTercetos);
-				assembler += MOV + " " + registro2 +", " + elementos.get(2).getNombreVar() + "["+controladorTercetos.getRegMatriz(2)+"]\n";;
+				assembler += MOV + " " + registro2 +", " + elementos.get(2).getNombreVar() + "["+controladorTercetos.getRegMatriz(2)+"]\n";
+				controladorTercetos.liberarRegistro(controladorTercetos.getRegMatriz(2));
 			}else
 				assembler += MOV + " " + registro2 +", " + elementos.get(2).getNombreVar()  + '\n';
 			
@@ -80,6 +81,7 @@ public class TercetoExpresion extends Terceto {
 			if(elementos.get(2).getNombreVar().startsWith("mat")){
 //				assembler = verificarMatriz((TokenMatriz)elementos.get(2).t,controladorTercetos);
 				assembler = MOV + " " + registro2 +", " + elementos.get(2).getNombreVar()  + "[" +controladorTercetos.getRegMatriz(1) +"]\n";
+				controladorTercetos.liberarRegistro(controladorTercetos.getRegMatriz(1));
 			}else
 				assembler = MOV + " " + registro2 +", " + elementos.get(2).getNombreVar()  + '\n';
 			

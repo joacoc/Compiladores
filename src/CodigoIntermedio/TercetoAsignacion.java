@@ -27,36 +27,34 @@ public class TercetoAsignacion extends Terceto{
 		
 				if (( elementos.get(1).esToken() ) && ( elementos.get(2).esToken() )) {
 					//caso 1: (ASIG, variable, variable)
-
-					registro2 = controladorTercetos.getProxRegLibre(elementos.get(2).getToken());
 						
 					//Si es una matriz tengo que hacer el chequeo de rango
 					if(elementos.get(1).getNombreVar().startsWith("mat")){
 						if(elementos.get(2).getNombreVar().startsWith("mat")){
 							//Ambas variables son matrices.
 							assembler = assembler + "MOV " +"EBX" +"," +controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro()+"\n"; 
-							assembler = assembler + "MOV " + elementos.get(1).getNombreVar() + "[" + elementos.get(1).getNombreVar().substring(4, elementos.get(1).getNombreVar().length())  +"]" +", " +elementos.get(2).getNombreVar()+"[EBX]" +"\n"; 
-//							assembler = assembler + verificarMatriz((TokenMatriz) elementos.get(1).getToken());
-//							assembler = assembler + verificarMatriz((TokenMatriz) elementos.get(2).getToken());
+							assembler = assembler + "MOV " + elementos.get(1).getNombreVar() + "[" + elementos.get(1).getNombreVar().substring(4, elementos.get(1).getNombreVar().length())  +"]" +", " +elementos.get(2).getNombreVar()+"[EBX]" +"\n";
+							controladorTercetos.liberarRegistro(controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro());
 						}
 						else{
-//							assembler = assembler + verificarMatriz((TokenMatriz) elementos.get(1).getToken());
 							assembler = assembler + "MOV " +"EBX" +"," +controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro()+"\n"; 
 							assembler = assembler + "MOV " + elementos.get(1).getNombreVar() + "[EBX]" +"," +elementos.get(2).getNombreVar()+"\n";
+							controladorTercetos.liberarRegistro(controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro());
 						}
 					}else 
 						if(elementos.get(2).getNombreVar().startsWith("mat")){
-//							assembler = assembler + verificarMatriz((TokenMatriz) elementos.get(2).getToken());
 							assembler = assembler + "MOV " +"EBX" +"," +controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro()+"\n"; 
 							assembler = assembler + "MOV " + elementos.get(1).getNombreVar() +"," +elementos.get(2).getNombreVar()+"[EBX]" +"\n";
+							controladorTercetos.liberarRegistro(controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro());
 						}else{
 							//Ninguna de las variables es una matriz
-							
+
+							registro2 = controladorTercetos.getProxRegLibre(elementos.get(2).getToken());
 							if ( (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableI) ) && (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableL)) ){
 								//puede que la primer instruccion no vaya
 								assembler = assembler + "MOV " + "EAX" + ", " + registro2 + '\n';
 								assembler = assembler + verificarConversionAsig(registro2);
-//								registro2 = controladorTercetos.getRegistroInteger(registro2);
+								registro2 = controladorTercetos.getRegistroInteger(registro2);
 							}
 							else
 								if ( (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableL) ) && (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableI)) ){
@@ -66,7 +64,6 @@ public class TercetoAsignacion extends Terceto{
 								else
 									assembler = assembler + "MOV " + registro2 + ", " + elementos.get(2).getNombreVar() + '\n';
 							
-
 							assembler = assembler +   "MOV" + " " +  elementos.get(1).getNombreVar() + ", " + registro2 + '\n';
 						}
 				}
@@ -76,24 +73,16 @@ public class TercetoAsignacion extends Terceto{
 					if ( (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableI) ) && (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableL)) ){
 						//puede que la primer instruccion no vaya
 						assembler = assembler + "MOV " + "EAX" + ", " + registro2 + '\n';
-//						assembler = assembler + verificarConversionAsig(registro2);
+						assembler = assembler + verificarConversionAsig(registro2);
 						registro2 = controladorTercetos.getRegistroInteger(registro2);
 					}
-					else{
+					else
 						if ( (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableL) ) && (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableI)) ){
 							assembler = assembler + crearAssemblerConversionVar(registro2);
 							registro2 = registroAux;
 						}
-					}
 					
-					if(elementos.get(1).getNombreVar().startsWith("mat")){
-						if(actVar)
-							assembler = assembler + "MOV " +"[" +  elementos.get(1).getNombreVar().substring(4, elementos.get(1).getNombreVar().length())+getRegistro() +"], " + registro2 +'\n';
-						else
-							assembler = assembler + "MOV " + elementos.get(1).getNombreVar() +"[" +getRegistro() +"], " + registro2 +'\n';
-					}
-					else
-						assembler = assembler + "MOV " +  elementos.get(1).getNombreVar() + ", " + registro2 + '\n';
+					assembler = assembler + "MOV " +  elementos.get(1).getNombreVar() + ", " + registro2 + '\n';
 					controladorTercetos.liberarRegistro(registro2);			
 				}
 			return assembler;
