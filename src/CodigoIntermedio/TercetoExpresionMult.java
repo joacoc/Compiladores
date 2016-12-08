@@ -36,7 +36,7 @@ public class TercetoExpresionMult extends TercetoExpresion {
 
 			if(elementos.get(1).getNombreVar().startsWith("mat")){
 //				verificarMatriz((TokenMatriz)elementos.get(1).t, controladorTercetos);
-				assembler = assembler + "MOV " + registroAX + ", " + elementos.get(1).getNombreVar() + "[EBX]\n";
+				assembler = assembler + "MOV " + registroAX + ", " + "["+controladorTercetos.getRegMatriz(1)+"]\n";
 			}else
 				assembler = assembler + "MOV " + registroAX + ", " + elementos.get(1).getNombreVar() + '\n';
 			
@@ -44,7 +44,12 @@ public class TercetoExpresionMult extends TercetoExpresion {
 
 			if(elementos.get(2).getNombreVar().startsWith("mat")){
 //				verificarMatriz((TokenMatriz)elementos.get(2).t, controladorTercetos);
-				assembler = assembler + "MOV " + registro + ", " + elementos.get(2).getNombreVar() + "[EBX]\n";
+				String regMatrizAux = controladorTercetos.getRegMatriz(2);
+				if(regMatrizAux==null)
+					assembler += MOV + " " + registro +", " + elementos.get(2).getNombreVar() + "["+controladorTercetos.getRegMatriz(1)+"]\n";
+				else
+					assembler = assembler + "MOV " + registro + ", " + elementos.get(2).getNombreVar() + "["+regMatrizAux+"]\n";
+				
 			}else
 				assembler = assembler + "MOV " + registro + ", " + elementos.get(2).getNombreVar() + '\n';
 			

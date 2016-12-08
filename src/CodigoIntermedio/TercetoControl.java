@@ -38,8 +38,6 @@ public class TercetoControl extends TercetoExpresion {
 		if(act){
 			assembler = assembler +"MOV " + "matrix" +", " +controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro() + "\n";
 			controladorTercetos.liberarRegistro(this.getRegistro());
-//			controladorTercetos.addVarAux(t1.getNombre().substring(4));
-			//	controladorTercetos.liberarRegistros();
 		}
 		return assembler;
 	}

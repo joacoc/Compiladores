@@ -40,7 +40,12 @@ public class TercetoComparacion extends Terceto {
 				assembler = assembler + "MOV" + " " +  registro1 + ", " + elementos.get(1).getNombreVar()+ '\n';
 			
 			if(elementos.get(2).getNombreVar().startsWith("mat@")){
-				assembler = assembler + "MOV" + " " +  registro2 + ", " + elementos.get(2).getNombreVar()+"[" +controladorTercetos.getRegMatriz(2) +"]" +'\n';
+				
+				String regMatrizAux = controladorTercetos.getRegMatriz(2);
+				if(regMatrizAux==null)
+					assembler = assembler + "MOV" + " " +  registro2 + ", " + elementos.get(2).getNombreVar()+"[" +controladorTercetos.getRegMatriz(1) +"]" +'\n';
+				else
+					assembler = assembler + "MOV" + " " +  registro2 + ", " + elementos.get(2).getNombreVar()+"[" +regMatrizAux +"]" +'\n';
 			}
 			else
 				assembler = assembler + "MOV" + " " +  registro2 + ", " + elementos.get(2).getNombreVar()+ '\n';
