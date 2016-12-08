@@ -35,7 +35,6 @@ public class TercetoAsignacion extends Terceto{
 							assembler = assembler + "MOV " +"EBX" +"," +controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro()+"\n"; 
 							assembler = assembler + "MOV " + elementos.get(1).getNombreVar() + "[" + elementos.get(1).getNombreVar().substring(4, elementos.get(1).getNombreVar().length())  +"]" +", " +elementos.get(2).getNombreVar()+"[EBX]" +"\n";
 							controladorTercetos.liberarRegistro(controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro());
-
 						}
 						else{
 							//La primer variable es matriz

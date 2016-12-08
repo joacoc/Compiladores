@@ -95,8 +95,8 @@ public class Main {
         	System.out.println( "No se genera codigo intermedio por errores en el codigo" );
         else{
 	        System.out.println( controladorTercetos.imprimirTercetos() );
-//	        convertidorAssembler.generarAssembler();
-	        System.out.println( convertidorAssembler.generarArchivo() );
+	        convertidorAssembler.generarAssembler();
+//	        System.out.println( convertidorAssembler.generarArchivo() );
         }
         
 	}
