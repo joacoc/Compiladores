@@ -2,6 +2,7 @@ package CodigoIntermedio;
 
 import AnalizadorLexico.AnalizadorLexico;
 import AnalizadorLexico.CeldaAS;
+import AnalizadorLexico.Token;
 import AnalizadorLexico.TokenMatriz;
 
 public class TercetoAsignacion extends Terceto{
@@ -83,8 +84,17 @@ public class TercetoAsignacion extends Terceto{
 							registro2 = registroAux;
 						}
 			
-					if(elementos.get(1).getNombreVar().startsWith("mat"))
-						assembler = assembler + "MOV " +  elementos.get(1).getNombreVar() +"[" +elementos.get(1).getNombreVar().substring(4) +"], " + registro2 + '\n';	
+					if(elementos.get(1).getNombreVar().startsWith("mat")){
+						
+						//Este token se usa para que use un registro EX para calcular la direccion de la matriz.
+						Token t = new Token("2");
+						t.setTipo("longint");
+						
+						String regAux = controladorTercetos.getProxRegLibre(t);
+						assembler = assembler + "MOV " + regAux + ", matrix \n"; 
+						assembler = assembler + "MOV " +  elementos.get(1).getNombreVar() +"[" +regAux +"], " + registro2 + '\n';	
+						controladorTercetos.liberarRegistro(regAux);
+					}
 					else
 						assembler = assembler + "MOV " +  elementos.get(1).getNombreVar() + ", " + registro2 + '\n';
 					controladorTercetos.liberarRegistro(registro2);			
