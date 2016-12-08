@@ -35,7 +35,7 @@ public class TercetoControl extends TercetoExpresion {
 		assembler = assembler + "JG " + ConvertidorAssembler.labelFueraRango +"\n" ;
 		
 		if(act){
-			assembler = assembler +"MOV " + t1.getNombre().substring(4, t1.getNombre().length()) +", " +controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro() + "\n";
+//			assembler = assembler +"MOV " + t1.getNombre().substring(4, t1.getNombre().length()) +", " +controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro() + "\n";
 			controladorTercetos.liberarRegistros();
 		}
 		return assembler;

@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 public abstract class Terceto {
 
-	public static final String reg1Integer = "BX";
-	public static final String reg1Long = "EBX";
-	public static final String reg2Integer = "CX";
-	public static final String reg2Long = "ECX";
+	public static final String reg2Integer = "BX";
+	public static final String reg2Long = "EBX";
+	public static final String reg1Integer = "CX";
+	public static final String reg1Long = "ECX";
 	public static final String reg3Integer = "AX";
 	public static final String reg3Long = "EAX";
 	public static final String reg4Integer = "DX";
