@@ -27,7 +27,6 @@ public class TercetoAsignacion extends Terceto{
 		
 				if (( elementos.get(1).esToken() ) && ( elementos.get(2).esToken() )) {
 					//caso 1: (ASIG, variable, variable)
-						
 					//Si es una matriz tengo que hacer el chequeo de rango
 					if(elementos.get(1).getNombreVar().startsWith("mat")){
 						if(elementos.get(2).getNombreVar().startsWith("mat")){
