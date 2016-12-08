@@ -30,7 +30,7 @@ public class ControladorTercetos {
 	
 	private String regMatriz = null;
 	private String regMatrizAux = null;
-	
+	private static StringBuilder varAux;
 	private Terceto tercetoAux;
 			
 	public ControladorTercetos() {
@@ -253,7 +253,6 @@ public class ControladorTercetos {
 		String assembler = "";
 		
 		num_terceto_actual = 1; //numero de terceto para colocar el label
-		
 		for ( Terceto t: tercetos ){
 			
 			t.setControladorTercetos(this);

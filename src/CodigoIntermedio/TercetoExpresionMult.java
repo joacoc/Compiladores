@@ -29,6 +29,7 @@ public class TercetoExpresionMult extends TercetoExpresion {
 		if ( ( elementos.get(1).esToken() ) && ( elementos.get(2).esToken() ) ){
 			
 			String registroDX = controladorTercetos.getReg4(elementos.get(1).getToken());
+			controladorTercetos.liberarRegistro(registroDX);//acordarse
 			String registroAX = controladorTercetos.getReg3(elementos.get(1).getToken() );
 			assembler += MOV + " " + registroDX +", " + "0"  + '\n'; //seteo en 0 el registro DX
 			

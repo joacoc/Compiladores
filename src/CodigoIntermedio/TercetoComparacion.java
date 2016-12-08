@@ -34,15 +34,13 @@ public class TercetoComparacion extends Terceto {
 			String registro2 = controladorTercetos.getProxRegLibre( elementos.get(2).getToken() );
 			
 			if(elementos.get(1).getNombreVar().startsWith("mat@")){	
-				assembler = verificarMatriz((TokenMatriz)elementos.get(1).t,controladorTercetos);
-				assembler = assembler + "MOV" + " " +  registro1 + ", " + elementos.get(1).getNombreVar()+"[EBX]" +'\n';
+				assembler = assembler + "MOV" + " " +  registro1 + ", " + elementos.get(1).getNombreVar()+"[" +controladorTercetos.getRegMatriz(1) +"]" +'\n';
 			}
 			else
 				assembler = assembler + "MOV" + " " +  registro1 + ", " + elementos.get(1).getNombreVar()+ '\n';
 			
 			if(elementos.get(2).getNombreVar().startsWith("mat@")){
-				assembler = verificarMatriz((TokenMatriz)elementos.get(2).t,controladorTercetos);
-				assembler = assembler + "MOV" + " " +  registro2 + ", " + elementos.get(2).getNombreVar()+"[EBX]" +'\n';
+				assembler = assembler + "MOV" + " " +  registro2 + ", " + elementos.get(2).getNombreVar()+"[" +controladorTercetos.getRegMatriz(2) +"]" +'\n';
 			}
 			else
 				assembler = assembler + "MOV" + " " +  registro2 + ", " + elementos.get(2).getNombreVar()+ '\n';
@@ -68,7 +66,6 @@ public class TercetoComparacion extends Terceto {
 				String registro2 = controladorTercetos.getProxRegLibre( elementos.get(2).getToken() );
 				
 				if(elementos.get(2).getNombreVar().startsWith("mat@")){
-					assembler = verificarMatriz((TokenMatriz)elementos.get(2).t,controladorTercetos);
 					assembler = assembler + "MOV" + " " +  registro2 + ", " + elementos.get(2).getNombreVar()+"[EBX]" +'\n';
 				}
 				else
@@ -105,7 +102,6 @@ public class TercetoComparacion extends Terceto {
 						String registro1 = controladorTercetos.getProxRegLibre( elementos.get(1).getToken() );
 						
 						if(elementos.get(1).getNombreVar().startsWith("mat")){
-							assembler = verificarMatriz((TokenMatriz)elementos.get(1).t,controladorTercetos);
 							assembler = assembler + "MOV" + " " +  registro1 + ", " + elementos.get(1).getNombreVar()+"[EBX]\n";
 						}else
 							assembler = assembler + "MOV" + " " +  registro1 + ", " + elementos.get(1).getNombreVar()+ '\n';
@@ -122,13 +118,6 @@ public class TercetoComparacion extends Terceto {
 						controladorTercetos.liberarRegistro(registro1);
 						controladorTercetos.liberarRegistro(terceto2.getRegistro());
 					}		
-		return assembler;
-	}
-	
-	public static String verificarMatriz(TokenMatriz tokenMatriz, ControladorTercetos controladorTercetos){
-		String assembler = "";
-		assembler = assembler + "CMP " + controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro()+ "," +(tokenMatriz.getColumnas()*tokenMatriz.getFilas()*4) + "\n";
-		assembler = assembler + "JG " + ConvertidorAssembler.labelFueraRango +"\n" ;
 		return assembler;
 	}
 

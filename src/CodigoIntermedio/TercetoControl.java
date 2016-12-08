@@ -30,13 +30,16 @@ public class TercetoControl extends TercetoExpresion {
 		int num_actual = controladorTercetos.getNumTercetoActual();
 		num_actual -= 1;
 		
-		controladorTercetos.setRegMatriz(controladorTercetos.getTerceto(num_actual).getRegistro());
+		//controladorTercetos.getTerceto(num_actual) 
+		controladorTercetos.setRegMatriz(controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro());
 		assembler = assembler + "CMP " + controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro() +", " +(t1.getColumnas()*t1.getFilas()*4) +"\n";
 		assembler = assembler + "JG " + ConvertidorAssembler.labelFueraRango +"\n" ;
 		
 		if(act){
 			assembler = assembler +"MOV " + t1.getNombre().substring(4, t1.getNombre().length()) +", " +controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro() + "\n";
-			controladorTercetos.liberarRegistros();
+			controladorTercetos.liberarRegistro(this.getRegistro());
+//			controladorTercetos.addVarAux(t1.getNombre().substring(4));
+			//	controladorTercetos.liberarRegistros();
 		}
 		return assembler;
 	}

@@ -2,7 +2,6 @@ package AnalizadorLexico;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-import Window.MainWindow;
 
 public class AnalizadorLexico {
 	

@@ -79,6 +79,7 @@ public class ConvertidorAssembler {
 		data = data + "errorPerdida db \"Hay perdida de informacion a la hora de realizar una asignacion\", 0" + '\n';
 		data = data + "FueraRango db \"Se intento acceder a una posicion de la matriz fuera del rango!\", 0" + '\n';
 		data = data + "matrix dd 0" +"\n";
+//		data = data + controladorTercetos.getVarAux();
 		data = data + '\n' + ".code"+ "\n";
 		
 		//matrix es una variable auxiliar para las matrices.

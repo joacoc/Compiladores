@@ -27,22 +27,18 @@ public class TercetoAsignacion extends Terceto{
 		
 				if (( elementos.get(1).esToken() ) && ( elementos.get(2).esToken() )) {
 					//caso 1: (ASIG, variable, variable)
-						
 					//Si es una matriz tengo que hacer el chequeo de rango
 					if(elementos.get(1).getNombreVar().startsWith("mat")){
 						if(elementos.get(2).getNombreVar().startsWith("mat")){
 							//Ambas variables son matrices.
 							assembler = assembler + "MOV " +"EBX" +"," +controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro()+"\n"; 
-							assembler = assembler + "MOV " + elementos.get(1).getNombreVar() + "[" + elementos.get(1).getNombreVar().substring(4, elementos.get(1).getNombreVar().length())  +"]" +", " +elementos.get(2).getNombreVar()+"[EBX]" +"\n";
+//							assembler = assembler + "MOV " + elementos.get(1).getNombreVar() + "[" + elementos.get(1).getNombreVar().substring(4, elementos.get(1).getNombreVar().length())  +"]" +", " +elementos.get(2).getNombreVar()+"[EBX]" +"\n";
 							controladorTercetos.liberarRegistro(controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro());
 						}
 						else{
-							//La primer variable es matriz
-							
-							System.out.print("registros libres a la matri:");
-							System.out.println(controladorTercetos.getCantRegistros());
-							
-							assembler = assembler + "MOV " + elementos.get(1).getNombreVar() + "[" + ((TercetoControl)controladorTercetos.getTercetoAux()).getTokenMatriz().getNombre().substring(4) +"]" +"," +elementos.get(2).getNombreVar()+"\n";
+							assembler = assembler + verificarMatriz((TokenMatriz) elementos.get(1).getToken());
+							assembler = assembler + "MOV " +"EBX" +"," +controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro()+"\n"; 
+							assembler = assembler + "MOV " + elementos.get(1).getNombreVar() + "[EBX]" +"," +elementos.get(2).getNombreVar()+"\n";
 							controladorTercetos.liberarRegistro(controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro());
 						}
 					}else 
@@ -87,7 +83,7 @@ public class TercetoAsignacion extends Terceto{
 							registro2 = registroAux;
 						}
 			
-					if(elementos.get(1).getNombreVar().substring(4).startsWith("mat"))
+					if(elementos.get(1).getNombreVar().startsWith("mat"))
 						assembler = assembler + "MOV " +  elementos.get(1).getNombreVar() +"[" +elementos.get(1).getNombreVar().substring(4) +"], " + registro2 + '\n';	
 					else
 						assembler = assembler + "MOV " +  elementos.get(1).getNombreVar() + ", " + registro2 + '\n';
