@@ -18,6 +18,7 @@ public class TercetoExpresionDiv extends TercetoExpresion{
 	public String getAssembler() {
 		String assembler = "";
 		Terceto terceto1 = null;
+		
 		if (!elementos.get(1).esToken())
 			terceto1 = controladorTercetos.getTerceto( Integer.parseInt( elementos.get(1).getNombreVar() ) );
 		Terceto terceto2 = null;
@@ -89,7 +90,15 @@ public class TercetoExpresionDiv extends TercetoExpresion{
 		else
 			assembler = assembler + "CWD" + '\n';
 		
-		assembler = assembler + MOV + " " + registro +", " + elementos.get(2).getNombreVar()  + '\n';
+		if(elementos.get(2).getNombreVar().startsWith("mat")){
+			String regMatrizAux = controladorTercetos.getRegMatriz(2);
+			if(regMatrizAux==null)
+				assembler += MOV + " " + registro +", " + elementos.get(2).getNombreVar() + "["+controladorTercetos.getRegMatriz(1)+"]\n";
+			else
+				assembler = assembler + "MOV " + registro + ", " + elementos.get(2).getNombreVar() + "["+regMatrizAux+"]\n";
+		}else
+			assembler = assembler + MOV + " " + registro +", " + elementos.get(2).getNombreVar()  + '\n';
+		
 		this.setRegistro(registro);
 		
 		//chequeamos que no sea cero el divisor
@@ -149,19 +158,37 @@ public class TercetoExpresionDiv extends TercetoExpresion{
 				registro = controladorTercetos.getProxRegLibre(elementos.get(2).getToken());
 		}
 		if ( (elementos.get(1).getToken().getTipo().equals(AnalizadorLexico.variableI) ) && (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableL) ) ){
-			assembler = assembler + MOV + " " + "AX" +", " + elementos.get(1).getNombreVar()  + '\n';
+			
+			if(elementos.get(1).getNombreVar().startsWith("mat")){
+				String regMatrizAux = controladorTercetos.getRegMatriz(1);
+				assembler = assembler + "MOV " + "AX" + ", " + elementos.get(1).getNombreVar() + "["+regMatrizAux+"]\n";
+			}else
+				assembler = assembler + MOV + " " + "AX" +", " + elementos.get(1).getNombreVar()  + '\n';
 			assembler = assembler + "CWDE"  + '\n';
 			registroAX = "EAX";
 		}
-		else
-			assembler = assembler + MOV + " " + registroAX +", " + elementos.get(1).getNombreVar()  + '\n';
+		else{
+			if(elementos.get(1).getNombreVar().startsWith("mat")){
+				String regMatrizAux = controladorTercetos.getRegMatriz(1);
+				assembler = assembler + "MOV " + registroAX + ", " + elementos.get(1).getNombreVar() + "["+regMatrizAux+"]\n";
+			}else
+				assembler = assembler + MOV + " " + registroAX +", " + elementos.get(1).getNombreVar()  + '\n';
+		}
 		assembler = assembler + MOV + " " + registroDX +", " + "0"  + '\n';
 		if (registroAX.equals("EAX") )
 			assembler = assembler + "CDQ" + '\n';
 		else
 			assembler = assembler + "CWD" + '\n';
 		
-		assembler = assembler + MOV + " " + registro +", " + elementos.get(2).getNombreVar()  + '\n';
+		if(elementos.get(2).getNombreVar().startsWith("mat")){
+			String regMatrizAux = controladorTercetos.getRegMatriz(2);
+			if(regMatrizAux==null)
+				assembler += MOV + " " + registro +", " + elementos.get(2).getNombreVar() + "["+controladorTercetos.getRegMatriz(1)+"]\n";
+			else
+				assembler = assembler + "MOV " + registro + ", " + elementos.get(2).getNombreVar() + "["+regMatrizAux+"]\n";
+		}else
+			assembler = assembler + MOV + " " + registro +", " + elementos.get(2).getNombreVar()  + '\n';
+		
 		this.setRegistro(registro);
 		
 		//chequeamos que no sea cero el divisor

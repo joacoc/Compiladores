@@ -49,7 +49,6 @@ public class TercetoExpresionMult extends TercetoExpresion {
 					assembler += MOV + " " + registro +", " + elementos.get(2).getNombreVar() + "["+controladorTercetos.getRegMatriz(1)+"]\n";
 				else
 					assembler = assembler + "MOV " + registro + ", " + elementos.get(2).getNombreVar() + "["+regMatrizAux+"]\n";
-				
 			}else
 				assembler = assembler + "MOV " + registro + ", " + elementos.get(2).getNombreVar() + '\n';
 			
