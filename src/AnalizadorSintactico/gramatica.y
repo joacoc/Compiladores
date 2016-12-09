@@ -354,7 +354,7 @@ termino : termino '*' factor	{	String valor ="*";
 										TercetoExpresionMult terceto = new TercetoExpresionMult ( new TercetoSimple( new Token("*",(int) valor.charAt(0) ) ),new TercetoSimple( (Token)$1.obj ), new TercetoSimple( (Token)$3.obj ), controladorTercetos.getProxNumero() );
 										controladorTercetos.addTerceto (terceto);
 										Token nuevo = new Token( controladorTercetos.numeroTercetoString() );
-										nuevo.setTipo("longint");
+										nuevo.setTipo(((Token)$1.obj).getTipo());
 										$$ = new ParserVal(nuevo);
 								}
     | termino '/' factor		{ String valor ="/";
