@@ -105,10 +105,13 @@ public class TercetoExpresionMult extends TercetoExpresion {
 				controladorTercetos.liberarRegistro(registro);
 				elementos.get(0).getToken().setTipo(AnalizadorLexico.variableL);
 				registro = controladorTercetos.getProxRegLibre(elementos.get(0).getToken());
-				this.setRegistro(registro);				
+				this.setRegistro(registro);							
+
+				if(this.tipo.equals(AnalizadorLexico.variableL))
+					assembler =  assembler + MOV + " " + registro +", " + "EAX"  + '\n';
+				else
+					assembler =  assembler + MOV + " " + registro +", " + "AX"  + '\n';
 				
-				assembler =  assembler + MOV + " " + registro +", " + "EAX"  + '\n';
-			
 				controladorTercetos.liberarRegistro(registroAX);
 				controladorTercetos.liberarRegistro(registroDX);
 			}
