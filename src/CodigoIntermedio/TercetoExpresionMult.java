@@ -89,8 +89,6 @@ public class TercetoExpresionMult extends TercetoExpresion {
 				
 
 				if(elementos.get(2).getNombreVar().startsWith("mat")){
-//					verificarMatriz((TokenMatriz)elementos.get(2).t, controladorTercetos);
-
 					assembler = assembler + "MOV " + registro + ", " + elementos.get(2).getNombreVar() + "["+controladorTercetos.getRegMatriz(1)+"]\n";
 				}else
 					assembler = assembler + "MOV " + registro + ", " + elementos.get(2).getNombreVar() + '\n';
