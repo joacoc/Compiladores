@@ -692,18 +692,29 @@ public Token obtenerSimbolo(String nombre,boolean esMatriz){
 	return null;
 }
 
-public Token[][] getMatriz(ArrayList<ArrayList<Token>> tokens, TokenMatriz declaracion_matriz){
+public Token[][] getMatriz(String orientacion, ArrayList<ArrayList<Token>> tokens, TokenMatriz declaracion_matriz){
 	Token[][] arregloTokens = new Token[declaracion_matriz.getFilas()][declaracion_matriz.getColumnas()]; 
 	int caux = 0, faux = 0;
 
 	if(tokens != null)
-		for(ArrayList<Token> a : tokens){
-			for(Token t : a){
-				arregloTokens[caux][faux] = t;
-				caux++;		
+		if(orientacion.equals("C")){
+			for(ArrayList<Token> a : tokens){
+				for(Token t : a){
+					arregloTokens[caux][faux] = t;
+					caux++;		
+				}
+				caux=0;
+				faux++;
 			}
-			caux=0;
-			faux++;
+		}else{
+			for(ArrayList<Token> a : tokens){
+				for(Token t : a){
+					arregloTokens[faux][caux] = t;
+					caux++;		
+				}
+				caux=0;
+				faux++;
+			}
 		}
 
 	return arregloTokens;
@@ -713,8 +724,9 @@ public boolean setTercetosMatriz(String orientacion, ArrayList<ArrayList<Token>>
 	Token matriz[][];
 	Token inicializador;
 	String tipo = declaracion_matriz.getTipo();
+
 	if (tokens!=null) {
-		matriz = getMatriz(tokens, declaracion_matriz);
+		matriz = getMatriz(orientacion, tokens, declaracion_matriz);
 		if ((orientacion.equals("C"))) {
 			//Orientacion por columnas
 			for (int caux = 0; caux < declaracion_matriz.getColumnas() ; caux++ ) {

@@ -109,7 +109,6 @@ public class TercetoExpresion extends Terceto {
 			assembler += hacerConversiones(registro1, registro2);
 			registro1 = registroAux1;
 			registro2 = registroAux2;
-			System.out.println(registro1 +"////REGISTROS////" +registro2);
 			assembler = assembler + opAssembler + " " + registro1 + ", " + registro2 + '\n';
 			controladorTercetos.liberarRegistro(registro2);
 		}
@@ -118,13 +117,6 @@ public class TercetoExpresion extends Terceto {
 
 			//caso 4: (OP, variable, registro)
 			String registro2 = terceto2.getRegistro();
-			
-			/*
-			if((!registro2.startsWith("E")) && elementos.get(1).t.getNombre().startsWith("mat")){
-				assembler = "EWCD \n";
-				controladorTercetos.OcuparRegistro("E"+registro2);
-			}
-			*/
 			
 			String registro1 = controladorTercetos.getProxRegLibre(elementos.get(1).getToken());
 			this.setRegistro(registro1);// se usa el del primer terceto.
