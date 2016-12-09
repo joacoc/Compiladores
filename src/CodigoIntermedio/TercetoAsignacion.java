@@ -45,14 +45,21 @@ public class TercetoAsignacion extends Terceto{
 						else{
 							assembler = assembler + verificarMatriz((TokenMatriz) elementos.get(1).getToken());
 							String regAux = controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro(); 
-							assembler = assembler + "MOV " + elementos.get(1).getNombreVar() + "[" + regAux + "]" +"," +elementos.get(2).getNombreVar()+"\n";
+							String aux = controladorTercetos.getProxRegLibre(elementos.get(2).getToken());
+							assembler = assembler + "MOV " + aux +"," +elementos.get(2).getNombreVar()+"\n";
+							assembler = assembler + "MOV " + elementos.get(1).getNombreVar() + "[" + regAux + "]" +"," +aux+"\n";
 							controladorTercetos.liberarRegistro(regAux);
+							controladorTercetos.liberarRegistro(aux);
 						}
 					}else 
 						if(elementos.get(2).getNombreVar().startsWith("mat")){
-							assembler = assembler + "MOV " +"EBX" +"," +controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro()+"\n"; 
-							assembler = assembler + "MOV " + elementos.get(1).getNombreVar() +"," +elementos.get(2).getNombreVar()+"[EBX]" +"\n";
+							String aux = controladorTercetos.getProxRegLibre(elementos.get(2).getToken());
+							assembler = assembler + "MOV " + aux +"," +elementos.get(2).getNombreVar()+"\n";
+							String regAux = controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro(); 
+							assembler = assembler + "MOV " + aux +"," +elementos.get(2).getNombreVar()+"[" + regAux +"]" +"\n";
+							assembler = assembler + "MOV " + elementos.get(1).getNombreVar() +"," +aux +"\n";
 							controladorTercetos.liberarRegistro(controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro());
+							controladorTercetos.liberarRegistro(aux);
 						}else{
 							//Ninguna de las variables es una matriz
 
@@ -68,8 +75,12 @@ public class TercetoAsignacion extends Terceto{
 									assembler = assembler + crearAssemblerConversionVar(registro2);
 									registro2 = registroAux;
 								}
-								else
+								else{
 									assembler = assembler + "MOV " + registro2 + ", " + elementos.get(2).getNombreVar() + '\n';
+									assembler = assembler + "MOV " + elementos.get(1).getNombreVar() + ", " + registro2 + '\n';
+								}
+					
+								
 							
 							if(this.tipo.equals("longint") && elementos.get(1).getToken().getTipo().equals("integer")){
 //								String regLibre = controladorTercetos.getProxRegLibre(elementos.get(1).getToken());
