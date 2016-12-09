@@ -9,7 +9,8 @@ public class TercetoAsignacion extends Terceto{
 
 	private String registroAux;
 	private boolean actVar = false;
-	
+	String registro2 = "";
+	String tipo = "integer";
 	public TercetoAsignacion(TercetoSimple izq, TercetoSimple medio, TercetoSimple der, int numeroTerceto) {
 		super(izq, medio, der, numeroTerceto);
 	}
@@ -20,7 +21,6 @@ public class TercetoAsignacion extends Terceto{
 	
 	public String getAssembler() {
 		String assembler = "";
-		String registro2 = "";
 
 		//tire aca arriba lo de la matriz
 		//tendria que ser todo codigo de matrices, sino le erre al sol el conflicto
@@ -53,9 +53,9 @@ public class TercetoAsignacion extends Terceto{
 							registro2 = controladorTercetos.getProxRegLibre(elementos.get(2).getToken());
 							if ( (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableI) ) && (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableL)) ){
 								//puede que la primer instruccion no vaya
-								assembler = assembler + "MOV " + "EAX" + ", " + registro2 + '\n';
+								assembler = assembler + "MOV " + "EAX" + ", " + elementos.get(2).getNombreVar() + '\n';
 								assembler = assembler + verificarConversionAsig(registro2);
-								registro2 = controladorTercetos.getRegistroInteger(registro2);
+								//registro2 = controladorTercetos.getRegistroInteger(registro2);
 							}
 							else
 								if ( (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableL) ) && (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableI)) ){
@@ -65,7 +65,12 @@ public class TercetoAsignacion extends Terceto{
 								else
 									assembler = assembler + "MOV " + registro2 + ", " + elementos.get(2).getNombreVar() + '\n';
 							
-							assembler = assembler +   "MOV" + " " +  elementos.get(1).getNombreVar() + ", " + registro2 + '\n';
+							if(this.tipo.equals("longint") && elementos.get(1).getToken().getTipo().equals("integer")){
+//								String regLibre = controladorTercetos.getProxRegLibre(elementos.get(1).getToken());
+								assembler = assembler + "CWDE" + '\n';
+								assembler = assembler + "MOV" + " " +  elementos.get(1).getNombreVar() + ", " + registro2.substring(1) + '\n';
+							}else
+								assembler = assembler + "MOV" + " " +  elementos.get(1).getNombreVar() + ", " + registro2 + '\n';
 							controladorTercetos.liberarRegistro(registro2);
 						}
 				}
@@ -126,6 +131,8 @@ public class TercetoAsignacion extends Terceto{
 	}
 	
 	private String verificarConversionAsig(String registro2){
+		this.tipo = "longint";
+		
 		String assembler = "";
 		String reg = "EAX";
 		controladorTercetos.OcuparRegistro("EAX");
@@ -134,6 +141,7 @@ public class TercetoAsignacion extends Terceto{
 		assembler = assembler + "JL LabelNEG" + controladorTercetos.getNumTercetoActual() + '\n';
 		//es positivo el valor
 		String maximo = controladorTercetos.getProxRegLibre(elementos.get(2).getToken());
+		assembler = assembler + "MOV " + registro2 + ", EAX\n";
 		assembler = assembler + "MOV " + maximo + ", " + CeldaAS.maximo + '\n';
 		assembler = assembler + "SUB EAX, " + maximo + '\n';
 		assembler = assembler + "CMP EAX, 0" + '\n';
@@ -144,6 +152,7 @@ public class TercetoAsignacion extends Terceto{
 		//es negativo el valor
 		assembler = assembler + "LabelNEG" + controladorTercetos.getNumTercetoActual() +":" + '\n';
 		String minimo = controladorTercetos.getProxRegLibre(elementos.get(2).getToken());
+		assembler = assembler + "MOV " + registro2 + ", EAX\n";
 		assembler = assembler + "MOV " + minimo + ", " + CeldaAS.minimo + '\n';
 		assembler = assembler + "SUB EAX, " + minimo + '\n';
 		assembler = assembler + "CMP EAX, " +  "0" + '\n';
