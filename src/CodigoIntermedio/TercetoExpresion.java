@@ -119,7 +119,7 @@ public class TercetoExpresion extends Terceto {
 			String registro2 = terceto2.getRegistro();
 			this.setRegistro(registro1);// se usa el del primer terceto.
 
-			if(elementos.get(1).getNombreVar().startsWith("mat")){
+			if(elementos.get(1).getNombreVar().startsWith("mat")){//Nunca va a entrar aca xq son registros
 				assembler = MOV + " " + registro1 +", " + elementos.get(1).getNombreVar()  +"[EBX]\n";
 			}else
 				assembler = MOV + " " + registro1 +", " + elementos.get(1).getNombreVar()  + '\n';

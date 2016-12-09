@@ -71,7 +71,11 @@ public class TercetoComparacion extends Terceto {
 				String registro2 = controladorTercetos.getProxRegLibre( elementos.get(2).getToken() );
 				
 				if(elementos.get(2).getNombreVar().startsWith("mat@")){
-					assembler = assembler + "MOV" + " " +  registro2 + ", " + elementos.get(2).getNombreVar()+"[EBX]" +'\n';
+					String regMatrizAux = controladorTercetos.getRegMatriz(2);
+					if(regMatrizAux==null)
+						assembler = assembler + "MOV" + " " +  registro2 + ", " + elementos.get(2).getNombreVar()+"[" +controladorTercetos.getRegMatriz(1) +"]" +'\n';
+					else
+						assembler = assembler + "MOV" + " " +  registro2 + ", " + elementos.get(2).getNombreVar()+"[" +regMatrizAux +"]" +'\n';
 				}
 				else
 					assembler = assembler + "MOV" + " " +  registro2 + ", " + elementos.get(2).getNombreVar()+ '\n';
@@ -107,7 +111,8 @@ public class TercetoComparacion extends Terceto {
 						String registro1 = controladorTercetos.getProxRegLibre( elementos.get(1).getToken() );
 						
 						if(elementos.get(1).getNombreVar().startsWith("mat")){
-							assembler = assembler + "MOV" + " " +  registro1 + ", " + elementos.get(1).getNombreVar()+"[EBX]\n";
+							String regMatrizAux = controladorTercetos.getRegMatriz(1);
+							assembler = assembler + "MOV" + " " +  registro1 + ", " + elementos.get(1).getNombreVar()+"["+regMatrizAux +"]\n";
 						}else
 							assembler = assembler + "MOV" + " " +  registro1 + ", " + elementos.get(1).getNombreVar()+ '\n';
 						
