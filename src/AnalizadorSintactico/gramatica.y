@@ -668,14 +668,16 @@ public Token obtenerSimbolo(String nombre,boolean esMatriz){
 public Token[][] getMatriz(ArrayList<ArrayList<Token>> tokens, TokenMatriz declaracion_matriz){
 	Token[][] arregloTokens = new Token[declaracion_matriz.getFilas()][declaracion_matriz.getColumnas()]; 
 	int caux = 0, faux = 0;
-	for(ArrayList<Token> a : tokens){
-		for(Token t : a){
-			arregloTokens[caux][faux] = t;
-			caux++;		
+
+	if(tokens != null)
+		for(ArrayList<Token> a : tokens){
+			for(Token t : a){
+				arregloTokens[caux][faux] = t;
+				caux++;		
+			}
+			caux=0;
+			faux++;
 		}
-		caux=0;
-		faux++;
-	}
 
 	return arregloTokens;
 }
@@ -747,9 +749,11 @@ public boolean setTercetosMatriz(String orientacion, ArrayList<ArrayList<Token>>
 					inicializador = new Token("_i0", analizadorL.CTEI);
 				else
 					inicializador = new Token("_l0", analizadorL.CTEL);
-				inicializador.setValor(0);			
 
-				Token t = matriz[faux][caux];	
+				inicializador.setValor(0);			
+				matriz [faux][caux] = inicializador;
+
+				// Token t = matriz[faux][caux];	
 				// Terceto terceto = new TercetoAsignacion ( new TercetoSimple( new Token(":=",analizadorL.S_ASIGNACION ) ),new TercetoSimple( inicializador ), new TercetoSimple( inicializador ), controladorTercetos.getProxNumero() );
 				// controladorTercetos.addTerceto (terceto);
 				// $$ = new ParserVal(new Token( controladorTercetos.numeroTercetoString() ));

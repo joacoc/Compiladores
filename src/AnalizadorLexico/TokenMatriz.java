@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class TokenMatriz extends Token{
 
-	int filas, columnas;	
-	
+	int filas = 0;	
+	int columnas = 0;
 	//Orientacion. False == filas. True == columnas. 
 	//Por defecto = filas.
 	boolean orientacion = false;
@@ -36,6 +36,7 @@ public class TokenMatriz extends Token{
 	public void setDimensiones(int filas, int columnas){
 		this.filas = filas;
 		this.columnas = columnas;
+		
 	}
 	
 	public void setOrientacion(String c){
@@ -78,6 +79,7 @@ public class TokenMatriz extends Token{
 		for(int i = 0; i<filas; i++)
 			for(int k = 0; k<columnas; k++)
 				buffer.append(arregloTokens[i][k].getValor()+",");
+		
 		buffer.deleteCharAt(buffer.length()-1);
 		buffer.append("\n");
 		return buffer.toString();
