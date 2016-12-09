@@ -70,9 +70,9 @@ public class TercetoExpresionMult extends TercetoExpresion {
 			this.setRegistro(registro);				
 			
 			if(this.tipo.equals(AnalizadorLexico.variableL))
-				assembler =  assembler + MOV + " " + registro +", " + "EAX"  + '\n';
+				assembler =  assembler + MOV + " " + registro +", " + registroAX  + '\n';
 			else
-				assembler =  assembler + MOV + " " + registro +", " + "AX"  + '\n';
+				assembler =  assembler + MOV + " " + registro +", " + registroAX  + '\n';
 	
 			controladorTercetos.liberarRegistro(registroAX);
 			controladorTercetos.liberarRegistro(registroDX);
@@ -111,9 +111,9 @@ public class TercetoExpresionMult extends TercetoExpresion {
 				this.setRegistro(registro);							
 
 				if(this.tipo.equals(AnalizadorLexico.variableL))
-					assembler =  assembler + MOV + " " + registro +", " + "EAX"  + '\n';
+					assembler =  assembler + MOV + " " + registro +", " + registroAX  + '\n';
 				else
-					assembler =  assembler + MOV + " " + registro +", " + "AX"  + '\n';
+					assembler =  assembler + MOV + " " + registro +", " + registroAX  + '\n';
 				
 				controladorTercetos.liberarRegistro(registroAX);
 				controladorTercetos.liberarRegistro(registroDX);
