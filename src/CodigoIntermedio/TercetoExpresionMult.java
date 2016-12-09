@@ -97,9 +97,12 @@ public class TercetoExpresionMult extends TercetoExpresion {
 				
 				this.setRegistro(registro);
 				assembler += hacerConversiones(registroAX, registroDX, registro);
-				registroAX = registroAux1;
-				registroDX = registroAux2;
-				registro = registroAux3;
+
+				if(this.tipo.equals(AnalizadorLexico.variableL)){
+					registroAX = registroAux1;
+					registroDX = registroAux2;
+					registro = registroAux3;
+				}
 				
 				assembler = assembler + opAssembler + " " + registroAX + ", " + registro + '\n';
 				controladorTercetos.liberarRegistro(registro);
