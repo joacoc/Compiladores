@@ -122,7 +122,7 @@ public class TercetoExpresionMult extends TercetoExpresion {
 		String assembler = "";
 		
 		if(elementos.get(1).getToken().getTipo().equals(elementos.get(2).getToken().getTipo()))
-			this.tipo = AnalizadorLexico.variableI;
+			this.tipo = elementos.get(1).getToken().getTipo();
 		else{
 			this.tipo = AnalizadorLexico.variableL;
 			if (elementos.get(2).getToken().getTipo().equals( AnalizadorLexico.variableI) ){ 
