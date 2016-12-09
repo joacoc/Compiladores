@@ -32,15 +32,21 @@ public class TercetoAsignacion extends Terceto{
 					if(elementos.get(1).getNombreVar().startsWith("mat")){
 						if(elementos.get(2).getNombreVar().startsWith("mat")){
 							//Ambas variables son matrices.
-							assembler = assembler + "MOV " +"EBX" +"," +controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro()+"\n"; 
-//							assembler = assembler + "MOV " + elementos.get(1).getNombreVar() + "[" + elementos.get(1).getNombreVar().substring(4, elementos.get(1).getNombreVar().length())  +"]" +", " +elementos.get(2).getNombreVar()+"[EBX]" +"\n";
+							
+							String regAux = controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro();
+							String aux = controladorTercetos.getProxRegLibre(elementos.get(2).getToken());
+							assembler = assembler + "MOV " + aux +  ", " +  elementos.get(2).getNombreVar() + "[" + regAux  + "]" +"\n";
+							
+							assembler = assembler + "MOV " + regAux +  ", matrix" + "\n";
+							assembler = assembler + "MOV " + elementos.get(1).getNombreVar() + "[" +regAux + "]" +", " + aux +"\n";
 							controladorTercetos.liberarRegistro(controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro());
+							controladorTercetos.liberarRegistro(aux);
 						}
 						else{
 							assembler = assembler + verificarMatriz((TokenMatriz) elementos.get(1).getToken());
-							assembler = assembler + "MOV " +"EBX" +"," +controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro()+"\n"; 
-							assembler = assembler + "MOV " + elementos.get(1).getNombreVar() + "[EBX]" +"," +elementos.get(2).getNombreVar()+"\n";
-							controladorTercetos.liberarRegistro(controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro());
+							String regAux = controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro(); 
+							assembler = assembler + "MOV " + elementos.get(1).getNombreVar() + "[" + regAux + "]" +"," +elementos.get(2).getNombreVar()+"\n";
+							controladorTercetos.liberarRegistro(regAux);
 						}
 					}else 
 						if(elementos.get(2).getNombreVar().startsWith("mat")){

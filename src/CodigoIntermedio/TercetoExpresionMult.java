@@ -32,7 +32,7 @@ public class TercetoExpresionMult extends TercetoExpresion {
 			String registroDX = controladorTercetos.getReg4(elementos.get(1).getToken());
 			controladorTercetos.liberarRegistro(registroDX);//acordarse
 			String registroAX = controladorTercetos.getReg3(elementos.get(1).getToken() );
-			assembler += MOV + " " + registroDX +", " + "0"  + '\n'; //seteo en 0 el registro DX
+//			assembler += MOV + " " + registroDX +", " + "0"  + '\n'; //seteo en 0 el registro DX
 			
 
 			if(elementos.get(1).getNombreVar().startsWith("mat")){
@@ -57,7 +57,7 @@ public class TercetoExpresionMult extends TercetoExpresion {
 			
 			if(this.tipo.equals(AnalizadorLexico.variableL)){
 				registroAX = registroAux1;
-				registroDX = registroAux2;
+//				registroDX = registroAux2;
 				registro = registroAux3;
 			}
 			
@@ -75,7 +75,7 @@ public class TercetoExpresionMult extends TercetoExpresion {
 				assembler =  assembler + MOV + " " + registro +", " + registroAX  + '\n';
 	
 			controladorTercetos.liberarRegistro(registroAX);
-			controladorTercetos.liberarRegistro(registroDX);
+//			controladorTercetos.liberarRegistro(registroDX);
 		}
 		else
 //			//caso 2: (OP, registro, variable)
@@ -116,7 +116,7 @@ public class TercetoExpresionMult extends TercetoExpresion {
 					assembler =  assembler + MOV + " " + registro +", " + registroAX  + '\n';
 				
 				controladorTercetos.liberarRegistro(registroAX);
-				controladorTercetos.liberarRegistro(registroDX);
+//				controladorTercetos.liberarRegistro(registroDX);
 			}
 		return assembler;
 	}

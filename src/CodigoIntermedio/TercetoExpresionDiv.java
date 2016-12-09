@@ -92,10 +92,14 @@ public class TercetoExpresionDiv extends TercetoExpresion{
 		
 		if(elementos.get(2).getNombreVar().startsWith("mat")){
 			String regMatrizAux = controladorTercetos.getRegMatriz(2);
-			if(regMatrizAux==null)
+			if(regMatrizAux==null){
 				assembler += MOV + " " + registro +", " + elementos.get(2).getNombreVar() + "["+controladorTercetos.getRegMatriz(1)+"]\n";
-			else
+//				controladorTercetos.liberarRegistro(controladorTercetos.getRegMatriz(1));
+			}
+			else{
 				assembler = assembler + "MOV " + registro + ", " + elementos.get(2).getNombreVar() + "["+regMatrizAux+"]\n";
+				controladorTercetos.liberarRegistro(regMatrizAux);
+			}
 		}else
 			assembler = assembler + MOV + " " + registro +", " + elementos.get(2).getNombreVar()  + '\n';
 		
@@ -121,12 +125,12 @@ public class TercetoExpresionDiv extends TercetoExpresion{
 	
 		assembler = assembler + MOV + " " + this.getRegistro() +", " + registroAX  + '\n';
 		controladorTercetos.liberarRegistro(registroAX);
-		controladorTercetos.liberarRegistro(registroDX);
+//		controladorTercetos.liberarRegistro(registroDX);
 		return assembler;
 }
 	
 	private String getAssemblerVarVar() {
-		controladorTercetos.OcuparRegistro(reg4Integer);
+//		controladorTercetos.OcuparRegistro(reg4Integer);
 		controladorTercetos.OcuparRegistro(reg3Integer);
 		String registroDX = "";
 		String registroAX = "";
@@ -162,6 +166,7 @@ public class TercetoExpresionDiv extends TercetoExpresion{
 			if(elementos.get(1).getNombreVar().startsWith("mat")){
 				String regMatrizAux = controladorTercetos.getRegMatriz(1);
 				assembler = assembler + "MOV " + "AX" + ", " + elementos.get(1).getNombreVar() + "["+regMatrizAux+"]\n";
+				controladorTercetos.liberarRegistro(regMatrizAux);
 			}else
 				assembler = assembler + MOV + " " + "AX" +", " + elementos.get(1).getNombreVar()  + '\n';
 			assembler = assembler + "CWDE"  + '\n';
@@ -171,10 +176,11 @@ public class TercetoExpresionDiv extends TercetoExpresion{
 			if(elementos.get(1).getNombreVar().startsWith("mat")){
 				String regMatrizAux = controladorTercetos.getRegMatriz(1);
 				assembler = assembler + "MOV " + registroAX + ", " + elementos.get(1).getNombreVar() + "["+regMatrizAux+"]\n";
+				controladorTercetos.liberarRegistro(regMatrizAux);
 			}else
 				assembler = assembler + MOV + " " + registroAX +", " + elementos.get(1).getNombreVar()  + '\n';
 		}
-		assembler = assembler + MOV + " " + registroDX +", " + "0"  + '\n';
+//		assembler = assembler + MOV + " " + registroDX +", " + "0"  + '\n';
 		if (registroAX.equals("EAX") )
 			assembler = assembler + "CDQ" + '\n';
 		else
@@ -182,10 +188,14 @@ public class TercetoExpresionDiv extends TercetoExpresion{
 		
 		if(elementos.get(2).getNombreVar().startsWith("mat")){
 			String regMatrizAux = controladorTercetos.getRegMatriz(2);
-			if(regMatrizAux==null)
+			if(regMatrizAux==null){
 				assembler += MOV + " " + registro +", " + elementos.get(2).getNombreVar() + "["+controladorTercetos.getRegMatriz(1)+"]\n";
-			else
+//				controladorTercetos.liberarRegistro(controladorTercetos.getRegMatriz(1));
+			}
+			else{
 				assembler = assembler + "MOV " + registro + ", " + elementos.get(2).getNombreVar() + "["+regMatrizAux+"]\n";
+				controladorTercetos.liberarRegistro(regMatrizAux);
+			}
 		}else
 			assembler = assembler + MOV + " " + registro +", " + elementos.get(2).getNombreVar()  + '\n';
 		
@@ -212,7 +222,7 @@ public class TercetoExpresionDiv extends TercetoExpresion{
 	
 		assembler = assembler + MOV + " " + this.getRegistro() +", " + registroAX  + '\n';
 		controladorTercetos.liberarRegistro(registroAX);
-		controladorTercetos.liberarRegistro(registroDX);
+//		controladorTercetos.liberarRegistro(registroDX);
 
 		return assembler;
 	}
