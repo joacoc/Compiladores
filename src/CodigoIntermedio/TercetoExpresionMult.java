@@ -8,7 +8,8 @@ public class TercetoExpresionMult extends TercetoExpresion {
 	private String registroAux1;
 	private String registroAux2;
 	private String registroAux3;
-
+	private String tipo;
+	
 	public TercetoExpresionMult(TercetoSimple izq, TercetoSimple medio,	TercetoSimple der, int numeroTerceto) {
 		super(izq, medio, der, numeroTerceto);
 		// TODO Auto-generated constructor stub
@@ -35,7 +36,6 @@ public class TercetoExpresionMult extends TercetoExpresion {
 			
 
 			if(elementos.get(1).getNombreVar().startsWith("mat")){
-//				verificarMatriz((TokenMatriz)elementos.get(1).t, controladorTercetos);
 				assembler = assembler + "MOV " + registroAX + ", " +elementos.get(1).getNombreVar() + "["+controladorTercetos.getRegMatriz(1)+"]\n";
 			}else
 				assembler = assembler + "MOV " + registroAX + ", " + elementos.get(1).getNombreVar() + '\n';
@@ -43,7 +43,6 @@ public class TercetoExpresionMult extends TercetoExpresion {
 			String registro = controladorTercetos.getProxRegLibre(elementos.get(2).getToken());
 
 			if(elementos.get(2).getNombreVar().startsWith("mat")){
-//				verificarMatriz((TokenMatriz)elementos.get(2).t, controladorTercetos);
 				String regMatrizAux = controladorTercetos.getRegMatriz(2);
 				if(regMatrizAux==null)
 					assembler += MOV + " " + registro +", " + elementos.get(2).getNombreVar() + "["+controladorTercetos.getRegMatriz(1)+"]\n";
@@ -56,18 +55,24 @@ public class TercetoExpresionMult extends TercetoExpresion {
 			
 			assembler += hacerConversiones(registroAX, registroDX, registro);
 			
-			registroAX = registroAux1;
-			registroDX = registroAux2;
-			registro = registroAux3;
+			if(this.tipo.equals(AnalizadorLexico.variableL)){
+				registroAX = registroAux1;
+				registroDX = registroAux2;
+				registro = registroAux3;
+			}
 			
 			assembler = assembler + opAssembler + " " + registroAX + ", " + registro + '\n';
 			
 			controladorTercetos.liberarRegistro(registro);
 			elementos.get(0).getToken().setTipo(AnalizadorLexico.variableL);
-			registro = controladorTercetos.getProxRegLibre(elementos.get(0).getToken());
+			registro = controladorTercetos.getProxRegLibre(elementos.get(1).getToken());
+			
 			this.setRegistro(registro);				
 			
-			assembler =  assembler + MOV + " " + registro +", " + "EAX"  + '\n';
+			if(this.tipo.equals(AnalizadorLexico.variableL))
+				assembler =  assembler + MOV + " " + registro +", " + "EAX"  + '\n';
+			else
+				assembler =  assembler + MOV + " " + registro +", " + "AX"  + '\n';
 	
 			controladorTercetos.liberarRegistro(registroAX);
 			controladorTercetos.liberarRegistro(registroDX);
@@ -115,25 +120,31 @@ public class TercetoExpresionMult extends TercetoExpresion {
 		registroAux2 = registroDX;
 		registroAux3 = registro;
 		String assembler = "";
-		if (elementos.get(2).getToken().getTipo().equals( AnalizadorLexico.variableI) ){ 
-			assembler = assembler + "MOV " + registroDX + ", " + registroAX + '\n';		
-			assembler = assembler + "MOV " + "AX" + ", " + registro + '\n';
-			assembler = assembler + "CWDE" + '\n';
-			controladorTercetos.liberarRegistro(registro);
-			elementos.get(2).getToken().setTipo(AnalizadorLexico.variableL);
-			registroAux1 = "EAX";
-			registroAux2 = "EDX";
-			registroAux3 = controladorTercetos.getProxRegLibre(elementos.get(2).getToken());
-			elementos.get(2).getToken().setTipo(AnalizadorLexico.variableI);
-			assembler = assembler + "MOV " + registroAux3 + ", " + registroAux1 + '\n';
-			assembler = assembler + "MOV " + registroAX + ", " + registroDX + '\n';
-
-		}
-
-		if (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableI) ){ 
-			assembler = assembler + "CWDE" + '\n';
-			registroAux1 = "EAX";
-			registroAux2 = "EDX";
+		
+		if(elementos.get(1).getToken().getTipo().equals(elementos.get(2).getToken().getTipo()))
+			this.tipo = AnalizadorLexico.variableI;
+		else{
+			this.tipo = AnalizadorLexico.variableL;
+			if (elementos.get(2).getToken().getTipo().equals( AnalizadorLexico.variableI) ){ 
+				assembler = assembler + "MOV " + registroDX + ", " + registroAX + '\n';		
+				assembler = assembler + "MOV " + "AX" + ", " + registro + '\n';
+				assembler = assembler + "CWDE" + '\n';
+				controladorTercetos.liberarRegistro(registro);
+				elementos.get(2).getToken().setTipo(AnalizadorLexico.variableL);
+				registroAux1 = "EAX";
+				registroAux2 = "EDX";
+				registroAux3 = controladorTercetos.getProxRegLibre(elementos.get(2).getToken());
+				elementos.get(2).getToken().setTipo(AnalizadorLexico.variableI);
+				assembler = assembler + "MOV " + registroAux3 + ", " + registroAux1 + '\n';
+				assembler = assembler + "MOV " + registroAX + ", " + registroDX + '\n';
+	
+			}
+	
+			if (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableI) ){ 
+				assembler = assembler + "CWDE" + '\n';
+				registroAux1 = "EAX";
+				registroAux2 = "EDX";
+			}
 		}
 		return assembler;
 	}
