@@ -56,8 +56,6 @@ public class TercetoExpresion extends Terceto {
 			}else
 				assembler = MOV + " " + registro1 +", " + elementos.get(1).getNombreVar()  +'\n';
 			
-			System.out.print("cantidad libres:");
-			System.out.println(controladorTercetos.getCantRegistros());
 			String registro2 = controladorTercetos.getProxRegLibre(elementos.get(2).getToken());
 
 			if(elementos.get(2).getNombreVar().startsWith("mat")){

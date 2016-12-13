@@ -65,17 +65,12 @@ public class TercetoExpresionMult extends TercetoExpresion {
 			
 			controladorTercetos.liberarRegistro(registro);
 			elementos.get(0).getToken().setTipo(AnalizadorLexico.variableL);
-			registro = controladorTercetos.getProxRegLibre(elementos.get(1).getToken());
+			registro = controladorTercetos.getProxRegLibre(elementos.get(0).getToken());
 			
 			this.setRegistro(registro);				
-			
-			if(this.tipo.equals(AnalizadorLexico.variableL))
-				assembler =  assembler + MOV + " " + registro +", " + registroAX  + '\n';
-			else
-				assembler =  assembler + MOV + " " + registro +", " + registroAX  + '\n';
-	
+				
 			controladorTercetos.liberarRegistro(registroAX);
-//			controladorTercetos.liberarRegistro(registroDX);
+			controladorTercetos.liberarRegistro(registroDX);
 		}
 		else
 //			//caso 2: (OP, registro, variable)
@@ -107,14 +102,9 @@ public class TercetoExpresionMult extends TercetoExpresion {
 				elementos.get(0).getToken().setTipo(AnalizadorLexico.variableL);
 				registro = controladorTercetos.getProxRegLibre(elementos.get(0).getToken());
 				this.setRegistro(registro);							
-
-				if(this.tipo.equals(AnalizadorLexico.variableL))
-					assembler =  assembler + MOV + " " + registro +", " + registroAX  + '\n';
-				else
-					assembler =  assembler + MOV + " " + registro +", " + registroAX  + '\n';
 				
 				controladorTercetos.liberarRegistro(registroAX);
-//				controladorTercetos.liberarRegistro(registroDX);
+				controladorTercetos.liberarRegistro(registroDX);
 			}
 		return assembler;
 	}

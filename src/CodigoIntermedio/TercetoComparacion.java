@@ -67,7 +67,6 @@ public class TercetoComparacion extends Terceto {
 		else
 			//caso 2: (OP, registro, variable)
 			if ( ( !elementos.get(1).esToken() ) && ( elementos.get(2).esToken() ) ){
-				System.out.println("reg - var");
 				String registro2 = controladorTercetos.getProxRegLibre( elementos.get(2).getToken() );
 				
 				if(elementos.get(2).getNombreVar().startsWith("mat@")){

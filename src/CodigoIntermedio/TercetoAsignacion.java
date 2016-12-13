@@ -72,6 +72,7 @@ public class TercetoAsignacion extends Terceto{
 							}
 							else
 								if ( (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableL) ) && (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableI)) ){
+									assembler = assembler + "MOV " + registro2 + ", " + elementos.get(2).getNombreVar() + '\n';
 									assembler = assembler + crearAssemblerConversionVar(registro2);
 									registro2 = registroAux;
 								}
@@ -102,6 +103,7 @@ public class TercetoAsignacion extends Terceto{
 					}
 					else
 						if ( (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableL) ) && (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableI)) ){
+							assembler = assembler + "MOV " + registro2 + ", " + elementos.get(2).getNombreVar() + '\n';
 							assembler = assembler + crearAssemblerConversionVar(registro2);
 							registro2 = registroAux;
 						}
