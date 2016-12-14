@@ -23,7 +23,7 @@ public class TercetoSimple {
 	}
 	
 	public Token getToken() {
-		return t;
+			return t;
 	}
 	
 	public boolean esToken(){

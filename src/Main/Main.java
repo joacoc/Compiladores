@@ -95,7 +95,7 @@ public class Main {
         else{
 	        System.out.println( controladorTercetos.imprimirTercetos() );
 	        convertidorAssembler.generarAssembler();
-	//        System.out.println( convertidorAssembler.generarArchivo() );
+	        System.out.println( convertidorAssembler.generarArchivo() );
         }
         
 	}

@@ -28,6 +28,7 @@ public class ControladorTercetos {
 	private String ultimoRegistro = null; 
 	private String anteUltimoRegistro = null;
 	
+	private String regMatrizLadoIzq = null;
 	private String regMatriz = null;
 	private String regMatrizAux = null;
 	private static StringBuilder varAux;
@@ -108,25 +109,37 @@ public class ControladorTercetos {
 		pila.add(new Integer(tercetos.size()-1) );
 	}
 	
-	public void setRegMatriz(String regMatriz){
-		if(this.regMatriz == null)
-			this.regMatriz = regMatriz;
+	public void setRegMatriz(String regMatriz, int pos){
+
+		if (pos==0)
+			this.regMatrizLadoIzq = regMatriz;		
 		else
-			this.regMatrizAux = regMatriz;
+			if(regMatriz == null )
+				this.regMatriz = regMatriz;			
+			else
+				this.regMatrizAux = regMatriz;				
 	}
+
 	
 	public String getRegMatriz(int i){
 		String aux;
-		if(i==1){
-			aux = this.regMatriz;
+		if (i==0){
+			aux = this.regMatrizLadoIzq;
 			this.regMatriz = null;
 			return aux;
 		}
-			else{
-				aux = this.regMatrizAux;
+		else
+			if(i==1){
+				aux = this.regMatriz;
+				this.regMatriz = this.regMatrizAux;
 				this.regMatrizAux = null;
 				return aux;
 			}
+				else{
+					aux = this.regMatrizAux;
+					this.regMatrizAux = null;
+					return aux;
+				}
 	}
 	
 	public void desapilar(){

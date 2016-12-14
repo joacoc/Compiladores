@@ -21,6 +21,10 @@ public class TercetoAsignacion extends Terceto{
 	
 	public String getAssembler() {
 		String assembler = "";
+		Terceto terceto2 = null;
+		if (!elementos.get(2).esToken())
+			terceto2 = controladorTercetos.getTerceto( Integer.parseInt( elementos.get(2).getNombreVar() ) );
+	
 
 		//tire aca arriba lo de la matriz
 		//tendria que ser todo codigo de matrices, sino le erre al sol el conflicto
@@ -37,7 +41,8 @@ public class TercetoAsignacion extends Terceto{
 							String aux = controladorTercetos.getProxRegLibre(elementos.get(2).getToken());
 							assembler = assembler + "MOV " + aux +  ", " +  elementos.get(2).getNombreVar() + "[" + regAux  + "]" +"\n";
 							
-							assembler = assembler + "MOV " + regAux +  ", matrix" + "\n";
+							assembler = assembler + "MOV " + regAux +  ", " + controladorTercetos.getRegMatriz(0) + "\n";
+							controladorTercetos.liberarRegistro(controladorTercetos.getRegMatriz(0));
 							assembler = assembler + "MOV " + elementos.get(1).getNombreVar() + "[" +regAux + "]" +", " + aux +"\n";
 							controladorTercetos.liberarRegistro(controladorTercetos.getTerceto(controladorTercetos.getNumTercetoActual()-1).getRegistro());
 							controladorTercetos.liberarRegistro(aux);
@@ -78,11 +83,10 @@ public class TercetoAsignacion extends Terceto{
 								}
 								else{
 									assembler = assembler + "MOV " + registro2 + ", " + elementos.get(2).getNombreVar() + '\n';
-									assembler = assembler + "MOV " + elementos.get(1).getNombreVar() + ", " + registro2 + '\n';
+				
 								}
 					
 								
-							
 							if(this.tipo.equals("longint") && elementos.get(1).getToken().getTipo().equals("integer")){
 //								String regLibre = controladorTercetos.getProxRegLibre(elementos.get(1).getToken());
 								assembler = assembler + "CWDE" + '\n';
@@ -95,14 +99,14 @@ public class TercetoAsignacion extends Terceto{
 				else{
 					//caso 2: (ASIG, variable, registro)
 					registro2 = controladorTercetos.getTerceto(elementos.get(2).getNumeroTerceto() ).getRegistro();
-					if ( (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableI) ) && (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableL)) ){
+					if ( (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableI) ) && (terceto2.getTerceto(0).getToken().getTipo().equals(AnalizadorLexico.variableL)) ){
 						//puede que la primer instruccion no vaya
 						assembler = assembler + "MOV " + "EAX" + ", " + registro2 + '\n';
 						assembler = assembler + verificarConversionAsig(registro2);
 						registro2 = controladorTercetos.getRegistroInteger(registro2);
 					}
 					else
-						if ( (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableL) ) && (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableI)) ){
+						if ( (elementos.get(1).getToken().getTipo().equals( AnalizadorLexico.variableL) ) && (terceto2.getTerceto(0).getToken().getTipo().equals(AnalizadorLexico.variableI)) ){
 							assembler = assembler + "MOV " + registro2 + ", " + elementos.get(2).getNombreVar() + '\n';
 							assembler = assembler + crearAssemblerConversionVar(registro2);
 							registro2 = registroAux;
@@ -115,13 +119,14 @@ public class TercetoAsignacion extends Terceto{
 						t.setTipo("longint");
 						
 						String regAux = controladorTercetos.getProxRegLibre(t);
-						assembler = assembler + "MOV " + regAux + ", matrix \n"; 
+						assembler = assembler + "MOV " + regAux +  ", " + controladorTercetos.getRegMatriz(0) + "\n";
+						controladorTercetos.liberarRegistro(controladorTercetos.getRegMatriz(0)); 
 						assembler = assembler + "MOV " +  elementos.get(1).getNombreVar() +"[" +regAux +"], " + registro2 + '\n';	
 						controladorTercetos.liberarRegistro(regAux);
 					}
 					else
 						assembler = assembler + "MOV " +  elementos.get(1).getNombreVar() + ", " + registro2 + '\n';
-					controladorTercetos.liberarRegistro(registro2);			
+						controladorTercetos.liberarRegistro(registro2);			
 				}
 				controladorTercetos.liberarRegistro(registro2);			
 			return assembler;

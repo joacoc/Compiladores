@@ -75,6 +75,10 @@ public class TercetoExpresion extends Terceto {
 			registro1 = registroAux1;
 			registro2 = registroAux2;
 			assembler = assembler + opAssembler + " " + registro1 + ", " + registro2 + '\n';
+			if ((elementos.get(1).getToken().getTipo().equals(AnalizadorLexico.variableL) ) || (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableL)) )
+				elementos.get(0).getToken().setTipo(AnalizadorLexico.variableL);
+			else
+				elementos.get(0).getToken().setTipo(AnalizadorLexico.variableI);
 			controladorTercetos.liberarRegistro(registro2);
 		}
 		else
@@ -95,6 +99,11 @@ public class TercetoExpresion extends Terceto {
 			registro1 = registroAux1;
 			registro2 = registroAux2;
 			assembler = assembler + opAssembler + " " + registro1 + ", " + registro2 + '\n';
+			
+			if ((terceto1.getTerceto(0).getToken().getTipo().equals(AnalizadorLexico.variableL) ) || (elementos.get(2).getToken().getTipo().equals(AnalizadorLexico.variableL)) )
+				elementos.get(0).getToken().setTipo(AnalizadorLexico.variableL);
+			else
+				elementos.get(0).getToken().setTipo(AnalizadorLexico.variableI);
 			controladorTercetos.liberarRegistro(registro2);
 		}
 		else
@@ -108,6 +117,10 @@ public class TercetoExpresion extends Terceto {
 			registro1 = registroAux1;
 			registro2 = registroAux2;
 			assembler = assembler + opAssembler + " " + registro1 + ", " + registro2 + '\n';
+			if ((terceto1.getTerceto(0).getToken().getTipo().equals(AnalizadorLexico.variableL) ) || (terceto2.getTerceto(0).getToken().getTipo().equals(AnalizadorLexico.variableL)) )
+				elementos.get(0).getToken().setTipo(AnalizadorLexico.variableL);
+			else
+				elementos.get(0).getToken().setTipo(AnalizadorLexico.variableI);
 			controladorTercetos.liberarRegistro(registro2);
 		}
 		
@@ -129,6 +142,10 @@ public class TercetoExpresion extends Terceto {
 			registro2 = registroAux2;
 			assembler = assembler + opAssembler + " " + registro1 + ", " + registro2 + '\n';
 			
+			if ( ( elementos.get(1).getToken().getTipo().equals(AnalizadorLexico.variableL) ) || (terceto2.getTerceto(0).getToken().getTipo().equals(AnalizadorLexico.variableL) ) )
+				elementos.get(0).getToken().setTipo(AnalizadorLexico.variableL);
+			else
+				elementos.get(0).getToken().setTipo(AnalizadorLexico.variableI);
 			controladorTercetos.liberarRegistro(registro2);
 		}
 		
